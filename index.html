@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#7b5fe0">
+<title>英単語 LOVE YOURSELF 💜 | 高1 中間テスト</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --purple:#7b5fe0; --purple-d:#5e44c4; --purple-l:#9d7bff;
+    --pink:#ff8fb1; --bg-card:#f4f0ff; --ink:#3a3550; --ink-soft:#8a83a8;
+    --ok:#1fae6c; --ok-bg:#e4f7ee; --ng:#e85b73; --ng-bg:#fde8ec;
+    --gold:#ffb13b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN",-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    background:linear-gradient(160deg,#c9b8ff 0%,#9b7df0 45%,#6f51d6 100%);
+    background-attachment:fixed;
+    min-height:100%;
+    color:var(--ink);
+    display:flex;justify-content:center;align-items:flex-start;
+    padding:14px;
+  }
+  .app{
+    width:100%;max-width:520px;
+    background:#fff;border-radius:26px;
+    box-shadow:0 24px 60px rgba(60,30,120,.4);
+    padding:20px 18px 26px;
+    position:relative;overflow:hidden;
+  }
+  .screen{animation:fade .35s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  .hidden{display:none !important;}
+
+  /* ---- top bar ---- */
+  .topbar{display:flex;align-items:center;gap:8px;margin-bottom:6px;min-height:34px;}
+  .icon-btn{
+    border:none;background:var(--bg-card);color:var(--purple-d);
+    border-radius:50%;width:36px;height:36px;font-size:16px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+    transition:transform .12s;
+  }
+  .icon-btn:active{transform:scale(.9);}
+  .topbar .spacer{flex:1;}
+  .topbar-title{font-weight:800;color:var(--purple-d);font-size:15px;}
+
+  /* ---- home ---- */
+  h1.logo{
+    text-align:center;font-size:24px;font-weight:800;color:var(--purple-d);
+    letter-spacing:.5px;margin-top:4px;line-height:1.3;
+  }
+  h1.logo .heart{display:inline-block;animation:beat 1.4s ease-in-out infinite;}
+  @keyframes beat{0%,100%{transform:scale(1);}45%{transform:scale(1.25);}}
+  .tagline{text-align:center;color:var(--ink-soft);font-size:12.5px;margin:6px 0 14px;font-weight:500;}
+
+  .streak{
+    text-align:center;font-size:13px;font-weight:700;color:var(--gold);
+    background:#fff7e6;border-radius:14px;padding:7px 10px;margin-bottom:14px;
+  }
+
+  /* zukan */
+  .zukan-box{background:var(--bg-card);border-radius:18px;padding:13px 12px;margin-bottom:16px;}
+  .zukan-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .zukan-head b{font-size:13.5px;color:var(--purple-d);}
+  .zukan-head .count{font-size:12px;color:var(--ink-soft);font-weight:700;}
+  .zukan-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
+  .member{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:default;}
+  .m-coin{
+    width:100%;aspect-ratio:1;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:15px;color:#fff;font-weight:800;
+    box-shadow:inset 0 -3px 6px rgba(0,0,0,.15);
+  }
+  .m-coin.locked{background:#e3def2;color:#b9b1d4;box-shadow:none;}
+  .member.got{cursor:pointer;}
+  .member.got:active{transform:scale(.92);}
+  .m-name{font-size:8.5px;color:var(--ink-soft);font-weight:700;text-align:center;line-height:1;}
+  .m-name.locked{color:#c5bedd;}
+
+  /* mode buttons */
+  .menu{display:flex;flex-direction:column;gap:11px;}
+  .mode-btn{
+    border:none;cursor:pointer;text-align:left;
+    background:linear-gradient(135deg,var(--purple),var(--purple-l));
+    color:#fff;border-radius:18px;padding:15px 16px;
+    display:flex;align-items:center;gap:13px;
+    font-family:inherit;transition:transform .12s,box-shadow .12s;
+    box-shadow:0 7px 16px rgba(123,95,224,.32);
+  }
+  .mode-btn:active{transform:scale(.97);}
+  .mode-btn .emoji{font-size:27px;flex:0 0 auto;}
+  .mode-btn .txt b{display:block;font-size:16px;font-weight:800;}
+  .mode-btn .txt span{display:block;font-size:11.5px;opacity:.92;margin-top:2px;font-weight:500;}
+  .mode-btn.review{background:linear-gradient(135deg,#ff8fb1,#ffa9c4);box-shadow:0 7px 16px rgba(255,143,177,.4);}
+  .mode-btn.study{background:linear-gradient(135deg,#56c2b0,#74d6c6);box-shadow:0 7px 16px rgba(86,194,176,.36);}
+  .mode-btn.match{background:linear-gradient(135deg,#f0a93b,#ffc065);box-shadow:0 7px 16px rgba(240,169,59,.4);}
+  .badge{
+    margin-left:auto;background:rgba(255,255,255,.28);
+    border-radius:11px;padding:3px 9px;font-size:12px;font-weight:800;flex:0 0 auto;
+  }
+
+  /* ---- setup screen ---- */
+  .setup-h{text-align:center;font-size:19px;font-weight:800;color:var(--purple-d);margin:6px 0 4px;}
+  .setup-sub{text-align:center;color:var(--ink-soft);font-size:12px;margin-bottom:16px;}
+  .pick-label{font-size:12.5px;font-weight:800;color:var(--purple-d);margin:14px 0 8px;}
+  .pick-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .pick{
+    flex:1;min-width:80px;border:2.5px solid #e7e1fb;background:#fff;
+    border-radius:14px;padding:12px 8px;cursor:pointer;font-family:inherit;
+    font-size:13.5px;font-weight:700;color:var(--ink);transition:all .14s;text-align:center;
+  }
+  .pick small{display:block;font-size:10.5px;color:var(--ink-soft);font-weight:600;margin-top:2px;}
+  .pick.sel{border-color:var(--purple);background:var(--bg-card);color:var(--purple-d);}
+  .pick.sel small{color:var(--purple);}
+  .start-btn{
+    width:100%;border:none;cursor:pointer;font-family:inherit;
+    background:linear-gradient(135deg,var(--purple),var(--purple-l));
+    color:#fff;font-size:17px;font-weight:800;border-radius:16px;
+    padding:15px;margin-top:22px;box-shadow:0 8px 18px rgba(123,95,224,.36);
+    transition:transform .12s;
+  }
+  .start-btn:active{transform:scale(.97);}
+
+  /* ---- progress ---- */
+  .qtop{display:flex;justify-content:space-between;align-items:center;font-size:12px;
+    color:var(--ink-soft);font-weight:700;margin-bottom:6px;}
+  .qtop .scoredot{color:var(--purple-d);}
+  .pbar{height:9px;background:#ece7fb;border-radius:6px;overflow:hidden;margin-bottom:18px;}
+  .pbar>div{height:100%;width:0;border-radius:6px;
+    background:linear-gradient(90deg,var(--purple),var(--pink));transition:width .35s;}
+
+  /* ---- quiz ---- */
+  .qcard{
+    background:var(--bg-card);border-radius:18px;padding:24px 16px;
+    text-align:center;margin-bottom:14px;
+  }
+  .q-tag{
+    display:inline-block;background:var(--purple);color:#fff;font-size:10.5px;
+    font-weight:700;padding:3px 10px;border-radius:9px;margin-bottom:10px;
+  }
+  .q-main{font-size:27px;font-weight:800;color:var(--ink);line-height:1.35;word-break:break-word;}
+  .q-ipa{font-size:13px;color:var(--ink-soft);margin-top:6px;font-style:italic;}
+  .q-sub{font-size:12px;color:var(--ink-soft);margin-top:8px;}
+  .choices{display:flex;flex-direction:column;gap:9px;}
+  .choice{
+    border:2.5px solid #e7e1fb;background:#fff;border-radius:14px;
+    padding:14px 15px;font-size:15.5px;font-weight:700;cursor:pointer;
+    font-family:inherit;color:var(--ink);text-align:left;transition:all .12s;
+    display:flex;align-items:center;gap:9px;
+  }
+  .choice .num{
+    flex:0 0 auto;width:22px;height:22px;border-radius:7px;background:var(--bg-card);
+    color:var(--purple-d);font-size:12px;display:flex;align-items:center;justify-content:center;
+  }
+  .choice:active:not(:disabled){transform:scale(.98);}
+  .choice:disabled{cursor:default;}
+  .choice.correct{border-color:var(--ok);background:var(--ok-bg);color:var(--ok);}
+  .choice.correct .num{background:var(--ok);color:#fff;}
+  .choice.wrong{border-color:var(--ng);background:var(--ng-bg);color:var(--ng);}
+  .choice.wrong .num{background:var(--ng);color:#fff;}
+
+  /* feedback + next */
+  .feedback{
+    text-align:center;font-weight:800;font-size:15px;margin-top:14px;
+    padding:11px;border-radius:13px;display:none;
+  }
+  .feedback.show{display:block;animation:pop .3s ease;}
+  @keyframes pop{from{transform:scale(.85);opacity:0;}to{transform:scale(1);opacity:1;}}
+  .feedback.ok{background:var(--ok-bg);color:var(--ok);}
+  .feedback.ng{background:var(--ng-bg);color:var(--ng);}
+  .next-btn{
+    width:100%;border:none;cursor:pointer;font-family:inherit;margin-top:12px;
+    background:linear-gradient(135deg,var(--purple),var(--purple-l));
+    color:#fff;font-size:15.5px;font-weight:800;border-radius:14px;padding:14px;
+    transition:transform .12s;
+  }
+  .next-btn:active{transform:scale(.97);}
+
+  /* ---- typing ---- */
+  .type-input{
+    width:100%;border:2.5px solid #e7e1fb;border-radius:14px;
+    padding:15px;font-size:19px;font-family:inherit;font-weight:700;
+    color:var(--ink);text-align:center;outline:none;transition:border .14s;
+  }
+  .type-input:focus{border-color:var(--purple);}
+  .type-input.ok{border-color:var(--ok);background:var(--ok-bg);}
+  .type-input.ng{border-color:var(--ng);background:var(--ng-bg);}
+  .ghint{text-align:center;font-size:11.5px;color:var(--ink-soft);margin-top:8px;}
+  .skip-btn{
+    background:none;border:none;color:var(--ink-soft);font-family:inherit;
+    font-size:12px;cursor:pointer;text-decoration:underline;margin-top:10px;width:100%;
+  }
+
+  /* ---- flashcard ---- */
+  .flash{perspective:1300px;height:270px;margin:6px 0 16px;cursor:pointer;}
+  .flash-in{position:relative;width:100%;height:100%;transform-style:preserve-3d;
+    transition:transform .55s cubic-bezier(.4,.2,.2,1);}
+  .flash.flip .flash-in{transform:rotateY(180deg);}
+  .flash-face{
+    position:absolute;width:100%;height:100%;backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;border-radius:20px;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    padding:22px;text-align:center;
+  }
+  .flash-front{background:linear-gradient(140deg,var(--purple),var(--purple-l));color:#fff;
+    box-shadow:0 10px 24px rgba(123,95,224,.4);}
+  .flash-back{background:#fff;border:3px solid var(--purple);transform:rotateY(180deg);}
+  .fc-word{font-size:34px;font-weight:800;word-break:break-word;}
+  .fc-ipa{font-size:15px;opacity:.85;margin-top:8px;font-style:italic;}
+  .fc-mean{font-size:26px;font-weight:800;color:var(--ink);line-height:1.35;}
+  .fc-def{font-size:12px;color:var(--ink-soft);margin-top:14px;line-height:1.5;}
+  .fc-pos{font-size:11px;background:rgba(255,255,255,.25);padding:3px 10px;border-radius:8px;margin-top:10px;}
+  .flash-back .fc-pos{background:var(--bg-card);color:var(--purple-d);}
+  .fc-tap{font-size:11px;opacity:.8;margin-top:14px;}
+  .speak-btn{
+    border:none;background:rgba(255,255,255,.25);color:#fff;border-radius:50%;
+    width:38px;height:38px;font-size:17px;cursor:pointer;margin-top:12px;
+  }
+  .flash-back .speak-btn{background:var(--bg-card);}
+
+  /* ---- matching ---- */
+  .match-grid{display:flex;gap:10px;}
+  .match-col{flex:1;display:flex;flex-direction:column;gap:9px;}
+  .mcard{
+    border:2.5px solid #e7e1fb;background:#fff;border-radius:13px;
+    padding:14px 8px;font-size:14px;font-weight:700;cursor:pointer;
+    font-family:inherit;color:var(--ink);text-align:center;
+    min-height:58px;display:flex;align-items:center;justify-content:center;
+    transition:all .13s;word-break:break-word;line-height:1.3;
+  }
+  .mcard:active:not(.done){transform:scale(.96);}
+  .mcard.sel{border-color:var(--purple);background:var(--bg-card);
+    box-shadow:0 0 0 3px rgba(123,95,224,.18);}
+  .mcard.done{border-color:var(--ok);background:var(--ok-bg);color:var(--ok);
+    opacity:.55;pointer-events:none;}
+  .mcard.shake{animation:shk .35s;border-color:var(--ng);background:var(--ng-bg);}
+  @keyframes shk{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+  .match-info{text-align:center;font-size:12px;color:var(--ink-soft);font-weight:700;margin-bottom:14px;}
+
+  /* ---- result ---- */
+  .result{text-align:center;}
+  .result .big-emoji{font-size:54px;animation:beat 1.2s ease infinite;}
+  .result h2{font-size:21px;color:var(--purple-d);font-weight:800;margin:6px 0;}
+  .scorenum{
+    font-size:50px;font-weight:800;margin:8px 0;
+    background:linear-gradient(135deg,var(--purple),var(--pink));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .result .msg{color:var(--ink-soft);font-size:14px;margin-bottom:16px;font-weight:600;}
+  .wrongbox{
+    background:#fff6f8;border-radius:14px;padding:12px;margin:14px 0;
+    text-align:left;max-height:200px;overflow-y:auto;
+  }
+  .wrongbox h3{font-size:12.5px;color:var(--ng);margin-bottom:7px;}
+  .wrong-item{font-size:13px;padding:6px 2px;border-bottom:1px dashed #f1d6dd;}
+  .wrong-item:last-child{border-bottom:none;}
+  .wrong-item b{color:var(--ink);}
+  .wrong-item .jp{color:var(--ink-soft);}
+  .result .start-btn{margin-top:10px;}
+  .result .ghost{
+    background:#fff;color:var(--purple-d);border:2.5px solid #e7e1fb;
+    box-shadow:none;
+  }
+
+  /* ---- celebrate ---- */
+  #screen-celebrate{
+    background:linear-gradient(165deg,#cab9ff,#8a6cef 70%,#6a4fd0);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    margin:-20px -18px -26px;padding:42px 22px;min-height:600px;text-align:center;
+  }
+  .cele-top{color:#fff;font-size:13px;font-weight:800;letter-spacing:1px;
+    background:rgba(255,255,255,.2);padding:6px 16px;border-radius:20px;}
+  .cele-new{
+    margin-top:14px;background:var(--gold);color:#fff;font-weight:800;font-size:12px;
+    padding:4px 14px;border-radius:12px;animation:beat 1s ease infinite;
+  }
+  .cele-card{
+    background:#fff;border-radius:24px;padding:26px 20px;margin-top:16px;
+    width:100%;max-width:340px;box-shadow:0 18px 44px rgba(40,10,90,.45);
+    animation:pop .5s cubic-bezier(.3,1.5,.5,1);
+  }
+  .cele-avatar{
+    width:110px;height:110px;border-radius:50%;margin:0 auto 6px;
+    display:flex;align-items:center;justify-content:center;font-size:46px;
+    box-shadow:inset 0 -7px 14px rgba(0,0,0,.18);animation:bob 2.4s ease-in-out infinite;
+  }
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-9px);}}
+  .cele-name{font-size:25px;font-weight:800;margin-top:6px;}
+  .cele-sub{font-size:12px;color:var(--ink-soft);font-weight:700;margin-bottom:12px;}
+  .cele-msg{font-size:15px;font-weight:700;color:var(--ink);line-height:1.5;}
+  .cele-msg.en{color:var(--purple-d);font-style:italic;margin-bottom:8px;}
+  .cele-btn{
+    margin-top:18px;border:none;cursor:pointer;font-family:inherit;
+    background:#fff;color:var(--purple-d);font-weight:800;font-size:15px;
+    border-radius:14px;padding:13px 30px;box-shadow:0 6px 16px rgba(0,0,0,.2);
+  }
+  .cele-btn:active{transform:scale(.96);}
+
+  /* confetti */
+  .confetti{position:fixed;top:-20px;width:10px;height:14px;border-radius:2px;
+    z-index:9999;pointer-events:none;}
+  @keyframes fall{
+    to{transform:translateY(115vh) rotate(720deg);opacity:.9;}
+  }
+
+  /* word list */
+  .wl-search{
+    width:100%;border:2.5px solid #e7e1fb;border-radius:12px;padding:10px 12px;
+    font-family:inherit;font-size:14px;outline:none;margin-bottom:10px;
+  }
+  .wl-item{
+    display:flex;align-items:center;gap:10px;padding:10px 6px;
+    border-bottom:1px solid #f0ecfb;
+  }
+  .wl-item .en{font-weight:800;font-size:14.5px;color:var(--ink);}
+  .wl-item .ipa{font-size:11px;color:var(--ink-soft);}
+  .wl-item .jp{margin-left:auto;font-size:13px;color:var(--purple-d);font-weight:700;text-align:right;}
+  .wl-pos{font-size:10px;background:var(--bg-card);color:var(--purple-d);
+    padding:2px 7px;border-radius:7px;font-weight:700;flex:0 0 auto;}
+  .wl-wrap{max-height:62vh;overflow-y:auto;}
+
+  @media(max-width:380px){
+    .q-main{font-size:23px;}
+    .fc-word{font-size:29px;}
+    .m-coin{font-size:12px;}
+  }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- ============ HOME ============ -->
+  <section id="screen-home" class="screen">
+    <div class="topbar">
+      <button class="icon-btn" id="sound-btn" title="音">🔊</button>
+      <div class="spacer"></div>
+      <button class="icon-btn" id="help-btn" title="あそびかた">？</button>
+    </div>
+    <h1 class="logo">英単語 <span class="heart">💜</span> LOVE YOURSELF</h1>
+    <p class="tagline">高1・1学期 中間テスト対策 ／ Lesson 1 &amp; 2（全91語）</p>
+
+    <div class="streak hidden" id="streak-box"></div>
+
+    <div class="zukan-box">
+      <div class="zukan-head">
+        <b>💜 BTS メンバーずかん</b>
+        <span class="count" id="zukan-count">0 / 7</span>
+      </div>
+      <div class="zukan-grid" id="zukan-grid"></div>
+      <p style="font-size:10.5px;color:var(--ink-soft);margin-top:9px;text-align:center;font-weight:600;">
+        10問ぜんぶ正解すると、メンバーが1人ずつ仲間入り！
+      </p>
+    </div>
+
+    <div class="menu">
+      <button class="mode-btn study" data-mode="flashcard">
+        <span class="emoji">🃏</span>
+        <span class="txt"><b>カードでおぼえる</b><span>めくって意味をチェック</span></span>
+      </button>
+      <button class="mode-btn" data-mode="quiz">
+        <span class="emoji">✏️</span>
+        <span class="txt"><b>4択クイズ</b><span>英→日 ／ 日→英 をえらぶ</span></span>
+      </button>
+      <button class="mode-btn" data-mode="typing">
+        <span class="emoji">⌨️</span>
+        <span class="txt"><b>うちこみクイズ</b><span>スペルや意味をタイプ</span></span>
+      </button>
+      <button class="mode-btn match" data-mode="matching">
+        <span class="emoji">🧩</span>
+        <span class="txt"><b>マッチング</b><span>単語と意味をペアにしよう</span></span>
+      </button>
+      <button class="mode-btn review" data-mode="review">
+        <span class="emoji">🔁</span>
+        <span class="txt"><b>まちがい復習</b><span>苦手な単語をやっつけよう</span></span>
+        <span class="badge" id="review-badge">0</span>
+      </button>
+      <button class="mode-btn" data-mode="wordlist" style="background:linear-gradient(135deg,#8a83b8,#a9a2cf);box-shadow:0 7px 16px rgba(138,131,184,.3);">
+        <span class="emoji">📖</span>
+        <span class="txt"><b>たんご一覧</b><span>91語をぜんぶ見る</span></span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ============ SETUP ============ -->
+  <section id="screen-setup" class="screen hidden">
+    <div class="topbar">
+      <button class="icon-btn back-home">←</button>
+      <div class="spacer"></div>
+    </div>
+    <h2 class="setup-h" id="setup-title"></h2>
+    <p class="setup-sub" id="setup-sub"></p>
+
+    <div id="scope-block">
+      <div class="pick-label">📚 はんい をえらぶ</div>
+      <div class="pick-row" id="scope-row">
+        <button class="pick sel" data-scope="all">ぜんぶ<small>91語</small></button>
+        <button class="pick" data-scope="1">Lesson 1<small>43語</small></button>
+        <button class="pick" data-scope="2">Lesson 2<small>48語</small></button>
+      </div>
+    </div>
+
+    <div id="dir-block">
+      <div class="pick-label">🔄 しゅつだい方向 をえらぶ</div>
+      <div class="pick-row" id="dir-row">
+        <button class="pick sel" data-dir="en-ja">英語 → 日本語<small>意味を答える</small></button>
+        <button class="pick" data-dir="ja-en">日本語 → 英語<small>英語を答える</small></button>
+      </div>
+    </div>
+
+    <button class="start-btn" id="setup-start">スタート！</button>
+  </section>
+
+  <!-- ============ FLASHCARD ============ -->
+  <section id="screen-flashcard" class="screen hidden">
+    <div class="topbar">
+      <button class="icon-btn back-home">←</button>
+      <span class="topbar-title">カードでおぼえる</span>
+      <div class="spacer"></div>
+    </div>
+    <div class="qtop"><span id="fc-counter"></span><span></span></div>
+    <div class="pbar"><div id="fc-bar"></div></div>
+    <div class="flash" id="flash">
+      <div class="flash-in">
+        <div class="flash-face flash-front" id="fc-front"></div>
+        <div class="flash-face flash-back" id="fc-back"></div>
+      </div>
+    </div>
+    <div class="choices" style="flex-direction:row;gap:9px;">
+      <button class="next-btn ghost" id="fc-prev" style="background:#fff;color:var(--purple-d);border:2.5px solid #e7e1fb;">← まえ</button>
+      <button class="next-btn" id="fc-next">つぎ →</button>
+    </div>
+    <p class="ghint">カードをタップで うらおもて</p>
+  </section>
+
+  <!-- ============ QUIZ (4-choice) ============ -->
+  <section id="screen-quiz" class="screen hidden">
+    <div class="topbar">
+      <button class="icon-btn back-home">←</button>
+      <span class="topbar-title" id="quiz-title">4択クイズ</span>
+      <div class="spacer"></div>
+    </div>
+    <div class="qtop"><span id="q-counter"></span><span class="scoredot" id="q-score"></span></div>
+    <div class="pbar"><div id="q-bar"></div></div>
+    <div class="qcard">
+      <span class="q-tag" id="q-tag"></span>
+      <div class="q-main" id="q-main"></div>
+      <div class="q-ipa" id="q-ipa"></div>
+    </div>
+    <div class="choices" id="q-choices"></div>
+    <div class="feedback" id="q-feedback"></div>
+    <button class="next-btn hidden" id="q-next"></button>
+  </section>
+
+  <!-- ============ TYPING ============ -->
+  <section id="screen-typing" class="screen hidden">
+    <div class="topbar">
+      <button class="icon-btn back-home">←</button>
+      <span class="topbar-title">うちこみクイズ</span>
+      <div class="spacer"></div>
+    </div>
+    <div class="qtop"><span id="t-counter"></span><span class="scoredot" id="t-score"></span></div>
+    <div class="pbar"><div id="t-bar"></div></div>
+    <div class="qcard">
+      <span class="q-tag" id="t-tag"></span>
+      <div class="q-main" id="t-main"></div>
+      <div class="q-ipa" id="t-ipa"></div>
+      <div class="q-sub" id="t-sub"></div>
+    </div>
+    <input type="text" class="type-input" id="t-input" autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" placeholder="ここに入力">
+    <div class="feedback" id="t-feedback"></div>
+    <button class="next-btn" id="t-check">こたえあわせ</button>
+    <button class="next-btn hidden" id="t-next"></button>
+    <button class="skip-btn" id="t-skip">わからない（答えを見る）</button>
+  </section>
+
+  <!-- ============ MATCHING ============ -->
+  <section id="screen-matching" class="screen hidden">
+    <div class="topbar">
+      <button class="icon-btn back-home">←</button>
+      <span class="topbar-title">マッチング</span>
+      <div class="spacer"></div>
+    </div>
+    <div class="qtop"><span id="m-counter"></span><span class="scoredot" id="m-miss"></span></div>
+    <div class="pbar"><div id="m-bar"></div></div>
+    <p class="match-info">単語をタップ → 意味をタップ でペアにしてね</p>
+    <div class="match-grid">
+      <div class="match-col" id="m-left"></div>
+      <div class="match-col" id="m-right"></div>
+    </div>
+  </section>
+
+  <!-- ============ RESULT ============ -->
+  <section id="screen-result" class="screen hidden">
+    <div class="result">
+      <div class="big-emoji" id="r-emoji">🎉</div>
+      <h2 id="r-head">結果</h2>
+      <div class="scorenum" id="r-score"></div>
+      <p class="msg" id="r-msg"></p>
+      <div class="wrongbox hidden" id="r-wrongbox">
+        <h3>📝 復習リストに追加した単語</h3>
+        <div id="r-wronglist"></div>
+      </div>
+      <button class="start-btn hidden" id="r-review">🔁 まちがえた問題を復習</button>
+      <button class="start-btn" id="r-again">🔄 もう一度（新しい10問）</button>
+      <button class="start-btn ghost" id="r-home">🏠 ホームへもどる</button>
+    </div>
+  </section>
+
+  <!-- ============ WORD LIST ============ -->
+  <section id="screen-wordlist" class="screen hidden">
+    <div class="topbar">
+      <button class="icon-btn back-home">←</button>
+      <span class="topbar-title">たんご一覧</span>
+      <div class="spacer"></div>
+    </div>
+    <input type="text" class="wl-search" id="wl-search" placeholder="🔍 英語・日本語でさがす">
+    <div class="pick-row" id="wl-filter" style="margin-bottom:10px;">
+      <button class="pick sel" data-wl="all">ぜんぶ</button>
+      <button class="pick" data-wl="1">Lesson 1</button>
+      <button class="pick" data-wl="2">Lesson 2</button>
+    </div>
+    <div class="wl-wrap" id="wl-list"></div>
+  </section>
+
+  <!-- ============ CELEBRATE ============ -->
+  <section id="screen-celebrate" class="screen hidden">
+    <div class="cele-top" id="cele-top">★ 全問正解おめでとう！ ★</div>
+    <div class="cele-new hidden" id="cele-new">🆕 ＮＥＷ メンバー！</div>
+    <div class="cele-card">
+      <div class="cele-avatar" id="cele-avatar">💜</div>
+      <div class="cele-name" id="cele-name"></div>
+      <div class="cele-sub" id="cele-sub"></div>
+      <div class="cele-msg en" id="cele-msg-en"></div>
+      <div class="cele-msg" id="cele-msg-ja"></div>
+    </div>
+    <button class="cele-btn" id="cele-btn">つづける →</button>
+  </section>
+
+</div>
+
+<script>
+/* =========================================================
+   英単語データ  高校1年 1学期 中間テスト範囲
+   Lesson 1 & Lesson 2（全91語）
+   ---------------------------------------------------------
+   ★ 単語の追加・修正はこのファイルだけ直せばOK ★
+   pos（品詞）:  動 / 名 / 形 / 副 / 接 / 句
+   句（イディオム）は ipa を "" にしてください。
+   def: 英英定義（テストのマッチング問題に出たものだけ）
+   ========================================================= */
+
+const WORDS = [
+  /* ===== Lesson 1 ===== */
+  /* -- part 1 -- */
+  { id: 1,  lesson: 1, part: 1, word: "fulfill",            ipa: "fulfíl",        pos: "動", ja: "～を実現させる、果たす",        def: "to do something that you really wanted to do" },
+  { id: 2,  lesson: 1, part: 1, word: "longtime",           ipa: "lɔ́(ː)ŋtàim",   pos: "形", ja: "長年の" },
+  { id: 3,  lesson: 1, part: 1, word: "operation",          ipa: "ɑ̀pəréiʃən",    pos: "名", ja: "手術" },
+  { id: 4,  lesson: 1, part: 1, word: "sadly",              ipa: "sǽdli",         pos: "副", ja: "悲しそうに、悲しいことに" },
+  { id: 5,  lesson: 1, part: 1, word: "recommend",          ipa: "rèkəménd",      pos: "動", ja: "推薦する、推奨する",            def: "to tell someone that something is good" },
+  { id: 6,  lesson: 1, part: 1, word: "superstar",          ipa: "súːpərstɑ̀ːr",  pos: "名", ja: "大スター、スーパースター" },
+  { id: 7,  lesson: 1, part: 1, word: "fascinate",          ipa: "fǽsənèit",      pos: "動", ja: "魅了する、興味をそそる",        def: "to attract someone very much" },
+  { id: 8,  lesson: 1, part: 1, word: "dynamic",            ipa: "dainǽmik",      pos: "形", ja: "活動的な、力強い" },
+  { id: 9,  lesson: 1, part: 1, word: "be able to do",      ipa: "",              pos: "句", ja: "～できる" },
+  { id: 10, lesson: 1, part: 1, word: "catch one's eye",    ipa: "",              pos: "句", ja: "目を引く、人目を引く" },
+
+  /* -- part 2 -- */
+  { id: 11, lesson: 1, part: 2, word: "swing",              ipa: "swíŋ",          pos: "名", ja: "振り方、スイング" },
+  { id: 12, lesson: 1, part: 2, word: "passion",            ipa: "pǽʃən",         pos: "名", ja: "情熱",                          def: "a very strong feeling of liking something" },
+  { id: 13, lesson: 1, part: 2, word: "upset",              ipa: "ʌpsét",         pos: "形", ja: "取り乱して、動揺して",          def: "unhappy or worried" },
+  { id: 14, lesson: 1, part: 2, word: "burst",              ipa: "bə́ːrst",       pos: "動", ja: "破裂する、爆発する" },
+  { id: 15, lesson: 1, part: 2, word: "rank",               ipa: "rǽŋk",          pos: "動", ja: "位置づける、ランクづける" },
+  { id: 16, lesson: 1, part: 2, word: "burst into tears",   ipa: "",              pos: "句", ja: "わっと泣き出す" },
+  { id: 17, lesson: 1, part: 2, word: "that's a given",     ipa: "",              pos: "句", ja: "それは当然だ" },
+  { id: 18, lesson: 1, part: 2, word: "pay off",            ipa: "",              pos: "句", ja: "報われる、実を結ぶ" },
+
+  /* -- part 3 -- */
+  { id: 19, lesson: 1, part: 3, word: "imitate",            ipa: "ímitèit",       pos: "動", ja: "～をまねる",                    def: "to copy what someone else does" },
+  { id: 20, lesson: 1, part: 3, word: "afterward",          ipa: "ǽftərwərd",     pos: "副", ja: "あとで" },
+  { id: 21, lesson: 1, part: 3, word: "thrill",             ipa: "θríl",          pos: "動", ja: "わくわく（どきどき）させる",    def: "to make someone very excited" },
+  { id: 22, lesson: 1, part: 3, word: "play against A",     ipa: "",              pos: "句", ja: "Aと対戦する" },
+  { id: 23, lesson: 1, part: 3, word: "focus on A",         ipa: "",              pos: "句", ja: "Aに集中する" },
+  { id: 24, lesson: 1, part: 3, word: "have a chance to do",ipa: "",              pos: "句", ja: "～するチャンスがある" },
+  { id: 25, lesson: 1, part: 3, word: "for the first time", ipa: "",              pos: "句", ja: "初めて" },
+  { id: 26, lesson: 1, part: 3, word: "in the end",         ipa: "",              pos: "句", ja: "結局、最後には" },
+  { id: 27, lesson: 1, part: 3, word: "hold A back",        ipa: "",              pos: "句", ja: "Aをこらえる、おさえる" },
+  { id: 28, lesson: 1, part: 3, word: "be thrilled to do",  ipa: "",              pos: "句", ja: "～することにわくわくする" },
+
+  /* -- part 4 -- */
+  { id: 29, lesson: 1, part: 4, word: "sudden",             ipa: "sʌ́dn",         pos: "形", ja: "突然の" },
+  { id: 30, lesson: 1, part: 4, word: "retire",             ipa: "ritáiər",       pos: "動", ja: "引退する",                      def: "to stop working, usually because one is older" },
+  { id: 31, lesson: 1, part: 4, word: "legend",             ipa: "lédʒənd",       pos: "名", ja: "伝説、伝説的な人" },
+  { id: 32, lesson: 1, part: 4, word: "baton",              ipa: "bətɑ́n",        pos: "名", ja: "バトン" },
+  { id: 33, lesson: 1, part: 4, word: "retirement",         ipa: "ritáiərmənt",   pos: "名", ja: "引退" },
+  { id: 34, lesson: 1, part: 4, word: "position",           ipa: "pəzíʃən",       pos: "名", ja: "地位、立場、位置" },
+  { id: 35, lesson: 1, part: 4, word: "strongly",           ipa: "strɔ́(ː)ŋli",   pos: "副", ja: "強く" },
+  { id: 36, lesson: 1, part: 4, word: "Grand Slam",         ipa: "grǽnd slǽm",    pos: "名", ja: "グランドスラム、四大大会" },
+  { id: 37, lesson: 1, part: 4, word: "chapter",            ipa: "tʃǽptər",       pos: "名", ja: "章" },
+  { id: 38, lesson: 1, part: 4, word: "inspiration",        ipa: "ìnspəréiʃən",   pos: "名", ja: "ひらめき、刺激（を与えるもの）",  def: "a feeling, person, or thing that makes you want to do something" },
+  { id: 39, lesson: 1, part: 4, word: "whether",            ipa: "(h)wéðər",      pos: "接", ja: "～かどうか" },
+  { id: 40, lesson: 1, part: 4, word: "disability",         ipa: "dìsəbíləti",    pos: "名", ja: "障害",                          def: "a physical or mental condition that limits a person's activities" },
+  { id: 41, lesson: 1, part: 4, word: "pass the baton",     ipa: "",              pos: "句", ja: "バトンを渡す" },
+  { id: 42, lesson: 1, part: 4, word: "face a challenge",   ipa: "",              pos: "句", ja: "難題に立ち向かう" },
+  { id: 43, lesson: 1, part: 4, word: "whether ... or not", ipa: "",              pos: "句", ja: "～かどうか" },
+
+  /* ===== Lesson 2 ===== */
+  /* -- part 1 -- */
+  { id: 44, lesson: 2, part: 1, word: "poodle",             ipa: "púːdl",         pos: "名", ja: "プードル" },
+  { id: 45, lesson: 2, part: 1, word: "trainer",            ipa: "tréinər",       pos: "名", ja: "訓練する人、調教師" },
+  { id: 46, lesson: 2, part: 1, word: "shelter",            ipa: "ʃéltər",        pos: "名", ja: "保護施設、避難所",              def: "a place that protects people or animals from danger" },
+  { id: 47, lesson: 2, part: 1, word: "abandon",            ipa: "əbǽndən",       pos: "動", ja: "～を見捨てる、捨てる",          def: "to leave something, for example a dog, and give up responsibility for it" },
+  { id: 48, lesson: 2, part: 1, word: "previous",           ipa: "príːviəs",      pos: "形", ja: "前の、以前の",                  def: "existing before now, or before the time you are talking about" },
+  { id: 49, lesson: 2, part: 1, word: "German",             ipa: "dʒə́ːrmən",     pos: "形", ja: "ドイツの、ドイツ人の" },
+  { id: 50, lesson: 2, part: 1, word: "shepherd",           ipa: "ʃépərd",        pos: "名", ja: "羊飼い、シェパード" },
+  { id: 51, lesson: 2, part: 1, word: "be about to do",     ipa: "",              pos: "句", ja: "ちょうど～しようとする" },
+  { id: 52, lesson: 2, part: 1, word: "put A down",         ipa: "",              pos: "句", ja: "Aを殺処分する" },
+  { id: 53, lesson: 2, part: 1, word: "give A away",        ipa: "",              pos: "句", ja: "Aを譲る" },
+
+  /* -- part 2 -- */
+  { id: 54, lesson: 2, part: 2, word: "session",            ipa: "séʃən",         pos: "名", ja: "セッション、（活動の）期間",      def: "a period of time for a particular activity" },
+  { id: 55, lesson: 2, part: 2, word: "eagerly",            ipa: "íːgərli",       pos: "副", ja: "熱心に、しきりに" },
+  { id: 56, lesson: 2, part: 2, word: "obey",               ipa: "oubéi",         pos: "動", ja: "～に従う",                      def: "to do what you are told" },
+  { id: 57, lesson: 2, part: 2, word: "hurdle",             ipa: "hə́ːrdl",       pos: "名", ja: "ハードル、障害" },
+  { id: 58, lesson: 2, part: 2, word: "hawk",               ipa: "hɔ́ːk",         pos: "名", ja: "タカ" },
+  { id: 59, lesson: 2, part: 2, word: "luckily",            ipa: "lʌ́kili",       pos: "副", ja: "運よく、幸運にも" },
+  { id: 60, lesson: 2, part: 2, word: "spite",              ipa: "spáit",         pos: "名", ja: "悪意" },
+  { id: 61, lesson: 2, part: 2, word: "happily",            ipa: "hǽpili",        pos: "副", ja: "幸せに、楽しそうに" },
+  { id: 62, lesson: 2, part: 2, word: "wag",                ipa: "wǽg",           pos: "動", ja: "（尾を）振る" },
+  { id: 63, lesson: 2, part: 2, word: "tail",               ipa: "téil",          pos: "名", ja: "尾、しっぽ" },
+  { id: 64, lesson: 2, part: 2, word: "praise",             ipa: "préiz",         pos: "動", ja: "～をほめる",                    def: "to say that someone or something is good" },
+  { id: 65, lesson: 2, part: 2, word: "for fun",            ipa: "",              pos: "句", ja: "楽しみで、面白半分に" },
+  { id: 66, lesson: 2, part: 2, word: "search for A",       ipa: "",              pos: "句", ja: "Aを探す" },
+  { id: 67, lesson: 2, part: 2, word: "in spite of A",      ipa: "",              pos: "句", ja: "Aにもかかわらず" },
+  { id: 68, lesson: 2, part: 2, word: "give up",            ipa: "",              pos: "句", ja: "あきらめる" },
+
+  /* -- part 3 -- */
+  { id: 69, lesson: 2, part: 3, word: "clue",               ipa: "klúː",          pos: "名", ja: "手がかり、ヒント",              def: "something that helps to solve a problem or mystery" },
+  { id: 70, lesson: 2, part: 3, word: "effective",          ipa: "iféktiv",       pos: "形", ja: "効果的な" },
+  { id: 71, lesson: 2, part: 3, word: "typical",            ipa: "típikəl",       pos: "形", ja: "典型的な",                      def: "having the usual qualities of a particular group or thing" },
+  { id: 72, lesson: 2, part: 3, word: "criminal",           ipa: "krímənl",       pos: "名", ja: "犯罪者、犯人" },
+  { id: 73, lesson: 2, part: 3, word: "contrast",           ipa: "kɑ́ntræst",     pos: "名", ja: "対比、対照" },
+  { id: 74, lesson: 2, part: 3, word: "attract",            ipa: "ətrǽkt",        pos: "動", ja: "～を引きつける、魅了する" },
+  { id: 75, lesson: 2, part: 3, word: "task",               ipa: "tǽsk",          pos: "名", ja: "仕事、作業、課題",              def: "a piece of work to be done" },
+  { id: 76, lesson: 2, part: 3, word: "missing",            ipa: "mísiŋ",         pos: "形", ja: "行方不明の、欠けている",          def: "lost, or not in the usual place" },
+  { id: 77, lesson: 2, part: 3, word: "dementia",           ipa: "diménʃə",       pos: "名", ja: "認知症" },
+  { id: 78, lesson: 2, part: 3, word: "scare",              ipa: "skéər",         pos: "動", ja: "～をこわがらせる、おびえさせる" },
+  { id: 79, lesson: 2, part: 3, word: "unit",               ipa: "júːnit",        pos: "名", ja: "単位、ユニット" },
+  { id: 80, lesson: 2, part: 3, word: "it is true that ... but ~", ipa: "",       pos: "句", ja: "…は事実だが～" },
+  { id: 81, lesson: 2, part: 3, word: "play a role",        ipa: "",              pos: "句", ja: "役割を果たす" },
+  { id: 82, lesson: 2, part: 3, word: "so ~ that ...",      ipa: "",              pos: "句", ja: "とても～なので…" },
+  { id: 83, lesson: 2, part: 3, word: "in contrast",        ipa: "",              pos: "句", ja: "対照的に" },
+  { id: 84, lesson: 2, part: 3, word: "scare A away",       ipa: "",              pos: "句", ja: "Aを怖がらせて追い払う" },
+
+  /* -- part 4 -- */
+  { id: 85, lesson: 2, part: 4, word: "inspiring",          ipa: "inspáiəriŋ",    pos: "形", ja: "奮い立たせる、やる気にさせる" },
+  { id: 86, lesson: 2, part: 4, word: "achieve",            ipa: "ətʃíːv",        pos: "動", ja: "～を達成する、成し遂げる",        def: "to succeed in doing something good, especially by working hard" },
+  { id: 87, lesson: 2, part: 4, word: "weakness",           ipa: "wíːknəs",       pos: "名", ja: "弱さ、弱点、欠点" },
+  { id: 88, lesson: 2, part: 4, word: "strength",           ipa: "stréŋkθ",       pos: "名", ja: "強さ、力、体力" },
+  { id: 89, lesson: 2, part: 4, word: "prove",              ipa: "prúːv",         pos: "動", ja: "～を証明する",                  def: "to show that something is true" },
+  { id: 90, lesson: 2, part: 4, word: "even though ...",    ipa: "",              pos: "句", ja: "～だけれども" },
+  { id: 91, lesson: 2, part: 4, word: "prove oneself",      ipa: "",              pos: "句", ja: "自分の力を証明する" }
+];
+
+</script>
+<script>
+(function(){
+  'use strict';
+
+  /* ============ BTS メンバー ============ */
+  var MEMBERS = [
+    { name:"RM",        sub:"リーダー",            c1:"#7b6cf6", c2:"#a99bff",
+      en:"“Perfect score! Your hard work is really paying off.”",
+      ja:"全問正解！努力がちゃんと実ってるよ。その調子！" },
+    { name:"Jin",       sub:"Worldwide Handsome",  c1:"#ff89ad", c2:"#ffb1c8",
+      en:"“10 out of 10! You're worldwide handsome at English too~”",
+      ja:"満点〜！もう英語もワールドワイドハンサムだね！" },
+    { name:"SUGA",      sub:"Min Yoongi",          c1:"#27c2b1", c2:"#62d8cb",
+      en:"“...Perfect. I knew you could do it. I'm proud of you.”",
+      ja:"…満点か。やればできると思ってたよ。えらい。" },
+    { name:"j-hope",    sub:"I'm your hope",       c1:"#ffb13b", c2:"#ffcd78",
+      en:"“Yes!! A perfect score! You're my hope and sunshine!”",
+      ja:"イェーイ！満点だ！キミは希望で太陽だよ！" },
+    { name:"Jimin",     sub:"ジミン",              c1:"#56a8ff", c2:"#8fc6ff",
+      en:"“Wahh, all correct! I'm so, so proud of you!”",
+      ja:"わぁ、ぜんぶ正解！すっごく誇らしいよ！" },
+    { name:"V",         sub:"Taehyung",            c1:"#9a8bff", c2:"#bdb2ff",
+      en:"“Perfect~! You're so talented. Borahae!”",
+      ja:"満点〜！才能あるね。ボラへ💜" },
+    { name:"Jung Kook", sub:"Golden Maknae",       c1:"#ff6fae", c2:"#ff9ec9",
+      en:"“Perfect 10! You're the golden student! Keep winning!”",
+      ja:"満点！キミはゴールデン生徒だ！この調子でいこう！" }
+  ];
+
+  /* ============ 永続データ（localStorage） ============ */
+  var SAVE_KEY = "lys_vocab_save_v1";
+  var save = { collected:[], reviewIds:[], btsIndex:0, streak:0, totalPerfect:0 };
+  function loadSave(){
+    try{
+      var raw = localStorage.getItem(SAVE_KEY);
+      if(raw){ var o=JSON.parse(raw);
+        save.collected   = o.collected   || [];
+        save.reviewIds   = o.reviewIds   || [];
+        save.btsIndex    = o.btsIndex    || 0;
+        save.streak      = o.streak      || 0;
+        save.totalPerfect= o.totalPerfect|| 0;
+      }
+    }catch(e){}
+  }
+  function persist(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(save)); }catch(e){} }
+
+  /* ============ 状態 ============ */
+  var state = {};
+  var QPS = 10;          // 1セットの問題数
+  var soundOn = true;
+
+  /* ============ 効果音（Web Audio・ファイル不要） ============ */
+  var actx = null;
+  function tone(freq, dur, type, when, vol){
+    if(!soundOn) return;
+    try{
+      if(!actx) actx = new (window.AudioContext||window.webkitAudioContext)();
+      var o=actx.createOscillator(), g=actx.createGain();
+      var t=actx.currentTime+(when||0);
+      o.type=type||"sine"; o.frequency.value=freq;
+      g.gain.setValueAtTime(0.0001,t);
+      g.gain.exponentialRampToValueAtTime(vol||0.18,t+0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+      o.connect(g); g.connect(actx.destination);
+      o.start(t); o.stop(t+dur+0.02);
+    }catch(e){}
+  }
+  function sndOk(){ tone(660,0.13,"triangle",0); tone(990,0.16,"triangle",0.1); }
+  function sndNg(){ tone(220,0.22,"sawtooth",0,0.12); }
+  function sndTap(){ tone(520,0.06,"sine",0,0.08); }
+  function sndFanfare(){
+    var n=[523,659,784,1047,1319];
+    n.forEach(function(f,i){ tone(f,0.32,"triangle",i*0.13,0.2); });
+  }
+
+  /* ============ ユーティリティ ============ */
+  function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){
+    var j=Math.floor(Math.random()*(i+1)); var t=a[i];a[i]=a[j];a[j]=t; } return a; }
+  function sample(a,n){ return shuffle(a).slice(0,n); }
+  function byId(id){ for(var i=0;i<WORDS.length;i++) if(WORDS[i].id===id) return WORDS[i]; return null; }
+  function $(id){ return document.getElementById(id); }
+
+  function scopeWords(scope){
+    if(scope==="1") return WORDS.filter(function(w){return w.lesson===1;});
+    if(scope==="2") return WORDS.filter(function(w){return w.lesson===2;});
+    return WORDS.slice();
+  }
+  function lessonLabel(w){ return "Lesson "+w.lesson+" - part "+w.part; }
+
+  function showScreen(id){
+    var ss=document.querySelectorAll(".screen");
+    for(var i=0;i<ss.length;i++) ss[i].classList.add("hidden");
+    $(id).classList.remove("hidden");
+    $("app").scrollTop=0; window.scrollTo(0,0);
+  }
+
+  /* ============ 復習リスト操作 ============ */
+  function addReview(id){
+    if(save.reviewIds.indexOf(id)<0){ save.reviewIds.push(id); }
+  }
+  function removeReview(id){
+    var i=save.reviewIds.indexOf(id);
+    if(i>=0) save.reviewIds.splice(i,1);
+  }
+
+  /* ============ ホーム描画 ============ */
+  function renderHome(){
+    // 復習バッジ
+    $("review-badge").textContent = save.reviewIds.length;
+    // 連続満点
+    var sb=$("streak-box");
+    if(save.streak>0){
+      sb.classList.remove("hidden");
+      sb.textContent = "🔥 れんぞく満点 "+save.streak+"！  ／  これまでの満点 "+save.totalPerfect+"回";
+    }else if(save.totalPerfect>0){
+      sb.classList.remove("hidden");
+      sb.textContent = "⭐ これまでの満点 "+save.totalPerfect+"回！";
+    }else{
+      sb.classList.add("hidden");
+    }
+    // ずかん
+    var grid=$("zukan-grid"); grid.innerHTML="";
+    for(var i=0;i<MEMBERS.length;i++){
+      (function(idx){
+        var m=MEMBERS[idx];
+        var got=save.collected.indexOf(idx)>=0;
+        var el=document.createElement("div");
+        el.className="member"+(got?" got":"");
+        var coin=document.createElement("div");
+        coin.className="m-coin"+(got?"":" locked");
+        if(got){ coin.style.background="linear-gradient(140deg,"+m.c1+","+m.c2+")"; coin.textContent="💜"; }
+        else { coin.textContent="?"; }
+        var nm=document.createElement("div");
+        nm.className="m-name"+(got?"":" locked");
+        nm.textContent=got?m.name:"???";
+        el.appendChild(coin); el.appendChild(nm);
+        if(got){ el.addEventListener("click",function(){ sndTap(); showCelebrate(idx,false,true); }); }
+        grid.appendChild(el);
+      })(i);
+    }
+    $("zukan-count").textContent = save.collected.length+" / 7";
+  }
+
+  /* ============ セットアップ画面 ============ */
+  var setupCfg = { mode:null, scope:"all", dir:"en-ja" };
+  function openSetup(mode){
+    setupCfg.mode=mode; setupCfg.scope="all"; setupCfg.dir="en-ja";
+    var titles={flashcard:"🃏 カードでおぼえる",quiz:"✏️ 4択クイズ",typing:"⌨️ うちこみクイズ",matching:"🧩 マッチング"};
+    $("setup-title").textContent=titles[mode]||"";
+    var subs={
+      flashcard:"カードをめくって意味をおぼえよう",
+      quiz:"4つの中から正しい答えをえらぼう（10問）",
+      typing:"答えをキーボードで入力しよう（10問・単語のみ）",
+      matching:"単語と意味をペアにしよう（10ペア）"
+    };
+    $("setup-sub").textContent=subs[mode]||"";
+    // scope ボタン初期化
+    var sr=$("scope-row").children;
+    for(var i=0;i<sr.length;i++) sr[i].classList.toggle("sel", sr[i].dataset.scope==="all");
+    // dir ボタン
+    var dr=$("dir-row").children;
+    for(var j=0;j<dr.length;j++) dr[j].classList.toggle("sel", dr[j].dataset.dir==="en-ja");
+    // マッチングは方向えらばない
+    $("dir-block").classList.toggle("hidden", mode==="matching");
+    showScreen("screen-setup");
+  }
+  function startFromSetup(){
+    var m=setupCfg.mode;
+    if(m==="flashcard") startFlashcard(scopeWords(setupCfg.scope), setupCfg.dir);
+    else if(m==="quiz") startQuiz(sample(scopeWords(setupCfg.scope),QPS), setupCfg.dir, false);
+    else if(m==="typing"){
+      var pool=scopeWords(setupCfg.scope).filter(function(w){return w.pos!=="句";});
+      startTyping(sample(pool,QPS), setupCfg.dir, false);
+    }
+    else if(m==="matching") startMatching(setupCfg.scope);
+  }
+
+  /* ============ フラッシュカード ============ */
+  function startFlashcard(words, dir){
+    state={words:shuffle(words), dir:dir, idx:0};
+    showScreen("screen-flashcard");
+    renderFlash();
+  }
+  function renderFlash(){
+    var w=state.words[state.idx];
+    $("flash").classList.remove("flip");
+    var posFull={"動":"動詞","名":"名詞","形":"形容詞","副":"副詞","接":"接続詞","句":"熟語・連語"};
+    var enHTML='<div class="fc-word">'+w.word+'</div>'+
+      (w.ipa?'<div class="fc-ipa">['+w.ipa+']</div>':'')+
+      '<div class="fc-pos">'+posFull[w.pos]+'</div>'+
+      '<button class="speak-btn" data-speak="1">🔊</button>'+
+      '<div class="fc-tap">タップで意味を見る</div>';
+    var jaHTML='<div class="fc-mean">'+w.ja+'</div>'+
+      '<div class="fc-pos">'+posFull[w.pos]+'</div>'+
+      (w.def?'<div class="fc-def">英英：'+w.def+'</div>':'')+
+      '<div class="fc-tap">タップで英語にもどる</div>';
+    if(state.dir==="en-ja"){ $("fc-front").innerHTML=enHTML; $("fc-back").innerHTML=jaHTML; }
+    else { $("fc-front").innerHTML=jaHTML.replace("意味を見る","英語を見る"); $("fc-back").innerHTML=enHTML.replace("意味にもどる","英語にもどる"); }
+    $("fc-counter").textContent=(state.idx+1)+" / "+state.words.length+" 語";
+    $("fc-bar").style.width=((state.idx+1)/state.words.length*100)+"%";
+    $("fc-prev").disabled=state.idx===0;
+    $("fc-prev").style.opacity=state.idx===0?".45":"1";
+    $("fc-next").textContent=state.idx===state.words.length-1?"おわり ✓":"つぎ →";
+  }
+
+  /* ============ 4択クイズ ============ */
+  function startQuiz(words, dir, isReview){
+    state={words:words, dir:dir, idx:0, correct:0, wrong:[], isReview:isReview, mode:"quiz"};
+    $("quiz-title").textContent = isReview ? "🔁 復習クイズ" : "4択クイズ";
+    showScreen("screen-quiz");
+    renderQuiz();
+  }
+  function renderQuiz(){
+    var w=state.words[state.idx];
+    $("q-feedback").className="feedback";
+    $("q-next").classList.add("hidden");
+    var qMain, ans, pool;
+    if(state.dir==="en-ja"){
+      qMain=w.word; ans=w.ja;
+      $("q-tag").textContent="この単語の意味は？";
+      $("q-ipa").textContent=w.ipa?"["+w.ipa+"]":"";
+      pool=WORDS.filter(function(x){return x.id!==w.id;}).map(function(x){return x.ja;});
+    }else{
+      qMain=w.ja; ans=w.word;
+      $("q-tag").textContent="この意味の英語は？";
+      $("q-ipa").textContent="";
+      pool=WORDS.filter(function(x){return x.id!==w.id;}).map(function(x){return x.word;});
+    }
+    $("q-main").textContent=qMain;
+    // 重複をのぞいたダミー
+    var uniq=[]; for(var i=0;i<pool.length;i++){ if(pool[i]!==ans && uniq.indexOf(pool[i])<0) uniq.push(pool[i]); }
+    var choices=shuffle([ans].concat(sample(uniq,3)));
+    var box=$("q-choices"); box.innerHTML="";
+    choices.forEach(function(c,i){
+      var b=document.createElement("button");
+      b.className="choice";
+      b.innerHTML='<span class="num">'+(i+1)+'</span><span>'+c+'</span>';
+      b.addEventListener("click",function(){ answerQuiz(b,c,ans,w); });
+      box.appendChild(b);
+    });
+    $("q-counter").textContent="問 "+(state.idx+1)+" / "+state.words.length;
+    $("q-score").textContent="✓ "+state.correct;
+    $("q-bar").style.width=((state.idx)/state.words.length*100)+"%";
+  }
+  function answerQuiz(btn,chosen,correct,w){
+    var cs=document.querySelectorAll("#q-choices .choice");
+    for(var i=0;i<cs.length;i++){
+      cs[i].disabled=true;
+      if(cs[i].querySelector("span:last-child").textContent===correct) cs[i].classList.add("correct");
+    }
+    var fb=$("q-feedback");
+    if(chosen===correct){
+      state.correct++; sndOk();
+      fb.textContent="⭕ 正解！"; fb.className="feedback ok show";
+    }else{
+      btn.classList.add("wrong"); sndNg();
+      fb.innerHTML="❌ おしい！ 正解は「"+correct+"」";
+      fb.className="feedback ng show";
+      state.wrong.push(w); addReview(w.id);
+    }
+    $("q-score").textContent="✓ "+state.correct;
+    $("q-bar").style.width=((state.idx+1)/state.words.length*100)+"%";
+    var nb=$("q-next");
+    nb.textContent=state.idx===state.words.length-1?"結果を見る →":"次の問題 →";
+    nb.classList.remove("hidden");
+  }
+  function nextQuiz(){
+    if(state.idx<state.words.length-1){ state.idx++; renderQuiz(); }
+    else finishSet("quiz");
+  }
+
+  /* ============ うちこみクイズ ============ */
+  function startTyping(words, dir, isReview){
+    state={words:words, dir:dir, idx:0, correct:0, wrong:[], isReview:isReview, mode:"typing", answered:false};
+    showScreen("screen-typing");
+    renderTyping();
+  }
+  function renderTyping(){
+    var w=state.words[state.idx];
+    state.answered=false;
+    $("t-feedback").className="feedback";
+    var inp=$("t-input");
+    inp.value=""; inp.className="type-input"; inp.disabled=false;
+    $("t-check").classList.remove("hidden");
+    $("t-next").classList.add("hidden");
+    $("t-skip").classList.remove("hidden");
+    if(state.dir==="en-ja"){
+      $("t-tag").textContent="意味を日本語で入力";
+      $("t-main").textContent=w.word;
+      $("t-ipa").textContent=w.ipa?"["+w.ipa+"]":"";
+      $("t-sub").textContent="";
+      inp.placeholder="日本語で答えてね";
+    }else{
+      $("t-tag").textContent="英語のスペルを入力";
+      $("t-main").textContent=w.ja;
+      $("t-ipa").textContent="";
+      $("t-sub").textContent="ヒント："+w.word.length+"文字";
+      inp.placeholder="英語で答えてね";
+    }
+    $("t-counter").textContent="問 "+(state.idx+1)+" / "+state.words.length;
+    $("t-score").textContent="✓ "+state.correct;
+    $("t-bar").style.width=((state.idx)/state.words.length*100)+"%";
+    setTimeout(function(){ inp.focus(); },120);
+  }
+  function normEn(s){ return (s||"").toLowerCase().trim().replace(/\s+/g," ").replace(/[.．。]/g,""); }
+  function normJa(s){ return (s||"").replace(/[\s　]/g,"").replace(/[～〜]/g,"")
+      .replace(/[（）()・,，、；;。.「」]/g,""); }
+  function judgeTyping(input,w){
+    if(state.dir==="ja-en"){
+      return normEn(input)===normEn(w.word) && input.trim().length>0;
+    }
+    var inp=normJa(input); if(inp.length<1) return false;
+    var chunks=w.ja.split(/[、,，・/／;；]/);
+    for(var i=0;i<chunks.length;i++){
+      var c=normJa(chunks[i]); if(!c) continue;
+      if(inp===c) return true;
+      if(inp.length>=2 && (c.indexOf(inp)>=0 || inp.indexOf(c)>=0)) return true;
+    }
+    return false;
+  }
+  function checkTyping(skip){
+    if(state.answered) return;
+    var w=state.words[state.idx];
+    var inp=$("t-input");
+    var ok = !skip && judgeTyping(inp.value,w);
+    state.answered=true;
+    inp.disabled=true;
+    $("t-check").classList.add("hidden");
+    $("t-skip").classList.add("hidden");
+    var fb=$("t-feedback");
+    var ansText = state.dir==="en-ja" ? w.ja : w.word;
+    if(ok){
+      state.correct++; sndOk();
+      inp.classList.add("ok");
+      fb.textContent="⭕ 正解！  "+ansText; fb.className="feedback ok show";
+    }else{
+      sndNg();
+      inp.classList.add("ng");
+      fb.innerHTML=(skip?"👀 答えはこちら → ":"❌ おしい！ 正解は → ")+
+        "<b>"+ansText+"</b>"+(state.dir==="ja-en"&&w.ipa?" ["+w.ipa+"]":"");
+      fb.className="feedback ng show";
+      state.wrong.push(w); addReview(w.id);
+    }
+    $("t-score").textContent="✓ "+state.correct;
+    $("t-bar").style.width=((state.idx+1)/state.words.length*100)+"%";
+    var nb=$("t-next");
+    nb.textContent=state.idx===state.words.length-1?"結果を見る →":"次の問題 →";
+    nb.classList.remove("hidden");
+  }
+  function nextTyping(){
+    if(state.idx<state.words.length-1){ state.idx++; renderTyping(); }
+    else finishSet("typing");
+  }
+
+  /* ============ マッチング ============ */
+  function startMatching(scope){
+    var pool=scopeWords(scope);
+    // 意味が重複しない10語をえらぶ
+    var picked=[], seen={};
+    var sh=shuffle(pool);
+    for(var i=0;i<sh.length && picked.length<QPS;i++){
+      if(!seen[sh[i].ja]){ seen[sh[i].ja]=1; picked.push(sh[i]); }
+    }
+    state={mode:"matching", words:picked, boards:[picked.slice(0,5),picked.slice(5,10)],
+      board:0, miss:0, wrong:[], matched:0, sel:null};
+    showScreen("screen-matching");
+    renderBoard();
+  }
+  function renderBoard(){
+    var bd=state.boards[state.board];
+    state.matched=0; state.sel=null;
+    var left=$("m-left"), right=$("m-right");
+    left.innerHTML=""; right.innerHTML="";
+    shuffle(bd).forEach(function(w){
+      var c=document.createElement("button");
+      c.className="mcard"; c.textContent=w.word; c.dataset.wid=w.id; c.dataset.side="L";
+      c.addEventListener("click",function(){ tapCard(c); });
+      left.appendChild(c);
+    });
+    shuffle(bd).forEach(function(w){
+      var c=document.createElement("button");
+      c.className="mcard"; c.textContent=w.ja; c.dataset.wid=w.id; c.dataset.side="R";
+      c.addEventListener("click",function(){ tapCard(c); });
+      right.appendChild(c);
+    });
+    var done=state.board*5;
+    $("m-counter").textContent="ペア "+done+" / 10";
+    $("m-miss").textContent="ミス "+state.miss;
+    $("m-bar").style.width=(done/10*100)+"%";
+  }
+  function tapCard(card){
+    if(card.classList.contains("done")) return;
+    sndTap();
+    if(!state.sel){
+      state.sel=card; card.classList.add("sel"); return;
+    }
+    if(state.sel===card){ card.classList.remove("sel"); state.sel=null; return; }
+    if(state.sel.dataset.side===card.dataset.side){
+      state.sel.classList.remove("sel"); state.sel=card; card.classList.add("sel"); return;
+    }
+    // 別サイド → 判定
+    var a=state.sel, b=card;
+    if(a.dataset.wid===b.dataset.wid){
+      a.classList.remove("sel"); a.classList.add("done"); b.classList.add("done");
+      state.sel=null; state.matched++; sndOk();
+      $("m-counter").textContent="ペア "+(state.board*5+state.matched)+" / 10";
+      $("m-bar").style.width=((state.board*5+state.matched)/10*100)+"%";
+      if(state.matched===5){
+        if(state.board===0){ state.board=1; setTimeout(renderBoard,420); }
+        else setTimeout(function(){ finishSet("matching"); },420);
+      }
+    }else{
+      state.miss++; sndNg();
+      var w=byId(parseInt(a.dataset.side==="L"?a.dataset.wid:b.dataset.wid,10));
+      if(w && state.wrong.indexOf(w)<0){ state.wrong.push(w); addReview(w.id); }
+      a.classList.add("shake"); b.classList.add("shake");
+      var aa=a,bb=b;
+      setTimeout(function(){
+        aa.classList.remove("shake","sel"); bb.classList.remove("shake");
+      },400);
+      state.sel=null;
+      $("m-miss").textContent="ミス "+state.miss;
+    }
+  }
+
+  /* ============ セット終了 → 結果 ============ */
+  function finishSet(mode){
+    var total, correct, perfect, wrong=state.wrong;
+    if(mode==="matching"){
+      total=10; correct=10-state.miss; if(correct<0)correct=0;
+      perfect=state.miss===0;
+    }else{
+      total=state.words.length; correct=state.correct;
+      perfect=correct===total;
+    }
+    // 復習モードで正解 → 復習リストから外す
+    if(state.isReview){
+      state.words.forEach(function(w){
+        var stillWrong=false;
+        for(var i=0;i<wrong.length;i++) if(wrong[i].id===w.id) stillWrong=true;
+        if(!stillWrong) removeReview(w.id);
+      });
+    }
+    // 連続満点
+    if(perfect){ save.streak++; save.totalPerfect++; }
+    else { save.streak=0; }
+    persist();
+    state.lastResult={mode:mode,total:total,correct:correct,perfect:perfect,wrong:wrong};
+    if(perfect){
+      var idx=nextMemberIndex();
+      var isNew=save.collected.indexOf(idx)<0;
+      if(isNew){ save.collected.push(idx); }
+      save.btsIndex=(idx+1)%7;
+      persist();
+      sndFanfare();
+      showCelebrate(idx,isNew,false);
+    }else{
+      showResult();
+    }
+  }
+  function nextMemberIndex(){
+    // まだ集めていないメンバーを優先（ずかんコンプ）
+    for(var i=0;i<7;i++){
+      var idx=(save.btsIndex+i)%7;
+      if(save.collected.indexOf(idx)<0) return idx;
+    }
+    return save.btsIndex%7;
+  }
+
+  /* ============ お祝い画面 ============ */
+  function showCelebrate(idx,isNew,fromHome){
+    var m=MEMBERS[idx];
+    $("cele-avatar").style.background="linear-gradient(140deg,"+m.c1+","+m.c2+")";
+    $("cele-name").textContent=m.name;
+    $("cele-name").style.color=m.c1;
+    $("cele-sub").textContent=m.sub;
+    $("cele-msg-en").textContent=m.en;
+    $("cele-msg-ja").textContent=m.ja;
+    $("cele-new").classList.toggle("hidden",!isNew);
+    $("cele-top").textContent = fromHome ? "★ あつめたメンバー ★" : "★ 全問正解おめでとう！ ★";
+    $("cele-btn").textContent = fromHome ? "とじる" : "つづける →";
+    state.celebrateFromHome=fromHome;
+    showScreen("screen-celebrate");
+    confetti();
+  }
+
+  /* ============ 結果画面 ============ */
+  function showResult(){
+    var r=state.lastResult;
+    showScreen("screen-result");
+    if(r.mode==="matching"){
+      $("r-score").textContent="ミス "+state.miss+" 回";
+      $("r-head").textContent="マッチング けっか";
+    }else{
+      $("r-score").textContent=r.correct+" / "+r.total;
+      $("r-head").textContent= state.isReview ? "復習けっか" : "けっか はっぴょう";
+    }
+    var pct=r.correct/r.total, emoji, msg;
+    if(r.perfect){ emoji="🏆"; msg="パーフェクト！すごい！"; }
+    else if(pct>=0.9){ emoji="😆"; msg="おっしい〜！あと少しで満点だよ！"; }
+    else if(pct>=0.7){ emoji="😊"; msg="いい調子！この調子でがんばろう✨"; }
+    else if(pct>=0.5){ emoji="💪"; msg="ナイスファイト！復習でぐーんと伸びるよ📈"; }
+    else { emoji="🌱"; msg="ここからが伸びどき！復習でばっちりにしよう💜"; }
+    $("r-emoji").textContent=emoji;
+    $("r-msg").textContent=msg;
+    // まちがいリスト
+    var wb=$("r-wrongbox"), wl=$("r-wronglist");
+    if(r.wrong.length>0){
+      wl.innerHTML="";
+      r.wrong.forEach(function(w){
+        var d=document.createElement("div");
+        d.className="wrong-item";
+        d.innerHTML='<b>'+w.word+'</b> '+(w.ipa?'<span class="ipa" style="font-size:11px;color:var(--ink-soft);">['+w.ipa+']</span>':'')+
+          ' <span class="jp">— '+w.ja+'</span>';
+        wl.appendChild(d);
+      });
+      wb.classList.remove("hidden");
+      $("r-review").classList.remove("hidden");
+      $("r-review").textContent="🔁 まちがえた"+r.wrong.length+"問を今すぐ復習";
+    }else{
+      wb.classList.add("hidden");
+      $("r-review").classList.add("hidden");
+    }
+    // もう一度ボタン文言
+    $("r-again").textContent = r.mode==="matching" ? "🔄 もう一度マッチング" : "🔄 もう一度（新しい10問）";
+  }
+
+  /* ============ 紙吹雪 ============ */
+  function confetti(){
+    var colors=["#7b6cf6","#ff89ad","#ffb13b","#27c2b1","#56a8ff","#9a8bff","#ff6fae"];
+    for(var i=0;i<46;i++){
+      (function(){
+        var d=document.createElement("div");
+        d.className="confetti";
+        d.style.left=Math.random()*100+"%";
+        d.style.background=colors[Math.floor(Math.random()*colors.length)];
+        var dur=2.4+Math.random()*1.8;
+        d.style.animation="fall "+dur+"s linear "+(Math.random()*0.5)+"s forwards";
+        if(Math.random()<0.5) d.style.borderRadius="50%";
+        d.style.width=(6+Math.random()*8)+"px";
+        d.style.height=(8+Math.random()*10)+"px";
+        document.body.appendChild(d);
+        setTimeout(function(){ if(d.parentNode) d.parentNode.removeChild(d); },(dur+1)*1000);
+      })();
+    }
+  }
+
+  /* ============ 読み上げ ============ */
+  function speak(text){
+    try{
+      if(!window.speechSynthesis) return;
+      window.speechSynthesis.cancel();
+      var u=new SpeechSynthesisUtterance(text);
+      u.lang="en-US"; u.rate=0.92;
+      window.speechSynthesis.speak(u);
+    }catch(e){}
+  }
+
+  /* ============ たんご一覧 ============ */
+  function renderWordList(){
+    var filter=document.querySelector("#wl-filter .sel").dataset.wl;
+    var q=normEn($("wl-search").value);
+    var qj=normJa($("wl-search").value);
+    var list=$("wl-list"); list.innerHTML="";
+    var arr=WORDS.filter(function(w){
+      if(filter!=="all" && w.lesson!==parseInt(filter,10)) return false;
+      if(!q && !qj) return true;
+      return normEn(w.word).indexOf(q)>=0 || (qj && normJa(w.ja).indexOf(qj)>=0);
+    });
+    if(arr.length===0){ list.innerHTML='<p style="text-align:center;color:var(--ink-soft);padding:20px;font-size:13px;">見つかりませんでした</p>'; return; }
+    arr.forEach(function(w){
+      var d=document.createElement("div");
+      d.className="wl-item";
+      d.innerHTML='<span class="wl-pos">'+w.pos+'</span>'+
+        '<span><span class="en">'+w.word+'</span>'+
+        (w.ipa?' <span class="ipa">['+w.ipa+']</span>':'')+'</span>'+
+        '<span class="jp">'+w.ja+'</span>';
+      d.addEventListener("click",function(){ sndTap(); speak(w.word); });
+      list.appendChild(d);
+    });
+  }
+
+  /* ============ イベント ============ */
+  document.addEventListener("DOMContentLoaded",function(){
+    loadSave();
+    renderHome();
+
+    // モードボタン
+    var mbs=document.querySelectorAll("[data-mode]");
+    for(var i=0;i<mbs.length;i++){
+      mbs[i].addEventListener("click",function(){
+        sndTap();
+        var mode=this.dataset.mode;
+        if(mode==="review"){
+          if(save.reviewIds.length===0){
+            alert("復習リストは空っぽ！\nクイズでまちがえた単語がここに集まるよ💜");
+            return;
+          }
+          var rw=save.reviewIds.map(byId).filter(Boolean);
+          startQuiz(sample(rw,Math.min(QPS,rw.length)),
+            Math.random()<0.5?"en-ja":"ja-en", true);
+        }
+        else if(mode==="wordlist"){
+          var wf=$("wl-filter").children;
+          for(var k=0;k<wf.length;k++) wf[k].classList.toggle("sel",wf[k].dataset.wl==="all");
+          $("wl-search").value="";
+          renderWordList();
+          showScreen("screen-wordlist");
+        }
+        else openSetup(mode);
+      });
+    }
+
+    // もどるボタン（全画面共通）
+    var backs=document.querySelectorAll(".back-home");
+    for(var b=0;b<backs.length;b++){
+      backs[b].addEventListener("click",function(){
+        sndTap(); renderHome(); showScreen("screen-home");
+      });
+    }
+
+    // セットアップ scope/dir
+    $("scope-row").addEventListener("click",function(e){
+      var t=e.target.closest(".pick"); if(!t) return; sndTap();
+      var ch=this.children; for(var i=0;i<ch.length;i++) ch[i].classList.remove("sel");
+      t.classList.add("sel"); setupCfg.scope=t.dataset.scope;
+    });
+    $("dir-row").addEventListener("click",function(e){
+      var t=e.target.closest(".pick"); if(!t) return; sndTap();
+      var ch=this.children; for(var i=0;i<ch.length;i++) ch[i].classList.remove("sel");
+      t.classList.add("sel"); setupCfg.dir=t.dataset.dir;
+    });
+    $("setup-start").addEventListener("click",function(){ sndTap(); startFromSetup(); });
+
+    // フラッシュカード
+    $("flash").addEventListener("click",function(e){
+      if(e.target.dataset.speak){
+        e.stopPropagation();
+        speak(state.words[state.idx].word); return;
+      }
+      this.classList.toggle("flip");
+    });
+    $("fc-prev").addEventListener("click",function(){
+      if(state.idx>0){ state.idx--; renderFlash(); }
+    });
+    $("fc-next").addEventListener("click",function(){
+      if(state.idx<state.words.length-1){ state.idx++; renderFlash(); }
+      else { renderHome(); showScreen("screen-home"); }
+    });
+
+    // クイズ
+    $("q-next").addEventListener("click",function(){ sndTap(); nextQuiz(); });
+
+    // タイピング
+    $("t-check").addEventListener("click",function(){ checkTyping(false); });
+    $("t-next").addEventListener("click",function(){ sndTap(); nextTyping(); });
+    $("t-skip").addEventListener("click",function(){ checkTyping(true); });
+    $("t-input").addEventListener("keydown",function(e){
+      if(e.key==="Enter"){
+        e.preventDefault();
+        if(state.answered) nextTyping(); else checkTyping(false);
+      }
+    });
+
+    // 結果
+    $("r-review").addEventListener("click",function(){
+      sndTap();
+      var rw=state.lastResult.wrong.slice();
+      startQuiz(rw, Math.random()<0.5?"en-ja":"ja-en", true);
+    });
+    $("r-again").addEventListener("click",function(){
+      sndTap();
+      var r=state.lastResult;
+      if(r.mode==="quiz") startQuiz(sample(scopeWords(setupCfg.scope),QPS),setupCfg.dir,false);
+      else if(r.mode==="typing"){
+        var pool=scopeWords(setupCfg.scope).filter(function(w){return w.pos!=="句";});
+        startTyping(sample(pool,QPS),setupCfg.dir,false);
+      }
+      else if(r.mode==="matching") startMatching(setupCfg.scope);
+    });
+    $("r-home").addEventListener("click",function(){
+      sndTap(); renderHome(); showScreen("screen-home");
+    });
+
+    // お祝い画面
+    $("cele-btn").addEventListener("click",function(){
+      sndTap();
+      if(state.celebrateFromHome){ renderHome(); showScreen("screen-home"); }
+      else showResult();
+    });
+
+    // たんご一覧
+    $("wl-search").addEventListener("input",renderWordList);
+    $("wl-filter").addEventListener("click",function(e){
+      var t=e.target.closest(".pick"); if(!t) return; sndTap();
+      var ch=this.children; for(var i=0;i<ch.length;i++) ch[i].classList.remove("sel");
+      t.classList.add("sel"); renderWordList();
+    });
+
+    // 音 ON/OFF
+    $("sound-btn").addEventListener("click",function(){
+      soundOn=!soundOn;
+      this.textContent=soundOn?"🔊":"🔇";
+      if(soundOn) sndTap();
+    });
+
+    // あそびかた
+    $("help-btn").addEventListener("click",function(){
+      alert("💜 あそびかた 💜\n\n"+
+        "①「カードでおぼえる」で単語をインプット\n"+
+        "②「4択」「うちこみ」「マッチング」で力だめし（10問）\n"+
+        "③ まちがえた単語は「まちがい復習」に自動で集まるよ\n"+
+        "④ 10問ぜんぶ正解すると…BTSメンバーが1人ずつ仲間入り！\n"+
+        "　 めざせ7人コンプリート💜\n\n"+
+        "がんばってね！ Borahae 💜");
+    });
+
+    // キーボード（4択：1〜4で回答）
+    document.addEventListener("keydown",function(e){
+      if(!$("screen-quiz").classList.contains("hidden")){
+        if(e.key>="1"&&e.key<="4"){
+          var cs=document.querySelectorAll("#q-choices .choice");
+          var n=parseInt(e.key,10)-1;
+          if(cs[n] && !cs[n].disabled) cs[n].click();
+        }
+        if(e.key==="Enter" && !$("q-next").classList.contains("hidden")) $("q-next").click();
+      }
+    });
+
+    showScreen("screen-home");
+  });
+})();
+</script>
+</body>
+</html>
