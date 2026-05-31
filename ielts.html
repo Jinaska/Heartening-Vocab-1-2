@@ -313,6 +313,10 @@
   .aiset-card{background:var(--bg-card2);border-radius:16px;padding:16px 14px;}
   .aiset-card .pick-label{margin-top:14px;}
   .aiset-card .pick-label:first-child{margin-top:0;}
+  #ai-model-row .pick.sel{border-color:var(--purple-d);
+    background:linear-gradient(135deg,#5e44c4,#9d7bff);color:#fff;
+    box-shadow:0 4px 12px rgba(94,68,196,.35);}
+  #ai-model-row .pick.sel small{color:rgba(255,255,255,.9);}
   .histessay{background:#fafdfc;border:1.5px solid var(--line);border-radius:12px;
     padding:12px;font-size:13px;line-height:1.7;color:var(--ink);white-space:pre-wrap;
     word-break:break-word;max-height:240px;overflow:auto;margin-bottom:14px;}
@@ -548,6 +552,7 @@
         <button class="pick sel" data-model="claude-sonnet-4-6">Sonnet<small>おすすめ</small></button>
         <button class="pick" data-model="claude-opus-4-8">Opus<small>最高品質</small></button>
       </div>
+      <div id="ai-model-current" style="text-align:center;font-size:13px;font-weight:800;color:var(--purple-d);margin-top:9px;"></div>
 
       <div class="btn-row" style="margin-top:16px;">
         <button class="pill-btn ghost" id="ai-test">🔌 接続テスト</button>
@@ -1623,11 +1628,23 @@ var GUIDE_HTML =
     ai.key=o.key||""; ai.model=o.model||"claude-sonnet-4-6"; }catch(e){} }
   function persistAI(){ try{ localStorage.setItem(AI_SKEY, JSON.stringify(ai)); }catch(e){} }
 
+  function modelLabel(id){
+    if(/haiku/i.test(id)) return "Haiku（安い・速い）";
+    if(/sonnet/i.test(id)) return "Sonnet（おすすめ）";
+    if(/opus/i.test(id)) return "Opus（最高品質）";
+    return id||"未選択";
+  }
+  function updateModelCurrent(){
+    var sel=$("ai-model-row").querySelector(".sel");
+    var id=sel?sel.dataset.model:"";
+    $("ai-model-current").innerHTML = id ? ('いま選んでいるモデル：<b>'+esc(modelLabel(id))+'</b>') : '未選択';
+  }
   function openAISettings(){
     $("ai-key-input").value=ai.key;
     $("ai-key-input").type="password"; $("ai-key-show").checked=false;
     var row=$("ai-model-row").children;
     for(var i=0;i<row.length;i++) row[i].classList.toggle("sel", row[i].dataset.model===ai.model);
+    updateModelCurrent();
     $("ai-test-result").textContent="";
     showScreen("screen-aiset");
   }
@@ -1977,15 +1994,17 @@ var GUIDE_HTML =
       b.addEventListener("click",function(){
         Array.prototype.forEach.call($("ai-model-row").children,function(x){ x.classList.remove("sel"); });
         b.classList.add("sel");
+        updateModelCurrent();
       });
     });
     $("ai-save").addEventListener("click",function(){
       ai.key=$("ai-key-input").value.trim();
       ai.model=$("ai-model-row").querySelector(".sel").dataset.model;
       persistAI();
+      updateModelCurrent();
       $("ai-test-result").innerHTML= ai.key
-        ? '<span style="color:var(--ok)">✓ 保存しました。各 Writing 画面で「🤖 AIに添削してもらう」が使えます</span>'
-        : '<span style="color:var(--ink-soft)">キーが空のまま保存しました</span>';
+        ? '<span style="color:var(--ok)">✓ 保存しました（モデル：'+esc(modelLabel(ai.model))+'）</span>'
+        : '<span style="color:var(--ink-soft)">キーが空のまま保存しました（モデル：'+esc(modelLabel(ai.model))+'）</span>';
     });
     $("ai-test").addEventListener("click",aiTest);
     $("ai-clear").addEventListener("click",function(){
