@@ -1667,14 +1667,12 @@ var GUIDE_HTML =
     fetch("https://api.anthropic.com/v1/messages",{
       method:"POST", headers:aiHeaders(ai.key),
       body:JSON.stringify({ model:ai.model, max_tokens:3500,
-        messages:[{role:"user", content:buildAIPrompt(item,kind,text)},
-                  {role:"assistant", content:"{"}] })   // プレフィルでJSON出力を強制
+        messages:[{role:"user", content:buildAIPrompt(item,kind,text)}] })
     }).then(function(r){ return r.json().then(function(j){ return {ok:r.ok,status:r.status,j:j}; }); })
     .then(function(res){
       if(!res.ok){ aiError(res.status, res.j); return; }
-      var blocks=(res.j.content||[]).filter(function(b){return b.type==="text";})
+      var raw=(res.j.content||[]).filter(function(b){return b.type==="text";})
         .map(function(b){return b.text;}).join("");
-      var raw="{"+blocks;   // プレフィルした "{" を補う
       var data=parseAIJson(raw);
       if(!data){ aiError("parse", {raw:raw, stop:res.j.stop_reason}); return; }
       renderAIResult(data, kind);
@@ -1686,16 +1684,22 @@ var GUIDE_HTML =
 
   function aiError(status, info){
     info=info||{};
+    var apiMsg = (info.error && info.error.message) ? info.error.message : "";
+    var apiType = (info.error && info.error.type) ? info.error.type : "";
     var msg;
     if(status===401||status===403) msg="APIキーが正しくないようです。設定でキーを確認してください。";
     else if(status===429) msg="アクセスが集中しています（レート上限）。少し待ってから再度お試しください。";
-    else if(status===400||status===404) msg="リクエストエラー："+((info.j&&info.j.error&&info.j.error.message)||"設定のモデルを変えて試してください。");
+    else if(status===400||status===404) msg="リクエストエラー："+(apiMsg || "設定のモデルを変えて試してください。");
     else if(status==="parse") msg="AIの返答を読み取れませんでした。"+(info.stop==="max_tokens"?"（返答が長くて途中で切れたようです。設定でモデルをHaikuにするか、もう一度お試しください）":"もう一度お試しください。");
     else if(status==="network") msg="ネットワークエラー。オンライン環境か、キー・通信を確認してください（CORS制限の可能性）。";
-    else msg="エラーが発生しました（"+status+"）。もう一度お試しください。";
-    var extra = (status==="parse" && info.raw)
-      ? '<details style="margin-top:10px"><summary style="font-size:11px;color:var(--ink-soft);cursor:pointer">🔍 返答の中身を見る（原因究明用）</summary>'+
-        '<pre style="white-space:pre-wrap;word-break:break-word;font-size:10px;color:var(--ink-soft);max-height:180px;overflow:auto;background:#fff;padding:9px;border-radius:8px;margin-top:6px">'+esc(info.raw.slice(0,900))+'</pre></details>'
+    else msg="エラーが発生しました（"+status+"）。"+(apiMsg||"もう一度お試しください。");
+    // 原因究明用の詳細（解析失敗時の生テキスト or APIエラー本文）
+    var detailText="";
+    if(status==="parse" && info.raw) detailText=info.raw;
+    else if(apiMsg) detailText=(apiType?("["+apiType+"] "):"")+apiMsg;
+    var extra = detailText
+      ? '<details style="margin-top:10px"><summary style="font-size:11px;color:var(--ink-soft);cursor:pointer">🔍 詳細を見る（原因究明用）</summary>'+
+        '<pre style="white-space:pre-wrap;word-break:break-word;font-size:10px;color:var(--ink-soft);max-height:180px;overflow:auto;background:#fff;padding:9px;border-radius:8px;margin-top:6px">'+esc(detailText.slice(0,900))+'</pre></details>'
       : '';
     $("ai-result").innerHTML='<div class="evalcard ai"><div class="eval-msg" style="color:var(--ng)">⚠️ '+esc(msg)+'</div>'+extra+
       '<div class="btn-row" style="margin-top:12px"><button class="pill-btn ghost" id="ai-open-set">⚙️ 設定を開く</button>'+
