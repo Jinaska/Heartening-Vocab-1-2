@@ -295,6 +295,24 @@
   .up-item .bad2{font-weight:800;color:var(--ink);}
   .up-item .better{color:var(--teal-d);font-weight:800;}
   .t2theme .up-item .better{color:var(--purple-d);}
+  .crit-row .cc{font-size:11px;color:var(--ink-soft);margin-top:2px;line-height:1.5;}
+
+  /* AI添削 */
+  .ai-btn{width:100%;margin-top:10px;
+    background:linear-gradient(135deg,#5e44c4,#9d7bff);box-shadow:0 6px 14px rgba(94,68,196,.34);}
+  .evalcard.ai{border-color:var(--purple);background:linear-gradient(160deg,#f4f0ff,#fff);}
+  .evalcard.ai .eval-band .num{background:linear-gradient(135deg,var(--purple),var(--purple-l));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .evalcard.ai .crit-bar>div{background:linear-gradient(90deg,var(--purple),var(--purple-l));}
+  .ai-badge{display:inline-block;background:linear-gradient(135deg,#5e44c4,#9d7bff);color:#fff;
+    font-size:10.5px;font-weight:800;padding:3px 11px;border-radius:9px;margin-bottom:9px;}
+  .ai-load{text-align:center;padding:24px 10px;color:var(--purple-d);font-weight:800;font-size:13px;line-height:2;}
+  .spinner{display:inline-block;width:20px;height:20px;border:3px solid rgba(123,95,224,.25);
+    border-top-color:var(--purple);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .aiset-card{background:var(--bg-card2);border-radius:16px;padding:16px 14px;}
+  .aiset-card .pick-label{margin-top:14px;}
+  .aiset-card .pick-label:first-child{margin-top:0;}
 
   /* generic buttons */
   .btn-row{display:flex;gap:9px;margin-top:6px;}
@@ -352,6 +370,10 @@
       <button class="mode-btn guide" data-go="guide">
         <span class="emoji">🧭</span>
         <span class="txt"><b>はじめてガイド</b><span>IELTSライティングの基本とBand 6攻略</span></span>
+      </button>
+      <button class="mode-btn" data-go="aiset" style="background:linear-gradient(135deg,#5e44c4,#9d7bff);box-shadow:0 7px 16px rgba(94,68,196,.32);">
+        <span class="emoji">🤖</span>
+        <span class="txt"><b>AI添削の設定</b><span>Claudeで本格的な添削を受ける（任意）</span></span>
       </button>
     </div>
   </section>
@@ -427,9 +449,11 @@
 
     <div class="btn-row" style="margin-top:14px;">
       <button class="pill-btn ghost" id="write-clear">🗑 消す</button>
-      <button class="pill-btn" id="write-done">✅ 提出して評価する</button>
+      <button class="pill-btn" id="write-done">✅ 自動で評価</button>
     </div>
+    <button class="pill-btn ai-btn" id="ai-grade">🤖 AIに添削してもらう（Claude）</button>
 
+    <div id="ai-result" class="hidden"></div>
     <div id="eval-result" class="hidden"></div>
   </section>
 
@@ -480,6 +504,45 @@
     <h2 class="sec-h">🧭 はじめてガイド</h2>
     <p class="sec-sub">IELTSライティングの基本と、Band 6 を取るコツ。</p>
     <div id="guide-body"></div>
+  </section>
+
+  <!-- ============ AI SETTINGS ============ -->
+  <section id="screen-aiset" class="screen hidden">
+    <div class="topbar">
+      <button class="icon-btn back-home">←</button>
+      <span class="topbar-title">AI添削の設定</span>
+      <div class="spacer"></div>
+    </div>
+    <h2 class="sec-h">🤖 AI添削の設定</h2>
+    <p class="sec-sub">Anthropic（Claude）のAPIキーを入れると、各 Writing 画面で<br>「🤖 AIに添削してもらう」が使えるようになります。</p>
+
+    <div class="aiset-card">
+      <div class="pick-label">🔑 APIキー</div>
+      <input type="password" id="ai-key-input" class="wl-search" placeholder="sk-ant-..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      <label style="font-size:11.5px;color:var(--ink-soft);display:flex;gap:6px;align-items:center;margin:0 0 4px;">
+        <input type="checkbox" id="ai-key-show" style="width:16px;height:16px;"> キーを表示する
+      </label>
+
+      <div class="pick-label">🤖 モデル（賢さと料金のバランス）</div>
+      <div class="pick-row" id="ai-model-row">
+        <button class="pick" data-model="claude-haiku-4-5-20251001">Haiku<small>安い・速い</small></button>
+        <button class="pick sel" data-model="claude-sonnet-4-6">Sonnet<small>おすすめ</small></button>
+        <button class="pick" data-model="claude-opus-4-8">Opus<small>最高品質</small></button>
+      </div>
+
+      <div class="btn-row" style="margin-top:16px;">
+        <button class="pill-btn ghost" id="ai-test">🔌 接続テスト</button>
+        <button class="pill-btn purple" id="ai-save">💾 保存</button>
+      </div>
+      <div id="ai-test-result" style="font-size:12px;font-weight:700;text-align:center;margin-top:11px;min-height:18px;"></div>
+      <button class="skip-btn" id="ai-clear">保存したキーを削除する</button>
+    </div>
+
+    <div class="eval-note" style="margin-top:14px;">
+      🔒 キーは<b>この端末のブラウザ内だけ</b>に保存され、Claudeへのリクエスト時以外には使われません。<br>
+      ⚠️ この方式は<b>先生ご自身のテスト用</b>です。生徒さんに配るとキーが見えてしまうため、その場合はサーバー版（プロキシ）が必要です。<br>
+      💳 キーの取得・課金は <b>console.anthropic.com</b> から。もしモデルでエラーが出たら別のモデルを選んで試してください。
+    </div>
   </section>
 
 </div>
@@ -1123,6 +1186,8 @@ var GUIDE_HTML =
     // 前回の評価結果を消す
     $("eval-result").classList.add("hidden");
     $("eval-result").innerHTML="";
+    $("ai-result").classList.add("hidden");
+    $("ai-result").innerHTML="";
 
     showScreen("screen-write");
   }
@@ -1515,6 +1580,149 @@ var GUIDE_HTML =
     if(el.scrollIntoView) el.scrollIntoView({behavior:"smooth"});
   }
 
+  /* ===================== AI添削（BYOK：自分のキー） ===================== */
+  var AI_SKEY="lys_ielts_ai_v1";
+  var ai={ key:"", model:"claude-sonnet-4-6" };
+  function loadAI(){ try{ var o=JSON.parse(localStorage.getItem(AI_SKEY)||"{}");
+    ai.key=o.key||""; ai.model=o.model||"claude-sonnet-4-6"; }catch(e){} }
+  function persistAI(){ try{ localStorage.setItem(AI_SKEY, JSON.stringify(ai)); }catch(e){} }
+
+  function openAISettings(){
+    $("ai-key-input").value=ai.key;
+    $("ai-key-input").type="password"; $("ai-key-show").checked=false;
+    var row=$("ai-model-row").children;
+    for(var i=0;i<row.length;i++) row[i].classList.toggle("sel", row[i].dataset.model===ai.model);
+    $("ai-test-result").textContent="";
+    showScreen("screen-aiset");
+  }
+
+  function aiHeaders(key){ return {
+    "content-type":"application/json",
+    "x-api-key":key,
+    "anthropic-version":"2023-06-01",
+    "anthropic-dangerous-direct-browser-access":"true"
+  }; }
+
+  function buildAIPrompt(item, kind, text){
+    var isT2=kind==="task2";
+    var focus = isT2
+      ? "これは Task 2（エッセイ）です。質問への答え方・立場の明確さ・理由と具体例・段落構成・つなぎ言葉を重視してください。"
+      : "これは Task 1（Academic：図表の説明）です。意見は不要で、概観(overview)・主要な特徴の選択・数値の正確な描写・比較表現を重視してください。";
+    return "あなたはIELTSライティングの採点官で、Band 6 を目指す日本人の初級〜中級者を教える優しい先生です。"+
+      "公式の4観点（Task Achievement / Coherence & Cohesion / Lexical Resource / Grammatical Range & Accuracy）で、甘すぎず辛すぎず本物のIELTS基準で採点します。"+focus+"\n\n"+
+      "【課題】\n"+item.prompt+"\n\n【生徒の解答】\n"+text+"\n\n"+
+      "次のJSONだけで返してください（コードフェンスや前後の説明は禁止。生徒向けの説明はすべてやさしい日本語、英語の語句や例は英語のまま）:\n"+
+      '{"overall_band":数値,"criteria":{"task":{"band":数値,"comment_ja":"…"},"coherence":{"band":数値,"comment_ja":"…"},"lexical":{"band":数値,"comment_ja":"…"},"grammar":{"band":数値,"comment_ja":"…"}},'+
+      '"good_points":["…"],"improvements":["…"],'+
+      '"corrections":[{"original":"英語の誤りを含む語句","fixed":"正しい英語","reason_ja":"理由"}],'+
+      '"upgrades":[{"original":"基本的な英語表現","better":"より良い英語表現","note_ja":"ひとこと"}],'+
+      '"encouragement_ja":"励ましの一言"}\n'+
+      "band は 4.0〜8.0 の 0.5 刻み。corrections は最大8個・重要なものだけ。upgrades は最大6個。good_points は2〜4個、improvements は3〜5個。";
+  }
+
+  function parseAIJson(s){
+    if(!s) return null;
+    var t=String(s).trim().replace(/^```(?:json)?/i,"").replace(/```$/,"").trim();
+    var a=t.indexOf("{"), b=t.lastIndexOf("}");
+    if(a<0||b<0) return null;
+    try{ return JSON.parse(t.slice(a,b+1)); }catch(e){ return null; }
+  }
+
+  function aiGrade(){
+    if(!ai.key){ if(confirm("AI添削にはAPIキーの設定が必要です。設定画面を開きますか？")) openAISettings(); return; }
+    var text=$("editor").value.trim();
+    if(text.split(/\s+/).filter(Boolean).length<20){ alert("もう少し書いてから「AI添削」を受けよう（20語以上）"); return; }
+    var item=cur, kind=curKind;
+    var box=$("ai-result"); box.classList.remove("hidden");
+    box.innerHTML='<div class="evalcard ai"><div class="ai-load"><span class="spinner"></span><br>AIが添削しています…（10〜20秒ほど）</div></div>';
+    if(box.scrollIntoView) box.scrollIntoView({behavior:"smooth"});
+    fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST", headers:aiHeaders(ai.key),
+      body:JSON.stringify({ model:ai.model, max_tokens:2000,
+        messages:[{role:"user", content:buildAIPrompt(item,kind,text)}] })
+    }).then(function(r){ return r.json().then(function(j){ return {ok:r.ok,status:r.status,j:j}; }); })
+    .then(function(res){
+      if(!res.ok){ aiError(res.status, res.j); return; }
+      var txt=(res.j.content&&res.j.content[0]&&res.j.content[0].text)||"";
+      var data=parseAIJson(txt);
+      if(!data){ aiError("parse", {}); return; }
+      renderAIResult(data, kind);
+      var ob=(typeof data.overall_band==="number")?data.overall_band:parseFloat(data.overall_band);
+      if(ob){ if(!save.best) save.best={};
+        if(!save.best[item.id] || ob>save.best[item.id]){ save.best[item.id]=ob; persist(); renderHome(); } }
+    }).catch(function(e){ aiError("network", {msg:String(e)}); });
+  }
+
+  function aiError(status, info){
+    var msg;
+    if(status===401||status===403) msg="APIキーが正しくないようです。設定でキーを確認してください。";
+    else if(status===429) msg="アクセスが集中しています（レート上限）。少し待ってから再度お試しください。";
+    else if(status===400) msg="リクエストエラー："+((info.j&&info.j.error&&info.j.error.message)||"内容を確認してください。");
+    else if(status==="parse") msg="AIの返答を読み取れませんでした。もう一度お試しください。";
+    else if(status==="network") msg="ネットワークエラー。オンライン環境か、キー・通信を確認してください（CORS制限の可能性）。";
+    else msg="エラーが発生しました（"+status+"）。もう一度お試しください。";
+    $("ai-result").innerHTML='<div class="evalcard ai"><div class="eval-msg" style="color:var(--ng)">⚠️ '+esc(msg)+'</div>'+
+      '<div class="btn-row" style="margin-top:12px"><button class="pill-btn ghost" id="ai-open-set">⚙️ 設定を開く</button>'+
+      '<button class="pill-btn purple" id="ai-retry">🔄 もう一度</button></div></div>';
+    var s=document.getElementById("ai-open-set"); if(s) s.addEventListener("click",openAISettings);
+    var rt=document.getElementById("ai-retry"); if(rt) rt.addEventListener("click",aiGrade);
+  }
+
+  function renderAIResult(d, kind){
+    function num(x){ return (typeof x==="number")? x.toFixed(1) : (x!=null?String(x):"-"); }
+    var c=d.criteria||{};
+    var rows=[["Task Achievement（内容）",c.task],["Coherence（構成・つながり）",c.coherence],
+      ["Lexical Resource（語彙）",c.lexical],["Grammar（文法）",c.grammar]];
+    var bars=rows.map(function(r){
+      var o=r[1]||{}; var sc=(typeof o.band==="number")?o.band:0;
+      return '<div class="crit-row"><div class="ch"><span>'+esc(r[0])+'</span><span class="sc">'+num(o.band)+'</span></div>'+
+        '<div class="crit-bar"><div style="width:'+clamp((sc-4)/4*100,5,100)+'%"></div></div>'+
+        (o.comment_ja?'<div class="cc">'+esc(o.comment_ja)+'</div>':'')+'</div>';
+    }).join("");
+    var gp=(d.good_points||[]).map(function(g){return '<div class="gd">✅ '+esc(g)+'</div>';}).join("");
+    var im=(d.improvements||[]).map(function(g){return '<div class="bd">⚠️ '+esc(g)+'</div>';}).join("");
+    var corr=(d.corrections||[]).slice(0,8).map(function(x){
+      return '<div class="fix-item"><span class="bad">'+esc(x.original||"")+'</span><span class="arrow">→</span>'+
+        '<span class="fix">'+esc(x.fixed||"")+'</span>'+(x.reason_ja?'<span class="note">'+esc(x.reason_ja)+'</span>':'')+'</div>';
+    }).join("");
+    var ups=(d.upgrades||[]).slice(0,6).map(function(x){
+      return '<div class="up-item"><span class="bad2">'+esc(x.original||"")+'</span><span class="arrow">→</span>'+
+        '<span class="better">'+esc(x.better||"")+'</span>'+(x.note_ja?'<span class="note">'+esc(x.note_ja)+'</span>':'')+'</div>';
+    }).join("");
+    var ob=(typeof d.overall_band==="number")?d.overall_band:(parseFloat(d.overall_band)||0);
+    var html='<div class="evalcard ai">'+
+      '<div style="text-align:center"><span class="ai-badge">🤖 AIによる添削（Claude）</span></div>'+
+      '<div class="eval-band"><div class="lbl">推定バンドスコア</div><div class="num">'+num(d.overall_band)+'</div>'+
+      '<div class="range">目安レンジ '+Math.max(4,ob-0.5).toFixed(1)+'〜'+(ob+0.5).toFixed(1)+'</div></div>'+
+      '<div class="crit">'+bars+'</div>'+
+      ((gp||im)?'<div class="eval-lists">'+gp+im+'</div>':'')+
+      (corr?'<div class="fixsec"><h5 class="fix-h">✏️ 文法・表現の直し</h5>'+corr+'</div>':'')+
+      (ups?'<div class="fixsec"><h5 class="up-h">✨ もっと良くなる表現</h5>'+ups+'</div>':'')+
+      (d.encouragement_ja?'<div class="eval-msg">'+esc(d.encouragement_ja)+'</div>':'')+
+      '<div class="eval-note">🤖 これはAIによる添削です。本物の採点にかなり近い参考になりますが、公式スコアの保証ではありません。モデルアンサーとも見比べてみよう 💜</div>'+
+      '<div class="btn-row" style="margin-top:12px"><button class="pill-btn ghost" id="ai-again">🔄 もう一度</button>'+
+      '<button class="pill-btn purple" id="ai-tohome">🏠 ホームへ</button></div></div>';
+    var box=$("ai-result"); box.innerHTML=html; box.classList.remove("hidden");
+    var ag=document.getElementById("ai-again"); if(ag) ag.addEventListener("click",aiGrade);
+    var th=document.getElementById("ai-tohome"); if(th) th.addEventListener("click",function(){ renderHome(); showScreen("screen-home"); });
+    if(box.scrollIntoView) box.scrollIntoView({behavior:"smooth"});
+  }
+
+  function aiTest(){
+    var key=$("ai-key-input").value.trim();
+    if(!key){ $("ai-test-result").innerHTML='<span style="color:var(--ng)">キーを入力してください</span>'; return; }
+    var model=$("ai-model-row").querySelector(".sel").dataset.model;
+    $("ai-test-result").innerHTML='<span class="spinner"></span> テスト中…';
+    fetch("https://api.anthropic.com/v1/messages",{ method:"POST", headers:aiHeaders(key),
+      body:JSON.stringify({model:model, max_tokens:16, messages:[{role:"user",content:"Reply with the single word: OK"}]})
+    }).then(function(r){ return r.json().then(function(j){return {ok:r.ok,status:r.status,j:j};}); })
+    .then(function(res){
+      if(res.ok) $("ai-test-result").innerHTML='<span style="color:var(--ok)">✓ 接続OK！キーは有効です。「💾 保存」を押してね</span>';
+      else if(res.status===401||res.status===403) $("ai-test-result").innerHTML='<span style="color:var(--ng)">✗ キーが無効です</span>';
+      else $("ai-test-result").innerHTML='<span style="color:var(--ng)">✗ エラー（'+res.status+'）：'+esc((res.j&&res.j.error&&res.j.error.message)||"")+'</span>';
+    }).catch(function(e){ $("ai-test-result").innerHTML='<span style="color:var(--ng)">✗ 通信エラー（'+esc(String(e))+'）</span>'; });
+  }
+
   /* ===================== パラフレーズ ===================== */
   var paraIdx=0;
   function openParaphrase(){ paraIdx=0; renderPara(); showScreen("screen-paraphrase"); }
@@ -1571,6 +1779,7 @@ var GUIDE_HTML =
         else if(go==="paraphrase"){ openParaphrase(); }
         else if(go==="phrasebank"){ openPhraseBank(); }
         else if(go==="guide"){ $("guide-body").innerHTML=GUIDE_HTML; showScreen("screen-guide"); }
+        else if(go==="aiset"){ openAISettings(); }
       });
     });
     $("home-guide-btn").addEventListener("click",function(){
@@ -1618,6 +1827,29 @@ var GUIDE_HTML =
       renderHome();
     });
 
+    // AI添削
+    $("ai-grade").addEventListener("click",aiGrade);
+    $("ai-key-show").addEventListener("change",function(){ $("ai-key-input").type=this.checked?"text":"password"; });
+    Array.prototype.forEach.call($("ai-model-row").children,function(b){
+      b.addEventListener("click",function(){
+        Array.prototype.forEach.call($("ai-model-row").children,function(x){ x.classList.remove("sel"); });
+        b.classList.add("sel");
+      });
+    });
+    $("ai-save").addEventListener("click",function(){
+      ai.key=$("ai-key-input").value.trim();
+      ai.model=$("ai-model-row").querySelector(".sel").dataset.model;
+      persistAI();
+      $("ai-test-result").innerHTML= ai.key
+        ? '<span style="color:var(--ok)">✓ 保存しました。各 Writing 画面で「🤖 AIに添削してもらう」が使えます</span>'
+        : '<span style="color:var(--ink-soft)">キーが空のまま保存しました</span>';
+    });
+    $("ai-test").addEventListener("click",aiTest);
+    $("ai-clear").addEventListener("click",function(){
+      if(confirm("保存したAPIキーを削除しますか？")){ ai.key=""; persistAI();
+        $("ai-key-input").value=""; $("ai-test-result").innerHTML='<span style="color:var(--ink-soft)">キーを削除しました</span>'; }
+    });
+
     // paraphrase
     $("para-reveal").addEventListener("click",revealPara);
     $("para-prev").addEventListener("click",function(){
@@ -1630,6 +1862,7 @@ var GUIDE_HTML =
 
   /* ===================== 起動 ===================== */
   loadSave();
+  loadAI();
   bind();
   renderHome();
   showScreen("screen-home");
