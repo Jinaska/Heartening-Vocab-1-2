@@ -252,6 +252,36 @@
   .scoretable td{border:1px solid var(--line);padding:8px;vertical-align:top;}
   .scoretable td:first-child{font-weight:800;color:var(--teal-d);width:34%;background:#fff;}
 
+  /* evaluation result */
+  .evalcard{background:linear-gradient(160deg,#eef7f5,#fff);border:2.5px solid var(--teal);
+    border-radius:18px;padding:18px 15px;margin-top:16px;animation:pop .4s ease;}
+  .t2theme .evalcard{border-color:var(--purple);}
+  @keyframes pop{from{transform:scale(.92);opacity:0;}to{transform:scale(1);opacity:1;}}
+  .eval-band{text-align:center;}
+  .eval-band .lbl{font-size:11px;font-weight:800;color:var(--ink-soft);}
+  .eval-band .num{font-size:46px;font-weight:800;line-height:1.05;
+    background:linear-gradient(135deg,var(--teal),var(--teal-l));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .t2theme .eval-band .num{background:linear-gradient(135deg,var(--purple),var(--purple-l));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .eval-band .range{font-size:11px;color:var(--ink-soft);font-weight:700;}
+  .eval-stars{font-size:23px;letter-spacing:3px;margin-top:5px;}
+  .eval-wc{text-align:center;font-size:12px;font-weight:800;color:var(--teal-d);margin:9px 0 2px;}
+  .crit{margin-top:12px;}
+  .crit-row{margin-bottom:10px;}
+  .crit-row .ch{display:flex;justify-content:space-between;font-size:12px;font-weight:800;color:var(--ink);}
+  .crit-row .ch .sc{color:var(--teal-d);}
+  .crit-bar{height:7px;background:#e2ece9;border-radius:4px;overflow:hidden;margin:4px 0;}
+  .crit-bar>div{height:100%;background:linear-gradient(90deg,var(--teal),var(--teal-l));border-radius:4px;transition:width .6s;}
+  .t2theme .crit-bar>div{background:linear-gradient(90deg,var(--purple),var(--purple-l));}
+  .eval-lists{margin-top:4px;}
+  .eval-lists .gd,.eval-lists .bd{font-size:12px;line-height:1.65;padding:3px 0;}
+  .eval-lists .gd{color:var(--ok);}
+  .eval-lists .bd{color:#c98a00;}
+  .eval-msg{text-align:center;font-size:13.5px;font-weight:800;color:var(--teal-d);margin-top:11px;}
+  .eval-note{font-size:10.5px;color:var(--ink-soft);line-height:1.6;margin-top:10px;
+    background:#fff;border-radius:10px;padding:10px;}
+
   /* generic buttons */
   .btn-row{display:flex;gap:9px;margin-top:6px;}
   .pill-btn{
@@ -383,8 +413,10 @@
 
     <div class="btn-row" style="margin-top:14px;">
       <button class="pill-btn ghost" id="write-clear">🗑 消す</button>
-      <button class="pill-btn" id="write-done">✅ 提出して保存</button>
+      <button class="pill-btn" id="write-done">✅ 提出して評価する</button>
     </div>
+
+    <div id="eval-result" class="hidden"></div>
   </section>
 
   <!-- ============ PARAPHRASE ============ -->
@@ -884,7 +916,7 @@ var GUIDE_HTML =
 
   /* ---- 保存データ ---- */
   var SAVE_KEY = "lys_ielts_save_v1";
-  var save = { drafts:{}, t1done:[], t2done:[], paraDone:[], check:{} };
+  var save = { drafts:{}, t1done:[], t2done:[], paraDone:[], check:{}, stars:0, best:{} };
   function loadSave(){
     try{ var raw=localStorage.getItem(SAVE_KEY);
       if(raw){ var o=JSON.parse(raw);
@@ -893,6 +925,8 @@ var GUIDE_HTML =
         save.t2done   = o.t2done   || [];
         save.paraDone = o.paraDone || [];
         save.check    = o.check    || {};
+        save.stars    = o.stars    || 0;
+        save.best     = o.best     || {};
       }
     }catch(e){}
   }
@@ -912,9 +946,12 @@ var GUIDE_HTML =
     $("para-badge").textContent = save.paraDone.length+"/"+PARAPHRASE.length;
     var total = save.t1done.length+save.t2done.length;
     var drafts = Object.keys(save.drafts).filter(function(k){return (save.drafts[k]||"").trim().length>0;}).length;
+    var bests = Object.keys(save.best||{}).map(function(k){return save.best[k];});
+    var topBand = bests.length ? Math.max.apply(null,bests).toFixed(1) : "-";
     $("home-stat").innerHTML =
-      "✍️ 提出した作文 <b>"+total+"</b> ／ 下書き保存中 <b>"+drafts+"</b><br>"+
-      "🔁 パラフレーズ <b>"+save.paraDone.length+"/"+PARAPHRASE.length+"</b> 完了";
+      "✍️ 提出した作文 <b>"+total+"</b> ／ 下書き <b>"+drafts+"</b><br>"+
+      "🔁 パラフレーズ <b>"+save.paraDone.length+"/"+PARAPHRASE.length+"</b>　⭐ スター <b>"+(save.stars||0)+"</b><br>"+
+      "🎯 自己ベスト推定バンド <b>"+topBand+"</b>";
   }
 
   /* ===================== チャート描画 ===================== */
@@ -1069,6 +1106,10 @@ var GUIDE_HTML =
     buildAccordion(item, kind);
     closeAllAcc();
 
+    // 前回の評価結果を消す
+    $("eval-result").classList.add("hidden");
+    $("eval-result").innerHTML="";
+
     showScreen("screen-write");
   }
 
@@ -1168,6 +1209,160 @@ var GUIDE_HTML =
     $("saved-note").textContent="✓ 自動保存しました "+new Date().toLocaleTimeString("ja-JP",{hour:"2-digit",minute:"2-digit"});
   }
 
+  /* ===================== 自動評価 ===================== */
+  function round5(x){ return Math.round(x*2)/2; }
+  function clamp(x,a,b){ return Math.max(a,Math.min(b,x)); }
+
+  function evaluate(text, kind){
+    var isT2 = kind==="task2";
+    var minW = isT2 ? 250 : 150;
+    var t=(text||"").trim();
+    var lt=t.toLowerCase();
+    var words=t?t.split(/\s+/):[];
+    var wc=words.length;
+    var paras=t.split(/\n+/).map(function(s){return s.trim();}).filter(Boolean);
+    var pc=paras.length;
+    var sentences=t.split(/[.!?]+/).map(function(s){return s.trim();})
+      .filter(function(s){return s.split(/\s+/).filter(Boolean).length>=2;});
+    var sc=sentences.length||1;
+    var avg=wc/sc;
+
+    var linkers=["however","therefore","moreover","furthermore","in addition","for example",
+      "for instance","on the other hand","in conclusion","firstly","secondly","finally",
+      "although","because","as a result","such as","in contrast","overall","whereas",
+      "nevertheless","to sum up","another"];
+    var found=linkers.filter(function(l){return lt.indexOf(l)>=0;});
+    var complexMk=["because","although","which","that","when ","if ","while","since","whereas","so that"];
+    var cxCount=complexMk.filter(function(w){return lt.indexOf(w)>=0;}).length;
+
+    var lower=words.map(function(w){return w.toLowerCase().replace(/[^a-z']/g,"");}).filter(Boolean);
+    var freq={}; lower.forEach(function(w){freq[w]=(freq[w]||0)+1;});
+    var ttr=Object.keys(freq).length/(lower.length||1);
+    var stop={the:1,and:1,that:1,have:1,this:1,with:1,they:1,from:1,their:1,there:1,which:1,
+      would:1,could:1,about:1,these:1,those:1,because:1,people:1,more:1,many:1,some:1,also:1,
+      very:1,than:1,then:1,when:1,what:1,such:1,will:1,been:1,were:1,them:1,other:1};
+    var over=null,overN=0;
+    Object.keys(freq).forEach(function(w){ if(w.length>=5 && !stop[w] && freq[w]>overN){overN=freq[w];over=w;} });
+
+    var good=[], bad=[];
+
+    /* --- Task Achievement --- */
+    var ta=6.0;
+    if(wc>=minW){ good.push("語数 "+wc+" 語（目標 "+minW+" 語クリア）"); if(wc>=minW+25) ta+=0.5; }
+    else { ta-=1.0; bad.push("語数が "+wc+" 語。あと "+(minW-wc)+" 語ふやそう（"+minW+" 語以上が目標）"); }
+    if(isT2){
+      var hasOp=["i think","in my opinion","i believe","i agree","i disagree",
+        "from my point of view","it seems to me","i strongly"].some(function(w){return lt.indexOf(w)>=0;});
+      var hasEx=["for example","for instance","such as"].some(function(w){return lt.indexOf(w)>=0;});
+      if(hasOp) good.push("自分の意見をはっきり書けている");
+      else { ta-=0.5; bad.push("自分の意見を表す表現を入れよう（In my opinion, … / I believe …）"); }
+      if(hasEx) good.push("具体例を入れられている");
+      else { ta-=0.3; bad.push("具体例を1つ入れよう（For example, … / such as …）"); }
+    } else {
+      var hasOv=lt.indexOf("overall")>=0||lt.indexOf("in general")>=0;
+      var trend=["increas","rise","rose","grew","grow","climb","fell","fall","declin","decreas",
+        "drop","remain","peak","fluctuat","more than","compared","highest","lowest"];
+      var hasTr=trend.some(function(w){return lt.indexOf(w)>=0;});
+      if(hasOv) good.push("Overview（全体の特徴）を書けている");
+      else { ta-=0.5; bad.push("Overview を1文入れよう（Overall, … で全体の傾向を）"); }
+      if(hasTr) good.push("変化・比較を表す語を使えている");
+      else { ta-=0.4; bad.push("増減の語を使おう（rose / fell / increased …）"); }
+      if(lt.indexOf("i think")>=0||lt.indexOf("in my opinion")>=0){
+        ta-=0.3; bad.push("Task 1 では自分の意見は書かない（データの説明だけにしよう）"); }
+    }
+    ta=clamp(ta,4.0,7.5);
+
+    /* --- Coherence & Cohesion --- */
+    var cc=5.5;
+    var needP=isT2?4:3;
+    if(pc>=needP){ cc+=0.5; good.push("段落が "+pc+" つに分かれている"); }
+    else { cc-=0.5; bad.push("段落を分けよう（導入／本論／結論で最低 "+needP+" 段落・空行で区切る）"); }
+    if(found.length>=5){ cc+=0.7; good.push("つなぎ言葉を "+found.length+" 種類使えている"); }
+    else if(found.length>=3){ cc+=0.3; good.push("つなぎ言葉を "+found.length+" 種類使えている"); }
+    else { cc-=0.3; bad.push("つなぎ言葉をもっと使おう（However, In addition, For example …）"); }
+    cc=clamp(cc,4.0,7.5);
+
+    /* --- Lexical Resource --- */
+    var lr=5.5;
+    if(ttr>=0.52){ lr+=0.6; good.push("いろいろな単語を使えている（語彙の幅 ◎）"); }
+    else if(ttr>=0.44){ lr+=0.2; }
+    else { lr-=0.2; bad.push("同じ単語の繰り返しを減らそう（言い換え＝パラフレーズ）"); }
+    if(overN>=6){ lr-=0.4; bad.push("「"+over+"」を "+overN+" 回使用。類義語に言い換えてみよう"); }
+    lr=clamp(lr,4.0,7.5);
+
+    /* --- Grammatical Range --- */
+    var gr=5.5;
+    if(avg>=12 && avg<=22){ gr+=0.5; good.push("文の長さのバランスが良い（平均 "+avg.toFixed(0)+" 語/文）"); }
+    else if(avg>28){ gr-=0.3; bad.push("一文が長すぎるかも（平均 "+avg.toFixed(0)+" 語）。ピリオドで区切ろう"); }
+    else if(avg<9 && wc>40){ gr-=0.3; bad.push("短い文が多め。接続詞でつないで複文も作ってみよう"); }
+    if(cxCount>=3){ gr+=0.5; good.push("複文（because / although / which …）を使えている"); }
+    else { bad.push("複文を増やそう（because, although, which … で文をつなぐ）"); }
+    gr=clamp(gr,4.0,7.5);
+
+    var band=clamp(round5((ta+cc+lr+gr)/4),4.0,8.0);
+    var stars = band>=6.5?5 : band>=6?4 : band>=5.5?3 : band>=5?2 : 1;
+
+    return {
+      wc:wc, band:band, stars:stars, tooShort:(wc<40),
+      crit:[
+        {name:"Task Achievement（内容）", score:ta},
+        {name:"Coherence（構成・つながり）", score:cc},
+        {name:"Lexical Resource（語彙）", score:lr},
+        {name:"Grammar（文法）", score:gr}
+      ],
+      good:good, bad:bad
+    };
+  }
+
+  function renderEval(ev, kind){
+    var el=$("eval-result");
+    if(ev.tooShort){
+      el.innerHTML='<div class="evalcard"><div class="eval-msg">まだ短いみたい！'+
+        'もう少し書いてから提出すると、くわしく評価できるよ ✍️</div>'+
+        '<div class="btn-row" style="margin-top:12px">'+
+        '<button class="pill-btn ghost" id="eval-home">🏠 ホームへ</button></div></div>';
+    } else {
+      var bars=ev.crit.map(function(c){
+        var pct=clamp((c.score-4)/4*100,5,100);
+        return '<div class="crit-row"><div class="ch"><span>'+esc(c.name)+
+          '</span><span class="sc">'+c.score.toFixed(1)+'</span></div>'+
+          '<div class="crit-bar"><div style="width:'+pct+'%"></div></div></div>';
+      }).join("");
+      var gd=ev.good.map(function(g){return '<div class="gd">✅ '+esc(g)+'</div>';}).join("");
+      var bd=ev.bad.map(function(b){return '<div class="bd">⚠️ '+esc(b)+'</div>';}).join("");
+      var starStr=""; for(var i=0;i<5;i++) starStr += (i<ev.stars?"⭐":"☆");
+      var msg = ev.band>=6 ? "Band 6 ライン到達！すばらしい 🎉"
+              : ev.band>=5.5 ? "あと一歩で Band 6！この調子 💪"
+              : "いいスタート！下のポイントを直すともっと伸びるよ 🌱";
+      el.innerHTML='<div class="evalcard">'+
+        '<div class="eval-band"><div class="lbl">推定バンドスコア（自動の目安）</div>'+
+        '<div class="num">'+ev.band.toFixed(1)+'</div>'+
+        '<div class="range">目安レンジ '+(Math.max(4,ev.band-0.5)).toFixed(1)+'〜'+(ev.band+0.5).toFixed(1)+'</div>'+
+        '<div class="eval-stars">'+starStr+'</div></div>'+
+        '<div class="eval-wc">📝 '+ev.wc+' 語</div>'+
+        '<div class="crit">'+bars+'</div>'+
+        '<div class="eval-lists">'+gd+bd+'</div>'+
+        '<div class="eval-msg">'+msg+'</div>'+
+        '<div class="eval-note">※ これは語数・段落・つなぎ言葉・語彙の幅・文の長さなどから計算した'+
+        '<b>自動のおおよその目安</b>です。文法や内容の細かい正しさまでは判定できないので、'+
+        '本当の実力は先生に見てもらうのが一番！モデルアンサーと見比べるのもおすすめです 💜</div>'+
+        '<div class="btn-row" style="margin-top:12px">'+
+        '<button class="pill-btn ghost" id="eval-model">⭐ モデルと比べる</button>'+
+        '<button class="pill-btn'+(kind==="task2"?" purple":"")+'" id="eval-home">🏠 ホームへ</button>'+
+        '</div></div>';
+    }
+    el.classList.remove("hidden");
+    var mb=document.getElementById("eval-model");
+    if(mb) mb.addEventListener("click",function(){
+      var b=document.querySelector('#screen-write .acc-btn[data-acc="model"]');
+      if(b && !b.classList.contains("open")) b.click();
+      var p=$("acc-model"); if(p&&p.scrollIntoView) p.scrollIntoView({behavior:"smooth"});
+    });
+    var hb=document.getElementById("eval-home");
+    if(hb) hb.addEventListener("click",function(){ renderHome(); showScreen("screen-home"); });
+    if(el.scrollIntoView) el.scrollIntoView({behavior:"smooth"});
+  }
+
   /* ===================== パラフレーズ ===================== */
   var paraIdx=0;
   function openParaphrase(){ paraIdx=0; renderPara(); showScreen("screen-paraphrase"); }
@@ -1257,17 +1452,17 @@ var GUIDE_HTML =
       if(confirm("書いた内容を消しますか？")){ $("editor").value=""; updateWordCount(); autoSave(); }
     });
     $("write-done").addEventListener("click",function(){
-      var n=countWords($("editor").value);
       autoSave();
       var arr = curKind==="task2" ? save.t2done : save.t1done;
-      if(arr.indexOf(cur.id)<0){ arr.push(cur.id); persist(); }
-      var msg = n>=curMinWords
-        ? "🎉 提出しました！ "+n+"語（目標達成）\nモデルアンサーと見比べてみよう。"
-        : "✅ 提出しました（"+n+"語）。\n本番は"+curMinWords+"語以上が目標。あと"+(curMinWords-n)+"語がんばろう！";
-      alert(msg);
-      // open model automatically
-      var mbtn=document.querySelector('#screen-write .acc-btn[data-acc="model"]');
-      if(mbtn && !mbtn.classList.contains("open")) mbtn.click();
+      if(arr.indexOf(cur.id)<0){ arr.push(cur.id); }
+      var ev=evaluate($("editor").value, curKind);
+      if(!ev.tooShort){
+        save.stars=(save.stars||0)+ev.stars;
+        if(!save.best) save.best={};
+        if(!save.best[cur.id] || ev.band>save.best[cur.id]) save.best[cur.id]=ev.band;
+      }
+      persist();
+      renderEval(ev, curKind);
       renderHome();
     });
 
