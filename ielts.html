@@ -1617,15 +1617,43 @@ var GUIDE_HTML =
       '"corrections":[{"original":"英語の誤りを含む語句","fixed":"正しい英語","reason_ja":"理由"}],'+
       '"upgrades":[{"original":"基本的な英語表現","better":"より良い英語表現","note_ja":"ひとこと"}],'+
       '"encouragement_ja":"励ましの一言"}\n'+
-      "band は 4.0〜8.0 の 0.5 刻み。corrections は最大8個・重要なものだけ。upgrades は最大6個。good_points は2〜4個、improvements は3〜5個。";
+      "band は 4.0〜8.0 の 0.5 刻み。corrections は最大5個・重要なものだけ。upgrades は最大4個。good_points は2〜3個、improvements は3〜4個。"+
+      "各 comment_ja は40字以内、reason_ja と note_ja は20字程度で簡潔に。必ず有効なJSONだけを出力すること。";
   }
 
   function parseAIJson(s){
     if(!s) return null;
-    var t=String(s).trim().replace(/^```(?:json)?/i,"").replace(/```$/,"").trim();
-    var a=t.indexOf("{"), b=t.lastIndexOf("}");
-    if(a<0||b<0) return null;
-    try{ return JSON.parse(t.slice(a,b+1)); }catch(e){ return null; }
+    var t=String(s).trim().replace(/```json/ig,"").replace(/```/g,"").trim();
+    var a=t.indexOf("{"); if(a<0) return null;
+    t=t.slice(a);
+    var cands=[];
+    var b=t.lastIndexOf("}");
+    if(b>0) cands.push(t.slice(0,b+1));    // ① 素直に最後の } まで
+    cands.push(repairJson(t,"close"));     // ② 開いた文字列を閉じて括弧も閉じる
+    cands.push(repairJson(t,"trim"));      // ③ 末尾の不完全部分を切り落として閉じる
+    for(var i=0;i<cands.length;i++){
+      try{ var d=JSON.parse(cands[i]); if(d&&typeof d==="object") return d; }catch(e){}
+    }
+    return null;
+  }
+  // 途中で切れたJSONを修復：開いた " { [ を閉じ、末尾の不完全なキー等を除去
+  function repairJson(s, mode){
+    var inStr=false, esc=false, stack=[], lastStruct=-1;
+    for(var i=0;i<s.length;i++){ var ch=s.charAt(i);
+      if(inStr){ if(esc){esc=false;} else if(ch==='\\'){esc=true;} else if(ch==='"'){inStr=false; lastStruct=i;} continue; }
+      if(ch==='"'){ inStr=true; }
+      else if(ch==='{'||ch==='['){ stack.push(ch); }
+      else if(ch==='}'||ch===']'){ stack.pop(); lastStruct=i; }
+      else if("0123456789truefalsn.-".indexOf(ch)>=0){ lastStruct=i; }
+    }
+    var core;
+    if(mode==="close"){ core = inStr ? s+'"' : s; }       // 開いた文字列を閉じる
+    else { core = (lastStruct>=0) ? s.slice(0,lastStruct+1) : s; }  // 構造的に安全な位置まで戻す
+    core = core.replace(/,\s*$/,"");                       // 末尾カンマ
+    core = core.replace(/,\s*"[^"]*"\s*:?\s*$/,"");        // 値のない末尾キー（"key": / "key"）を除去
+    var add="";
+    for(var j=stack.length-1;j>=0;j--){ add += (stack[j]==='{'?"}":"]"); }
+    return core+add;
   }
 
   function aiGrade(){
@@ -1638,14 +1666,17 @@ var GUIDE_HTML =
     if(box.scrollIntoView) box.scrollIntoView({behavior:"smooth"});
     fetch("https://api.anthropic.com/v1/messages",{
       method:"POST", headers:aiHeaders(ai.key),
-      body:JSON.stringify({ model:ai.model, max_tokens:2000,
-        messages:[{role:"user", content:buildAIPrompt(item,kind,text)}] })
+      body:JSON.stringify({ model:ai.model, max_tokens:3500,
+        messages:[{role:"user", content:buildAIPrompt(item,kind,text)},
+                  {role:"assistant", content:"{"}] })   // プレフィルでJSON出力を強制
     }).then(function(r){ return r.json().then(function(j){ return {ok:r.ok,status:r.status,j:j}; }); })
     .then(function(res){
       if(!res.ok){ aiError(res.status, res.j); return; }
-      var txt=(res.j.content&&res.j.content[0]&&res.j.content[0].text)||"";
-      var data=parseAIJson(txt);
-      if(!data){ aiError("parse", {}); return; }
+      var blocks=(res.j.content||[]).filter(function(b){return b.type==="text";})
+        .map(function(b){return b.text;}).join("");
+      var raw="{"+blocks;   // プレフィルした "{" を補う
+      var data=parseAIJson(raw);
+      if(!data){ aiError("parse", {raw:raw, stop:res.j.stop_reason}); return; }
       renderAIResult(data, kind);
       var ob=(typeof data.overall_band==="number")?data.overall_band:parseFloat(data.overall_band);
       if(ob){ if(!save.best) save.best={};
@@ -1654,14 +1685,19 @@ var GUIDE_HTML =
   }
 
   function aiError(status, info){
+    info=info||{};
     var msg;
     if(status===401||status===403) msg="APIキーが正しくないようです。設定でキーを確認してください。";
     else if(status===429) msg="アクセスが集中しています（レート上限）。少し待ってから再度お試しください。";
-    else if(status===400) msg="リクエストエラー："+((info.j&&info.j.error&&info.j.error.message)||"内容を確認してください。");
-    else if(status==="parse") msg="AIの返答を読み取れませんでした。もう一度お試しください。";
+    else if(status===400||status===404) msg="リクエストエラー："+((info.j&&info.j.error&&info.j.error.message)||"設定のモデルを変えて試してください。");
+    else if(status==="parse") msg="AIの返答を読み取れませんでした。"+(info.stop==="max_tokens"?"（返答が長くて途中で切れたようです。設定でモデルをHaikuにするか、もう一度お試しください）":"もう一度お試しください。");
     else if(status==="network") msg="ネットワークエラー。オンライン環境か、キー・通信を確認してください（CORS制限の可能性）。";
     else msg="エラーが発生しました（"+status+"）。もう一度お試しください。";
-    $("ai-result").innerHTML='<div class="evalcard ai"><div class="eval-msg" style="color:var(--ng)">⚠️ '+esc(msg)+'</div>'+
+    var extra = (status==="parse" && info.raw)
+      ? '<details style="margin-top:10px"><summary style="font-size:11px;color:var(--ink-soft);cursor:pointer">🔍 返答の中身を見る（原因究明用）</summary>'+
+        '<pre style="white-space:pre-wrap;word-break:break-word;font-size:10px;color:var(--ink-soft);max-height:180px;overflow:auto;background:#fff;padding:9px;border-radius:8px;margin-top:6px">'+esc(info.raw.slice(0,900))+'</pre></details>'
+      : '';
+    $("ai-result").innerHTML='<div class="evalcard ai"><div class="eval-msg" style="color:var(--ng)">⚠️ '+esc(msg)+'</div>'+extra+
       '<div class="btn-row" style="margin-top:12px"><button class="pill-btn ghost" id="ai-open-set">⚙️ 設定を開く</button>'+
       '<button class="pill-btn purple" id="ai-retry">🔄 もう一度</button></div></div>';
     var s=document.getElementById("ai-open-set"); if(s) s.addEventListener("click",openAISettings);
