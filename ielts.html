@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#2f9e8e">
+<title>IELTS Writing 練習 💜 LOVE YOURSELF English | Band 6 を目指そう</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#2f9e8e; --teal-d:#1f7d70; --teal-l:#54c4b3;
+    --purple:#7b5fe0; --purple-d:#5e44c4; --purple-l:#9d7bff;
+    --pink:#ff8fb1; --bg-card:#eef7f5; --bg-card2:#f4f0ff;
+    --ink:#33403d; --ink-soft:#7d8a87;
+    --ok:#1fae6c; --ok-bg:#e4f7ee; --ng:#e85b73; --ng-bg:#fde8ec;
+    --gold:#ffb13b; --line:#e2ece9;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN",-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    background:linear-gradient(160deg,#a7e3d8 0%,#5cc0b1 45%,#2f9e8e 100%);
+    background-attachment:fixed;
+    min-height:100%;
+    color:var(--ink);
+    display:flex;justify-content:center;align-items:flex-start;
+    padding:14px;
+  }
+  .app{
+    width:100%;max-width:560px;
+    background:#fff;border-radius:26px;
+    box-shadow:0 24px 60px rgba(20,90,80,.4);
+    padding:20px 18px 26px;
+    position:relative;overflow:hidden;
+  }
+  .screen{animation:fade .35s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  .hidden{display:none !important;}
+
+  /* ---- top bar ---- */
+  .topbar{display:flex;align-items:center;gap:8px;margin-bottom:6px;min-height:34px;}
+  .icon-btn{
+    border:none;background:var(--bg-card);color:var(--teal-d);
+    border-radius:50%;width:36px;height:36px;font-size:16px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+    transition:transform .12s;
+  }
+  .icon-btn:active{transform:scale(.9);}
+  .topbar .spacer{flex:1;}
+  .topbar-title{font-weight:800;color:var(--teal-d);font-size:15px;}
+
+  /* ---- home ---- */
+  h1.logo{
+    text-align:center;font-size:23px;font-weight:800;color:var(--teal-d);
+    letter-spacing:.3px;margin-top:4px;line-height:1.3;
+  }
+  h1.logo .heart{display:inline-block;animation:beat 1.4s ease-in-out infinite;}
+  @keyframes beat{0%,100%{transform:scale(1);}45%{transform:scale(1.22);}}
+  .tagline{text-align:center;color:var(--ink-soft);font-size:12.5px;margin:6px 0 14px;font-weight:500;}
+
+  .statline{
+    text-align:center;font-size:12px;font-weight:700;color:var(--teal-d);
+    background:var(--bg-card);border-radius:14px;padding:9px 10px;margin-bottom:14px;
+    line-height:1.6;
+  }
+
+  /* mode buttons */
+  .menu{display:flex;flex-direction:column;gap:11px;}
+  .mode-btn{
+    border:none;cursor:pointer;text-align:left;
+    background:linear-gradient(135deg,var(--teal),var(--teal-l));
+    color:#fff;border-radius:18px;padding:15px 16px;
+    display:flex;align-items:center;gap:13px;
+    font-family:inherit;transition:transform .12s,box-shadow .12s;
+    box-shadow:0 7px 16px rgba(47,158,142,.32);
+  }
+  .mode-btn:active{transform:scale(.97);}
+  .mode-btn .emoji{font-size:27px;flex:0 0 auto;}
+  .mode-btn .txt b{display:block;font-size:16px;font-weight:800;}
+  .mode-btn .txt span{display:block;font-size:11.5px;opacity:.92;margin-top:2px;font-weight:500;}
+  .mode-btn.t2{background:linear-gradient(135deg,var(--purple),var(--purple-l));box-shadow:0 7px 16px rgba(123,95,224,.32);}
+  .mode-btn.para{background:linear-gradient(135deg,#ff8fb1,#ffa9c4);box-shadow:0 7px 16px rgba(255,143,177,.4);}
+  .mode-btn.bank{background:linear-gradient(135deg,#f0a93b,#ffc065);box-shadow:0 7px 16px rgba(240,169,59,.4);}
+  .mode-btn.guide{background:linear-gradient(135deg,#56a8ff,#8fc6ff);box-shadow:0 7px 16px rgba(86,168,255,.36);}
+  .badge{
+    margin-left:auto;background:rgba(255,255,255,.28);
+    border-radius:11px;padding:3px 9px;font-size:12px;font-weight:800;flex:0 0 auto;
+  }
+
+  /* ---- section headings ---- */
+  .sec-h{text-align:center;font-size:19px;font-weight:800;color:var(--teal-d);margin:6px 0 4px;}
+  .sec-sub{text-align:center;color:var(--ink-soft);font-size:12px;margin-bottom:16px;line-height:1.6;}
+
+  /* ---- prompt list cards ---- */
+  .plist{display:flex;flex-direction:column;gap:11px;}
+  .pcard{
+    border:2.5px solid var(--line);background:#fff;border-radius:16px;
+    padding:14px 15px;cursor:pointer;font-family:inherit;text-align:left;
+    transition:all .14s;
+  }
+  .pcard:active{transform:scale(.98);}
+  .pcard .ptype{
+    display:inline-block;font-size:10.5px;font-weight:800;color:#fff;
+    background:var(--teal);padding:3px 10px;border-radius:9px;margin-bottom:8px;
+  }
+  .pcard.t2 .ptype{background:var(--purple);}
+  .pcard .ptitle{font-size:14px;font-weight:700;color:var(--ink);line-height:1.5;}
+  .pcard .pdone{
+    display:inline-block;margin-top:7px;font-size:11px;font-weight:700;
+    color:var(--ok);background:var(--ok-bg);padding:2px 9px;border-radius:8px;
+  }
+
+  /* ---- writing workspace ---- */
+  .promptbox{
+    background:var(--bg-card);border-radius:16px;padding:15px 14px;margin-bottom:12px;
+  }
+  .app .t2theme .promptbox{background:var(--bg-card2);}
+  .q-tag{
+    display:inline-block;background:var(--teal);color:#fff;font-size:10.5px;
+    font-weight:800;padding:3px 10px;border-radius:9px;margin-bottom:9px;
+  }
+  .t2theme .q-tag{background:var(--purple);}
+  .q-prompt{font-size:14.5px;font-weight:700;color:var(--ink);line-height:1.65;}
+  .q-instr{font-size:11.5px;color:var(--ink-soft);margin-top:9px;font-weight:600;line-height:1.5;}
+
+  /* charts */
+  .chartwrap{margin-top:13px;background:#fff;border-radius:13px;padding:13px 11px;border:1px solid var(--line);}
+  .chart-title{font-size:11.5px;font-weight:700;color:var(--ink-soft);text-align:center;margin-bottom:9px;line-height:1.4;}
+  .legend{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:9px;}
+  .legend span{font-size:10.5px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:4px;}
+  .legend i{width:11px;height:11px;border-radius:3px;display:inline-block;}
+  .barrow{display:flex;align-items:center;gap:7px;margin-bottom:8px;}
+  .barrow .blab{font-size:11px;font-weight:700;color:var(--ink);width:62px;flex:0 0 auto;text-align:right;}
+  .barrow .btrack{flex:1;display:flex;flex-direction:column;gap:3px;}
+  .bbar{height:15px;border-radius:5px;display:flex;align-items:center;justify-content:flex-end;
+    padding-right:5px;color:#fff;font-size:9.5px;font-weight:800;min-width:24px;transition:width .5s;}
+  table.dtable{width:100%;border-collapse:collapse;font-size:11.5px;}
+  table.dtable th,table.dtable td{border:1px solid var(--line);padding:6px 5px;text-align:center;}
+  table.dtable th{background:var(--bg-card);color:var(--teal-d);font-weight:800;}
+  table.dtable td:first-child,table.dtable th:first-child{text-align:left;font-weight:700;}
+  .pie2{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+  .pieblock{text-align:center;}
+  .pieblock .donut{width:108px;height:108px;border-radius:50%;margin:0 auto;}
+  .pieblock .yr{font-size:11px;font-weight:800;color:var(--teal-d);margin-top:6px;}
+  .procrow{display:flex;flex-wrap:wrap;gap:6px;align-items:stretch;justify-content:center;}
+  .procstep{background:var(--teal);color:#fff;border-radius:11px;padding:9px 8px;font-size:10.5px;
+    font-weight:700;text-align:center;min-width:70px;max-width:96px;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;line-height:1.35;}
+  .procstep .pnum{font-size:9px;opacity:.85;}
+  .procarrow{align-self:center;color:var(--teal);font-size:15px;font-weight:800;}
+  .maps{display:flex;gap:10px;flex-wrap:wrap;}
+  .mapcol{flex:1;min-width:130px;background:#fff;border:1.5px solid var(--line);border-radius:11px;padding:10px;}
+  .mapcol h5{font-size:11.5px;color:var(--teal-d);font-weight:800;margin-bottom:6px;text-align:center;}
+  .mapcol ul{list-style:none;font-size:10.8px;color:var(--ink);line-height:1.7;}
+  .mapcol li:before{content:"📍 ";}
+
+  /* toolbar: timer + wordcount */
+  .wtools{display:flex;gap:9px;margin-bottom:11px;}
+  .tool{
+    flex:1;background:var(--bg-card);border-radius:13px;padding:10px 9px;text-align:center;
+  }
+  .tool .tl{font-size:10px;font-weight:700;color:var(--ink-soft);}
+  .tool .tv{font-size:21px;font-weight:800;color:var(--teal-d);line-height:1.2;margin-top:1px;}
+  .tool .tv.over{color:var(--ng);}
+  .tool .tv.met{color:var(--ok);}
+  .tool .sub{font-size:9.5px;color:var(--ink-soft);font-weight:600;}
+  .timer-btns{display:flex;gap:4px;justify-content:center;margin-top:5px;}
+  .timer-btns button{
+    border:none;background:#fff;color:var(--teal-d);border-radius:8px;
+    font-family:inherit;font-size:10px;font-weight:800;padding:3px 8px;cursor:pointer;
+  }
+  .wc-bar{height:6px;background:#fff;border-radius:4px;overflow:hidden;margin-top:6px;}
+  .wc-bar>div{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--teal-l));transition:width .3s;border-radius:4px;}
+  .wc-bar>div.met{background:linear-gradient(90deg,var(--ok),#5ad59a);}
+
+  .editor{
+    width:100%;min-height:230px;border:2.5px solid var(--line);border-radius:14px;
+    padding:13px;font-family:inherit;font-size:14.5px;line-height:1.7;color:var(--ink);
+    outline:none;resize:vertical;transition:border .14s;
+  }
+  .editor:focus{border-color:var(--teal);}
+  .t2theme .editor:focus{border-color:var(--purple);}
+  .savednote{font-size:10.5px;color:var(--ink-soft);text-align:right;margin-top:4px;font-weight:600;min-height:14px;}
+
+  /* accordion */
+  .acc{margin-top:8px;}
+  .acc-btn{
+    width:100%;border:2.5px solid var(--line);background:#fff;border-radius:13px;
+    padding:13px 14px;font-family:inherit;font-size:13.5px;font-weight:800;color:var(--ink);
+    cursor:pointer;display:flex;align-items:center;gap:9px;margin-bottom:9px;transition:all .12s;
+  }
+  .acc-btn:active{transform:scale(.99);}
+  .acc-btn .arw{margin-left:auto;transition:transform .2s;color:var(--ink-soft);}
+  .acc-btn.open{border-color:var(--teal);background:var(--bg-card);color:var(--teal-d);}
+  .t2theme .acc-btn.open{border-color:var(--purple);background:var(--bg-card2);color:var(--purple-d);}
+  .acc-btn.open .arw{transform:rotate(180deg);}
+  .acc-panel{
+    border:2px solid var(--line);border-radius:13px;padding:14px;margin:-3px 0 11px;
+    font-size:13px;line-height:1.75;color:var(--ink);background:#fafdfc;
+  }
+  .acc-panel h4{font-size:12.5px;color:var(--teal-d);margin:10px 0 4px;}
+  .acc-panel h4:first-child{margin-top:0;}
+  .acc-panel ul{margin:4px 0 4px 2px;list-style:none;}
+  .acc-panel ul li{padding:3px 0 3px 16px;position:relative;}
+  .acc-panel ul li:before{content:"▸";position:absolute;left:0;color:var(--teal);font-weight:800;}
+  .acc-panel .en{color:var(--ink);font-weight:700;}
+  .acc-panel .jp{color:var(--ink-soft);font-size:11.5px;}
+  .acc-panel p{margin-bottom:7px;}
+  .model-p{margin-bottom:10px;}
+  .chk-item{display:flex;align-items:flex-start;gap:9px;padding:6px 0;cursor:pointer;font-size:12.5px;}
+  .chk-item input{width:18px;height:18px;flex:0 0 auto;margin-top:1px;accent-color:var(--teal);}
+
+  /* paraphrase */
+  .para-orig{
+    background:var(--bg-card);border-radius:14px;padding:16px 14px;text-align:center;
+    font-size:16px;font-weight:700;color:var(--ink);line-height:1.6;margin-bottom:12px;
+  }
+  .para-orig .lbl{font-size:10.5px;font-weight:800;color:var(--teal-d);display:block;margin-bottom:7px;}
+  .syn-hint{font-size:11.5px;color:var(--ink-soft);text-align:center;margin-bottom:12px;line-height:1.7;}
+  .syn-hint b{color:var(--teal-d);}
+  .para-model{background:var(--ok-bg);border-radius:14px;padding:14px;margin-top:12px;}
+  .para-model .lbl{font-size:10.5px;font-weight:800;color:var(--ok);display:block;margin-bottom:6px;}
+  .para-model .mtext{font-size:14.5px;font-weight:700;color:var(--ink);line-height:1.6;margin-bottom:5px;}
+  .tech{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;}
+  .tech span{font-size:10.5px;font-weight:700;background:#fff;color:var(--teal-d);
+    border:1.5px solid var(--teal-l);padding:3px 9px;border-radius:9px;}
+
+  /* phrase bank */
+  .pb-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+  .pb-tab{
+    flex:1;min-width:70px;border:2.5px solid var(--line);background:#fff;border-radius:12px;
+    padding:9px 6px;font-family:inherit;font-size:12px;font-weight:800;color:var(--ink);
+    cursor:pointer;transition:all .13s;
+  }
+  .pb-tab.sel{border-color:var(--teal);background:var(--bg-card);color:var(--teal-d);}
+  .pb-group{margin-bottom:16px;}
+  .pb-group h4{font-size:13px;color:var(--teal-d);font-weight:800;margin-bottom:8px;
+    border-left:4px solid var(--teal);padding-left:9px;}
+  .pb-list{display:flex;flex-direction:column;gap:7px;}
+  .pb-row{background:#fafdfc;border:1.5px solid var(--line);border-radius:11px;padding:9px 11px;}
+  .pb-row .en{font-size:13px;font-weight:700;color:var(--ink);}
+  .pb-row .jp{font-size:11px;color:var(--ink-soft);margin-top:2px;}
+
+  /* guide */
+  .guidecard{background:var(--bg-card);border-radius:15px;padding:15px;margin-bottom:13px;}
+  .guidecard h3{font-size:14px;color:var(--teal-d);font-weight:800;margin-bottom:8px;}
+  .guidecard p{font-size:13px;line-height:1.75;color:var(--ink);margin-bottom:7px;}
+  .guidecard .big{font-size:15px;font-weight:800;color:var(--teal-d);}
+  .scoretable{width:100%;border-collapse:collapse;font-size:12px;margin-top:4px;}
+  .scoretable td{border:1px solid var(--line);padding:8px;vertical-align:top;}
+  .scoretable td:first-child{font-weight:800;color:var(--teal-d);width:34%;background:#fff;}
+
+  /* generic buttons */
+  .btn-row{display:flex;gap:9px;margin-top:6px;}
+  .pill-btn{
+    flex:1;border:none;cursor:pointer;font-family:inherit;
+    background:linear-gradient(135deg,var(--teal),var(--teal-l));
+    color:#fff;font-size:14.5px;font-weight:800;border-radius:14px;padding:13px;
+    box-shadow:0 6px 14px rgba(47,158,142,.32);transition:transform .12s;
+  }
+  .pill-btn:active{transform:scale(.97);}
+  .pill-btn.ghost{background:#fff;color:var(--teal-d);border:2.5px solid var(--line);box-shadow:none;}
+  .pill-btn.purple{background:linear-gradient(135deg,var(--purple),var(--purple-l));box-shadow:0 6px 14px rgba(123,95,224,.32);}
+
+  @media(max-width:380px){
+    .q-prompt{font-size:13.5px;}
+    .tool .tv{font-size:18px;}
+  }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- ============ HOME ============ -->
+  <section id="screen-home" class="screen">
+    <div class="topbar">
+      <div class="topbar-title">IELTS Writing</div>
+      <div class="spacer"></div>
+      <button class="icon-btn" id="home-guide-btn" title="はじめてガイド">？</button>
+    </div>
+    <h1 class="logo">IELTS Writing <span class="heart">💜</span></h1>
+    <p class="tagline">LOVE YOURSELF English ／ Band 6 を目指す 初級〜中級コース</p>
+
+    <div class="statline" id="home-stat"></div>
+
+    <div class="menu">
+      <button class="mode-btn" data-go="task1list">
+        <span class="emoji">📊</span>
+        <span class="txt"><b>Task 1 を練習（Academic）</b><span>グラフ・表・図を説明する（150語以上）</span></span>
+        <span class="badge" id="t1-badge">0/6</span>
+      </button>
+      <button class="mode-btn t2" data-go="task2list">
+        <span class="emoji">✍️</span>
+        <span class="txt"><b>Task 2 を練習（エッセイ）</b><span>意見・両論・問題解決など（250語以上）</span></span>
+        <span class="badge" id="t2-badge">0/6</span>
+      </button>
+      <button class="mode-btn para" data-go="paraphrase">
+        <span class="emoji">🔁</span>
+        <span class="txt"><b>パラフレーズ練習</b><span>同じ意味を別の言い方にする力をつける</span></span>
+        <span class="badge" id="para-badge">0/12</span>
+      </button>
+      <button class="mode-btn bank" data-go="phrasebank">
+        <span class="emoji">💬</span>
+        <span class="txt"><b>フレーズ＆表現集</b><span>そのまま使える定番フレーズ・語彙集</span></span>
+      </button>
+      <button class="mode-btn guide" data-go="guide">
+        <span class="emoji">🧭</span>
+        <span class="txt"><b>はじめてガイド</b><span>IELTSライティングの基本とBand 6攻略</span></span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ============ TASK 1 LIST ============ -->
+  <section id="screen-task1list" class="screen hidden">
+    <div class="topbar">
+      <button class="icon-btn back-home">←</button>
+      <span class="topbar-title">Task 1（Academic）</span>
+      <div class="spacer"></div>
+    </div>
+    <h2 class="sec-h">📊 Task 1 を練習</h2>
+    <p class="sec-sub">グラフや図を見て、特徴を説明する練習です。<br>目安：<b>20分・150語以上</b>。まずは1問やってみよう！</p>
+    <div class="plist" id="t1-list"></div>
+  </section>
+
+  <!-- ============ TASK 2 LIST ============ -->
+  <section id="screen-task2list" class="screen hidden">
+    <div class="topbar">
+      <button class="icon-btn back-home">←</button>
+      <span class="topbar-title">Task 2（エッセイ）</span>
+      <div class="spacer"></div>
+    </div>
+    <h2 class="sec-h">✍️ Task 2 を練習</h2>
+    <p class="sec-sub">質問に対して自分の意見をエッセイで書く練習です。<br>目安：<b>40分・250語以上</b>。配点が大きいので一番大事！</p>
+    <div class="plist" id="t2-list"></div>
+  </section>
+
+  <!-- ============ WRITE WORKSPACE ============ -->
+  <section id="screen-write" class="screen hidden">
+    <div class="topbar">
+      <button class="icon-btn" id="write-back">←</button>
+      <span class="topbar-title" id="write-title">Writing</span>
+      <div class="spacer"></div>
+    </div>
+
+    <div class="promptbox" id="write-prompt"></div>
+
+    <div class="wtools">
+      <div class="tool">
+        <div class="tl">⏱ タイマー</div>
+        <div class="tv" id="timer-v">00:00</div>
+        <div class="sub" id="timer-target"></div>
+        <div class="timer-btns">
+          <button id="timer-toggle">スタート</button>
+          <button id="timer-reset">リセット</button>
+        </div>
+      </div>
+      <div class="tool">
+        <div class="tl">📝 語数</div>
+        <div class="tv" id="wc-v">0</div>
+        <div class="sub" id="wc-target"></div>
+        <div class="wc-bar"><div id="wc-fill"></div></div>
+      </div>
+    </div>
+
+    <textarea class="editor" id="editor" placeholder="ここに英語で書いてみよう…&#10;&#10;まずは構成（下の「📝 書き方ガイド」）を見ながら、段落ごとに書くのがおすすめ！"></textarea>
+    <div class="savednote" id="saved-note"></div>
+
+    <div class="acc">
+      <button class="acc-btn" data-acc="guide">📝 書き方ガイド（構成）<span class="arw">▾</span></button>
+      <div class="acc-panel hidden" id="acc-guide"></div>
+
+      <button class="acc-btn" data-acc="phrase">💬 使える表現<span class="arw">▾</span></button>
+      <div class="acc-panel hidden" id="acc-phrase"></div>
+
+      <button class="acc-btn" data-acc="check">✅ Band 6 チェックリスト<span class="arw">▾</span></button>
+      <div class="acc-panel hidden" id="acc-check"></div>
+
+      <button class="acc-btn" data-acc="model">⭐ モデルアンサーを見る<span class="arw">▾</span></button>
+      <div class="acc-panel hidden" id="acc-model"></div>
+    </div>
+
+    <div class="btn-row" style="margin-top:14px;">
+      <button class="pill-btn ghost" id="write-clear">🗑 消す</button>
+      <button class="pill-btn" id="write-done">✅ 提出して保存</button>
+    </div>
+  </section>
+
+  <!-- ============ PARAPHRASE ============ -->
+  <section id="screen-paraphrase" class="screen hidden">
+    <div class="topbar">
+      <button class="icon-btn back-home">←</button>
+      <span class="topbar-title">パラフレーズ練習</span>
+      <div class="spacer"></div>
+    </div>
+    <h2 class="sec-h">🔁 パラフレーズ練習</h2>
+    <p class="sec-sub" id="para-counter"></p>
+
+    <div class="para-orig" id="para-orig"></div>
+    <div class="syn-hint" id="para-syn"></div>
+
+    <textarea class="editor" id="para-input" style="min-height:90px;" placeholder="同じ意味を、別の言い方で書いてみよう…"></textarea>
+
+    <div class="acc-panel hidden" id="para-answer"></div>
+
+    <div class="btn-row" style="margin-top:13px;">
+      <button class="pill-btn ghost" id="para-prev">← まえ</button>
+      <button class="pill-btn" id="para-reveal">答えを見る</button>
+      <button class="pill-btn purple" id="para-next">つぎ →</button>
+    </div>
+  </section>
+
+  <!-- ============ PHRASE BANK ============ -->
+  <section id="screen-phrasebank" class="screen hidden">
+    <div class="topbar">
+      <button class="icon-btn back-home">←</button>
+      <span class="topbar-title">フレーズ＆表現集</span>
+      <div class="spacer"></div>
+    </div>
+    <h2 class="sec-h">💬 フレーズ＆表現集</h2>
+    <p class="sec-sub">そのまま使える定番表現。書くときに迷ったらここを見てね。</p>
+    <div class="pb-tabs" id="pb-tabs"></div>
+    <div id="pb-body"></div>
+  </section>
+
+  <!-- ============ GUIDE ============ -->
+  <section id="screen-guide" class="screen hidden">
+    <div class="topbar">
+      <button class="icon-btn back-home">←</button>
+      <span class="topbar-title">はじめてガイド</span>
+      <div class="spacer"></div>
+    </div>
+    <h2 class="sec-h">🧭 はじめてガイド</h2>
+    <p class="sec-sub">IELTSライティングの基本と、Band 6 を取るコツ。</p>
+    <div id="guide-body"></div>
+  </section>
+
+</div>
+
+<script>
+/* =========================================================
+   IELTS Writing 練習アプリ  —  LOVE YOURSELF English
+   Band 6 を目指す 初級〜中級者向け
+   ---------------------------------------------------------
+   ★ 問題・モデルアンサー・フレーズはこのファイルだけ直せばOK ★
+   TASK1 … Academic Task 1（グラフ説明）
+   TASK2 … エッセイ
+   PARAPHRASE … 言い換え練習
+   PHRASEBANK … 表現集
+   ========================================================= */
+
+/* ====== カラー（チャート用） ====== */
+var CCOL = ["#2f9e8e","#ff8fb1","#7b5fe0","#ffb13b","#56a8ff"];
+
+/* ===================== TASK 1 ===================== */
+var TASK1 = [
+  {
+    id:"t1-line",
+    typeLabel:"折れ線グラフ Line graph",
+    title:"美術館の海外からの来館者数（6か月間）",
+    prompt:"The line graph below shows the number of international visitors to a museum each month over a six-month period (January–June). Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+    chart:{kind:"line", unit:"千人 (thousands)", max:80,
+      points:[["Jan",20],["Feb",25],["Mar",40],["Apr",38],["May",55],["Jun",70]]},
+    guide:[
+      ["導入 (Introduction)","問題文を<b>言い換えて</b>1文で。「The line graph illustrates how many international visitors went to a museum each month from January to June.」"],
+      ["概観 (Overview)","数字を出さずに<b>全体の流れ</b>を1〜2文。「Overall, the number of visitors rose significantly, despite a slight fall in April.」"],
+      ["詳細① (Body 1)","前半の動きを数字つきで。1月〜4月あたり。"],
+      ["詳細② (Body 2)","後半の動きとピークを数字つきで。5月〜6月、最大値。"]
+    ],
+    model:"The line graph illustrates how many international visitors went to a particular museum each month over a six-month period, from January to June.\n\nOverall, it is clear that the number of visitors increased significantly during this time, despite a slight fall in April. The museum was far more popular at the end of the period than at the beginning, and the upward trend was strong throughout.\n\nIn January, the museum received around 20,000 international visitors. This figure rose to 25,000 in February and then climbed more steeply to reach 40,000 in March. After this point, however, there was a small decrease to 38,000 in April.\n\nFrom April onwards, the number of visitors rose sharply once again. It reached 55,000 in May before peaking at 70,000 in June, which was the highest figure recorded over the whole period. In other words, the number of visitors in June was more than three times higher than in January, showing a clear overall rise in the museum's popularity."
+  },
+  {
+    id:"t1-bar",
+    typeLabel:"棒グラフ Bar chart",
+    title:"3か国のインターネット普及率（2010年と2020年）",
+    prompt:"The bar chart below shows the percentage of households with internet access in three countries in 2010 and 2020. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+    chart:{kind:"bar", unit:"% of households", max:100,
+      series:["2010","2020"], colors:[CCOL[2],CCOL[0]],
+      groups:[["Country A",40,85],["Country B",55,90],["Country C",30,70]]},
+    guide:[
+      ["導入","「The bar chart compares the percentage of households with internet access in three countries, A, B and C, in 2010 and 2020.」"],
+      ["概観","全体傾向＋一番高い/低い国。「Overall, internet access rose in all three countries. Country B had the highest level in both years.」"],
+      ["詳細① 2010年","3か国の2010年の数字を比較。respectively などを使う。"],
+      ["詳細② 2020年","2020年の数字と変化。more than doubled などの表現を。"]
+    ],
+    model:"The bar chart compares the percentage of households that had internet access in three different countries, A, B and C, in the years 2010 and 2020.\n\nOverall, it is clear that internet access became much more common in all three countries over the decade. Country B had the highest level of access in both years, whereas Country C consistently had the lowest.\n\nIn 2010, just over half of the households in Country B had internet access, at 55%. The figures for Countries A and C were lower, standing at 40% and 30% respectively. At this point, therefore, the difference between the three countries was relatively small.\n\nBy 2020, the situation had changed considerably. Internet access in Country B rose to 90%, remaining the highest of the three. Country A saw a similar increase, reaching 85%. Although Country C still had the lowest figure, its percentage more than doubled, climbing from 30% to 70%. As a result, internet access had become widespread in every country by the end of the period."
+  },
+  {
+    id:"t1-pie",
+    typeLabel:"円グラフ Pie charts",
+    title:"電力の発電源の割合（2000年と2020年）",
+    prompt:"The two pie charts below show the proportion of electricity generated from four different sources in a country in 2000 and 2020. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+    chart:{kind:"pie", unit:"%",
+      labels:["Coal","Gas","Renewables","Nuclear"], colors:[CCOL[3],CCOL[4],CCOL[0],CCOL[2]],
+      sets:[["2000",[50,20,10,20]],["2020",[25,25,40,10]]]},
+    guide:[
+      ["導入","「The two pie charts show how electricity was generated from four sources in a country in 2000 and 2020.」"],
+      ["概観","一番大きな変化を。「Overall, the country relied much less on coal, while renewable energy became far more important.」"],
+      ["詳細① 2000年","2000年の各割合。largest source は coal。"],
+      ["詳細② 2020年","2020年の変化。renewables が最大に、coal は半減 など。"]
+    ],
+    model:"The two pie charts show how electricity was generated from four different sources — coal, gas, renewables and nuclear power — in a particular country in 2000 and 2020.\n\nOverall, it is clear that the country relied much less on coal over the twenty-year period, while renewable energy became far more important. The contribution of gas and nuclear power, by contrast, changed only slightly.\n\nIn 2000, coal was by far the largest source of energy, accounting for half of the total. Gas and nuclear power each made up 20%, while renewables provided only 10%. Together, fossil fuels and nuclear power therefore dominated the country's energy supply.\n\nBy 2020, the picture had changed significantly. Renewables had become the leading source, rising sharply to 40%. Coal, in contrast, fell to just 25%, meaning it produced half as much as before. The proportion of energy from gas increased slightly to 25%, while nuclear power dropped to 10%. Overall, the country's energy mix became cleaner and far less dependent on coal than it had been two decades earlier."
+  },
+  {
+    id:"t1-table",
+    typeLabel:"表 Table",
+    title:"年齢層別のスマホ利用時間（2015年と2022年）",
+    prompt:"The table below shows the average number of hours per day spent using a smartphone by three age groups in 2015 and 2022. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+    chart:{kind:"table",
+      headers:["Age group","2015","2022"],
+      rows:[["Teenagers","3.0 hrs","5.0 hrs"],["Adults","2.0 hrs","3.5 hrs"],["Over 60","0.5 hrs","1.5 hrs"]]},
+    guide:[
+      ["導入","「The table shows the average hours per day that three age groups spent using a smartphone in 2015 and 2022.」"],
+      ["概観","全体傾向＋最大の層。「Overall, usage increased in every age group. Teenagers spent the most time in both years.」"],
+      ["詳細① 2015年","2015年の各層の数字。highest / lowest を明確に。"],
+      ["詳細② 2022年","2022年の変化。相対的に一番伸びた層（over 60 が3倍）に注目。"]
+    ],
+    model:"The table shows the average number of hours per day that three age groups — teenagers, adults and people over 60 — spent using a smartphone in 2015 and 2022.\n\nOverall, smartphone use increased in every age group over the seven-year period. Teenagers spent the most time on their phones in both years, whereas people over 60 spent the least.\n\nIn 2015, teenagers used their smartphones for an average of 3 hours a day, which was the highest figure. Adults spent 2 hours, while those over 60 used their phones for only half an hour. This meant that teenagers spent six times as long on their phones as the oldest group did.\n\nBy 2022, usage had risen across all groups. Teenagers' daily use climbed to 5 hours, and adults' use increased to 3.5 hours. The biggest change, in relative terms, was among those over 60, whose usage tripled from 0.5 to 1.5 hours per day. Despite this sharp rise, however, older people still spent far less time on their phones than the two younger groups."
+  },
+  {
+    id:"t1-process",
+    typeLabel:"プロセス図 Process",
+    title:"ペットボトルがリサイクルされる流れ",
+    prompt:"The diagram below shows how used plastic bottles are recycled into new products. Summarise the information by selecting and reporting the main features.",
+    chart:{kind:"process",
+      steps:["Used bottles collected","Sorted by type & colour","Washed","Shredded into flakes","Melted down","Made into new products"]},
+    guide:[
+      ["導入","「The diagram illustrates the process by which used plastic bottles are recycled into new products.」"],
+      ["概観","段階の数＋始まりと終わり。「Overall, the process has six main stages, beginning with collection and ending with new products. It is a linear process.」"],
+      ["詳細① 前半","受動態＋順序の語で。「First, … are collected. Then they are sorted… After that, …」"],
+      ["詳細② 後半","「Following this, … Finally, … and the cycle begins again.」受動態を中心に。"]
+    ],
+    model:"The diagram illustrates the process by which used plastic bottles are recycled into new products.\n\nOverall, the process consists of six main stages, beginning with the collection of used bottles and ending with the production of new items. It is a linear process that depends on both human and mechanical work, and no new raw materials are required, since the same plastic is reused.\n\nAt the first stage, used plastic bottles are collected and taken to a recycling centre. Here, the bottles are sorted by colour and type. Once they have been sorted, the bottles are thoroughly washed in order to remove any dirt or labels.\n\nFollowing this, the clean bottles are shredded into small plastic flakes. These flakes are then heated until they melt. Finally, the melted plastic is used to make new products, such as bottles, containers or clothing, after which the cycle can begin again. In this way, waste plastic is given a new life instead of simply being thrown away."
+  },
+  {
+    id:"t1-map",
+    typeLabel:"地図 Maps",
+    title:"ある町の中心部の変化（1990年と現在）",
+    prompt:"The two maps below show the centre of a small town in 1990 and at the present day. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+    chart:{kind:"map",
+      before:["North: large car park","Centre: main road for cars","South: small school"],
+      after:["North: modern shopping mall","Centre: pedestrian zone with trees","South: larger, expanded school"]},
+    guide:[
+      ["導入","「The two maps show how the centre of a small town changed between 1990 and the present day.」"],
+      ["概観","最も目立つ変化を。「Overall, the town centre became busier and more modern, most notably with a new shopping mall and a pedestrian zone.」"],
+      ["詳細① 北・中央","「has been replaced by」「has been turned into」など現在完了の受動態で変化を。"],
+      ["詳細② 南・その他","「has been expanded」「a number of trees have been planted」など。"]
+    ],
+    model:"The two maps show how the centre of a small town changed between 1990 and the present day.\n\nOverall, the town centre developed from a fairly quiet area into a busier, more modern one. The most noticeable changes were the construction of a shopping mall and the introduction of a pedestrian-only zone.\n\nIn 1990, there was a large car park in the north of the town centre. This has now been replaced by a modern shopping mall. To the south, the small school that existed in 1990 has been expanded and now occupies a much larger area.\n\nIn addition, the main road that ran through the centre has been turned into a pedestrian zone, where cars are no longer allowed. A number of trees have also been planted along this area, making the town centre greener and more pleasant than before. Taken together, these changes suggest that the town centre has become quieter and safer for pedestrians, as well as more attractive to shoppers and visitors."
+  }
+];
+
+/* ===================== TASK 2 ===================== */
+var TASK2 = [
+  {
+    id:"t2-opinion",
+    typeLabel:"意見型 Opinion (agree/disagree)",
+    title:"学校で外国語を必修にすべきか",
+    prompt:"Some people believe that students should be required to study a foreign language at school. To what extent do you agree or disagree?",
+    type:"opinion",
+    guide:[
+      ["導入 (Introduction)","話題を一般化→<b>質問を言い換え</b>→自分の立場を明確に。「I strongly agree that … because …」"],
+      ["本論① (Body 1)","1つ目の理由＋説明＋例。「The most important reason is that … For example, …」"],
+      ["本論② (Body 2)","2つ目の理由＋説明＋例。または反対意見に触れて反論。「In addition, … / Some people argue …, but …」"],
+      ["結論 (Conclusion)","立場をもう一度言い換えて。「In conclusion, I firmly believe that …」"]
+    ],
+    model:"In today's connected world, the role of foreign language education is often debated. I strongly agree that students should be required to study a foreign language at school, because it brings both practical and personal benefits.\n\nThe most important reason is that knowing a foreign language improves career opportunities. As businesses become increasingly international, employers value workers who can communicate with clients and partners from other countries. For example, a person who speaks English in addition to their first language can apply for a much wider range of jobs, often with higher salaries. If language learning is made compulsory, all students gain this advantage, not only those whose families can afford private lessons.\n\nIn addition, studying a foreign language helps young people understand other cultures. When students learn a new language, they also learn about the customs and values of the people who speak it. This makes them more open-minded and respectful of differences, which is essential in modern multicultural societies.\n\nSome people argue that not all students enjoy languages and that the time could be spent on other subjects. While this is true to some extent, the same could be said about almost any subject. The skills and cultural awareness gained from language study are valuable for everyone, even those who never become fluent.\n\nIn conclusion, although learning a foreign language can be challenging, I firmly believe it should be a required subject at school. The benefits for students' future careers and their understanding of the world clearly outweigh the difficulties involved."
+  },
+  {
+    id:"t2-discuss",
+    typeLabel:"両論型 Discuss both views",
+    title:"子どもは早く入学すべきか遅く入学すべきか",
+    prompt:"Some people think children should start school at a very young age, while others believe they should start later. Discuss both views and give your own opinion.",
+    type:"discuss",
+    guide:[
+      ["導入","話題→「両方の意見がある」→「This essay will discuss both views before giving my own opinion.」"],
+      ["本論① 1つ目の意見","「On the one hand, …」早く始める派の理由＋説明＋例。"],
+      ["本論② 2つ目の意見","「On the other hand, …」遅く始める派の理由＋説明＋例。"],
+      ["結論＋意見","両方に触れつつ<b>自分の意見</b>を。「In my opinion, … / I personally believe …」"]
+    ],
+    model:"There is much disagreement about the right age for children to begin formal education. While some people support starting school very early, others believe a later start is better. This essay will discuss both views before giving my own opinion.\n\nOn the one hand, those who support an early start argue that young children learn very quickly. In their first years, children's brains develop rapidly, so they can absorb new information, such as reading and numbers, more easily than older children. Starting school early also helps children become independent and learn to socialise with others, which prepares them for later life.\n\nOn the other hand, many people believe that children should start school later. They argue that very young children need time to play and develop naturally, rather than sitting in a classroom. Too much pressure at an early age can cause stress and make children dislike learning. Supporters of this view often point to countries where children begin school at seven and still achieve excellent results.\n\nIn my opinion, both early socialisation and free play are important, so the best solution lies in between. I believe children should begin school at around six years old. Before this age, they can attend kindergarten, where they learn through play rather than formal lessons. In this way, children are neither pushed too hard nor left unprepared for primary school.\n\nIn conclusion, although there are good arguments on both sides, I personally believe that a moderate starting age, combined with play-based early education, offers children the best balance between learning and enjoying their early years."
+  },
+  {
+    id:"t2-advdis",
+    typeLabel:"利点・欠点型 Advantages/Disadvantages",
+    title:"在宅勤務の利点は欠点を上回るか",
+    prompt:"More and more people are working from home rather than in an office. Do the advantages of this development outweigh the disadvantages?",
+    type:"advdis",
+    guide:[
+      ["導入","話題を言い換え→自分の立場「I believe the advantages outweigh the disadvantages.」を先に出す。"],
+      ["本論① 利点","「There are clear benefits. Firstly, … Secondly, …」具体例つきで。"],
+      ["本論② 欠点","「However, there are some drawbacks. The main problem is …」"],
+      ["結論","利点が勝る理由を整理して。「Despite these problems, the benefits are greater because …」"]
+    ],
+    model:"In recent years, working from home has become far more common than before. Although this change has some drawbacks, I believe its advantages are greater than its disadvantages.\n\nThere are clear benefits to working from home. Firstly, employees save a great deal of time and money because they no longer need to travel to an office every day. This time can be spent with family or on rest, which improves people's quality of life. Secondly, working from home offers greater flexibility. Workers can often organise their own schedules, which allows them to balance their jobs with personal responsibilities, such as caring for children.\n\nHowever, this development also has some disadvantages. The main problem is that working from home can be lonely. Without daily contact with colleagues, some people feel isolated and find it harder to stay motivated. In addition, it can be difficult to separate work from home life, so employees may end up working longer hours and feeling stressed.\n\nDespite these problems, I believe the benefits outweigh the drawbacks. Many of the disadvantages can be reduced with the right approach. For instance, companies can organise regular video meetings to help staff stay connected, and workers can set clear working hours to protect their free time. The advantages of saving time and gaining flexibility, on the other hand, have a lasting positive effect on daily life.\n\nIn conclusion, while working from home is not perfect, its benefits are more significant than its disadvantages. With good planning from both employers and employees, this way of working can be both productive and enjoyable."
+  },
+  {
+    id:"t2-problem",
+    typeLabel:"問題・解決型 Problem/Solution",
+    title:"都市の交通渋滞：原因と対策",
+    prompt:"Many cities around the world face serious traffic congestion. What are the causes of this problem, and what measures can be taken to solve it?",
+    type:"problem",
+    guide:[
+      ["導入","話題を言い換え→「This essay will examine the causes and suggest some solutions.」"],
+      ["本論① 原因","「There are two main causes. The most obvious one is … A second cause is …」"],
+      ["本論② 対策","「Fortunately, there are measures. Firstly, … Secondly, …」例つきで。"],
+      ["結論","原因と対策を一文ずつ整理して締める。"]
+    ],
+    model:"Traffic congestion is a serious problem in many cities around the world. This essay will examine the main causes of this issue and suggest some practical measures to deal with it.\n\nThere are two main causes of traffic congestion. The most obvious one is the rapid increase in the number of private cars. As people become wealthier, more families can afford their own vehicles, which means there are simply too many cars on the roads. A second cause is poor public transport. In many cities, buses and trains are unreliable or overcrowded, so people prefer to drive instead, which makes the roads even busier.\n\nFortunately, there are several measures that can be taken to reduce this problem. Firstly, governments should invest in better public transport. If buses and trains are cheap, fast and comfortable, more people will choose to use them rather than their cars. For example, cities that have built modern underground systems have successfully reduced the number of cars in their centres. Secondly, local authorities could discourage driving in busy areas by introducing charges for entering the city centre, as has been done in London. The money raised could then be used to improve transport further.\n\nIn conclusion, traffic congestion is mainly caused by the growing number of private cars and inadequate public transport. However, this problem can be solved if governments invest in efficient public transport and discourage unnecessary car use. With these measures in place, cities can become less crowded and more pleasant places to live."
+  },
+  {
+    id:"t2-twopart",
+    typeLabel:"二部構成型 Two-part question",
+    title:"一人暮らしの増加：理由と評価",
+    prompt:"These days, more people are choosing to live alone than in the past. Why is this happening? Is it a positive or negative development?",
+    type:"twopart",
+    guide:[
+      ["導入","話題を言い換え→2つの問いに答えると示す＋自分の評価を先に。"],
+      ["本論① 理由(Why)","「There are several reasons. The main reason is … Another reason is …」"],
+      ["本論② 評価","「In my opinion, this trend is mostly positive/negative because …」例つきで。"],
+      ["結論","理由＋評価を一文ずつでまとめる。"]
+    ],
+    model:"These days, more and more people are choosing to live on their own rather than with family or partners. This essay will explain why this is happening and argue that, on balance, it is a positive development.\n\nThere are several reasons why living alone has become more common. The main reason is that people today are more financially independent. As more people, including women, have well-paid jobs, they can afford to rent or buy their own homes without relying on others. Another reason is that society has changed. People now marry later in life, or choose not to marry at all, so they spend more years living by themselves.\n\nIn my opinion, this trend is mostly positive. Living alone gives people freedom and independence. They can make their own decisions, organise their time as they wish, and develop important life skills such as cooking, budgeting and looking after a home. These experiences help people become more confident and responsible. Although some may argue that living alone can be lonely, modern technology makes it easy to stay in close contact with friends and family, so this problem is not as serious as it once was. Furthermore, living alone often encourages people to build wider social networks, as they actively seek out friends and community activities rather than relying only on the people they live with.\n\nIn conclusion, the rise in people living alone is mainly the result of greater financial independence and changing social attitudes. While there are some disadvantages, I believe the benefits of independence and personal growth make this a positive development for both individuals and society."
+  },
+  {
+    id:"t2-society",
+    typeLabel:"意見型 Opinion (society)",
+    title:"政府は公共サービスと芸術のどちらにお金を使うべきか",
+    prompt:"Some people think that governments should spend money on public services such as hospitals and schools rather than on the arts, such as music and painting. To what extent do you agree or disagree?",
+    type:"opinion",
+    guide:[
+      ["導入","話題を言い換え→自分の立場（部分的に賛成 partly agree も有効）。"],
+      ["本論① 一方","「On the one hand, …」公共サービス優先に理解を示す。"],
+      ["本論② 他方","「On the other hand, …」芸術も無視できない理由＋例。"],
+      ["結論","バランスを取った結論を。「mainly … while still …」"]
+    ],
+    model:"Governments have limited budgets, so they must decide carefully how to spend public money. Some people believe that funding should go to public services rather than to the arts, such as music and painting. While I understand this view, I only partly agree with it.\n\nOn the one hand, there are strong reasons to prioritise public services. Services such as hospitals, schools and transport are essential for everyone's daily life and well-being. If a government does not spend enough on healthcare, for example, people may not receive the medical treatment they need. Because these services affect the whole population, it is reasonable that they should receive the largest share of public funding.\n\nOn the other hand, I do not believe that the arts should be ignored. Music, painting and other art forms play an important role in society. They enrich people's lives, encourage creativity and form an important part of a country's culture and identity. In addition, the arts can support the economy by attracting tourists and creating jobs. In some cities, famous museums and concert halls are among the main reasons that visitors come at all. If governments stopped funding the arts completely, many of these museums, theatres and galleries would be forced to close.\n\nIn conclusion, while I agree that essential public services should be the government's main priority, I do not think this means the arts should receive no support at all. The best approach is for governments to invest mainly in public services while still setting aside a reasonable amount of money to keep the arts alive."
+  }
+];
+
+/* ===================== チェックリスト ===================== */
+var CHECK_T1 = [
+  "問題文を自分の言葉で言い換えて導入を書いた",
+  "Overview（全体の特徴）を1〜2文書いた（数字なしでOK）",
+  "重要なデータ・数字を選んで説明した（全部は書かない）",
+  "増加・減少の語を使い分けた（rose / fell / remained stable …）",
+  "比較の表現を使った（higher than / while / respectively …）",
+  "150語以上書いた",
+  "段落に分けた（導入／概観／詳細①／詳細②）"
+];
+var CHECK_T2 = [
+  "質問にきちんと答えている（テーマからずれていない）",
+  "導入・本論①・本論②・結論の4段落がある",
+  "各段落の最初にトピックセンテンスがある",
+  "自分の意見をはっきり述べた",
+  "つなぎ言葉を使った（However / For example / In addition …）",
+  "具体例を入れた（For example, … / such as …）",
+  "同じ単語の繰り返しを避けた（パラフレーズ）",
+  "250語以上書いた"
+];
+
+/* ===================== パラフレーズ ===================== */
+var PARAPHRASE = [
+  { o:"Many people think that children watch too much television.",
+    syn:["many people → a large number of people","think → believe","watch too much TV → spend excessive time watching TV"],
+    m:"A large number of people believe that children spend an excessive amount of time watching television.",
+    t:["類義語","名詞句に変換"] },
+  { o:"Pollution is a serious problem in big cities.",
+    syn:["pollution → contamination","serious → major","problem → issue","big cities → large urban areas"],
+    m:"Contamination is a major issue in large urban areas.",
+    t:["類義語"] },
+  { o:"The government should spend more money on education.",
+    syn:["government → authorities","should → ought to","spend more money → increase investment"],
+    m:"The authorities ought to increase their investment in education.",
+    t:["類義語","品詞を変える(spend→investment)"] },
+  { o:"Students learn better when they enjoy their lessons.",
+    syn:["students → learners","learn better → make more progress","enjoy lessons → find classes enjoyable"],
+    m:"Learners make more progress when they find their classes enjoyable.",
+    t:["類義語","形を変える"] },
+  { o:"Technology has changed the way we communicate.",
+    syn:["changed → transformed","communicate → interact with one another","→ 受動態にしてみる"],
+    m:"The way we interact with one another has been transformed by technology.",
+    t:["受動態","類義語"] },
+  { o:"Living in a city has many advantages.",
+    syn:["many → numerous","advantages → benefits","living in a city → residing in an urban area","→ There are … 構文"],
+    m:"There are numerous benefits to residing in an urban area.",
+    t:["文構造を変える","類義語"] },
+  { o:"Tourism can damage the environment.",
+    syn:["damage → harm","tourism → the tourism industry","→ 受動態に"],
+    m:"The natural environment can be harmed by the tourism industry.",
+    t:["受動態","類義語"] },
+  { o:"Some people believe that exams are not a good way to test students.",
+    syn:["some people → a number of individuals","believe → argue","not a good way → an ineffective method","test → assess"],
+    m:"A number of individuals argue that examinations are an ineffective method of assessing learners.",
+    t:["類義語","否定を1語に(not good→ineffective)"] },
+  { o:"Children should be encouraged to read books from an early age.",
+    syn:["children → young people","encouraged → motivated","from an early age → from a young age"],
+    m:"Young people ought to be motivated to read from a young age.",
+    t:["類義語"] },
+  { o:"Unemployment is increasing in many countries.",
+    syn:["unemployment → joblessness","is increasing → is on the rise","many countries → numerous nations"],
+    m:"Joblessness is on the rise in numerous nations.",
+    t:["類義語","イディオム(on the rise)"] },
+  { o:"The internet allows us to find information quickly.",
+    syn:["allows → enables","us → people","find → access","quickly → rapidly"],
+    m:"The internet enables people to access information rapidly.",
+    t:["類義語"] },
+  { o:"Healthy food is often more expensive than junk food.",
+    syn:["healthy food → nutritious meals","often → tend to","more expensive → cost more","junk food → unhealthy fast food"],
+    m:"Nutritious meals tend to cost more than unhealthy fast food.",
+    t:["類義語","形を変える(more expensive→cost more)"] }
+];
+
+/* ===================== フレーズ集 ===================== */
+var PHRASEBANK = {
+  task1:{ label:"Task 1", groups:[
+    {h:"① 導入（問題文の言い換え）", rows:[
+      ["The graph / chart / table shows (illustrates) …","グラフ/表は…を示している"],
+      ["The diagram illustrates the process of …","図は…の過程を示している"],
+      ["The two maps show how … changed between … and …","2つの地図は…が…から…でどう変化したかを示す"],
+      ["… , compared over a period of … months / years","…か月／年間で比較して"]
+    ]},
+    {h:"② Overview（全体の特徴）", rows:[
+      ["Overall, it is clear that …","全体として、…は明らかだ"],
+      ["Overall, the most noticeable trend is that …","全体として、最も目立つ傾向は…"],
+      ["In general, … rose / fell significantly over the period.","全体的に…は期間中大きく上昇／下降した"]
+    ]},
+    {h:"③ 増加 Increase", rows:[
+      ["rise / increase / grow / climb / go up","上がる"],
+      ["rose sharply / dramatically","急激に上がった"],
+      ["increased steadily / gradually","着実に／徐々に上がった"],
+      ["peaked at … / reached a peak of …","…でピークに達した"]
+    ]},
+    {h:"④ 減少 Decrease", rows:[
+      ["fall / decline / drop / decrease","下がる"],
+      ["fell slightly / marginally","わずかに下がった"],
+      ["dropped dramatically / plummeted","急激に下がった"],
+      ["hit a low of … / bottomed out at …","…まで下がって底を打った"]
+    ]},
+    {h:"⑤ 変化なし Stable", rows:[
+      ["remained stable / constant / unchanged","変わらなかった"],
+      ["levelled off / plateaued","横ばいになった"],
+      ["fluctuated (around …)","（…前後で）上下した"]
+    ]},
+    {h:"⑥ 比較・数字", rows:[
+      ["A was higher / lower than B","AはBより高かった／低かった"],
+      ["…, respectively","それぞれ…"],
+      ["more than twice as high as …","…の2倍以上"],
+      ["accounted for / made up … %","…％を占めた"],
+      ["stood at … / reached …","…だった／…に達した"],
+      ["around / approximately / just over / just under …","約／およそ／…を少し超える／…弱"]
+    ]}
+  ]},
+  task2:{ label:"Task 2", groups:[
+    {h:"① 意見を述べる", rows:[
+      ["In my opinion, …","私の意見では…"],
+      ["I strongly believe that …","私は…と強く思う"],
+      ["From my point of view, …","私の見方では…"],
+      ["It seems to me that …","私には…のように思える"]
+    ]},
+    {h:"② 賛成・反対", rows:[
+      ["I completely agree that …","…に完全に賛成だ"],
+      ["I disagree with the idea that …","…という考えには反対だ"],
+      ["While I agree to some extent, …","ある程度は賛成だが…"],
+      ["I only partly agree with this view.","この見方には部分的にしか賛成しない"]
+    ]},
+    {h:"③ 理由・列挙", rows:[
+      ["The main reason for this is that …","主な理由は…"],
+      ["This is because …","これは…だからだ"],
+      ["Firstly, … Secondly, … Finally, …","第一に…第二に…最後に…"],
+      ["Another important point is that …","もう1つ重要な点は…"]
+    ]},
+    {h:"④ 例を出す", rows:[
+      ["For example, … / For instance, …","例えば…"],
+      ["A good example of this is …","この良い例は…"],
+      ["…, such as …","…のような…"]
+    ]},
+    {h:"⑤ 対比・譲歩", rows:[
+      ["However, … / On the other hand, …","しかし…／一方で…"],
+      ["Although … / Even though …","…だけれども"],
+      ["It is true that …, but …","…は事実だが…"],
+      ["While some people argue that …, I believe …","…と言う人もいるが、私は…と思う"]
+    ]},
+    {h:"⑥ 因果", rows:[
+      ["As a result, … / Therefore, …","結果として…／したがって…"],
+      ["This leads to … / This results in …","これは…につながる"],
+      ["due to … / because of …","…のために"]
+    ]},
+    {h:"⑦ 結論", rows:[
+      ["In conclusion, … / To sum up, …","結論として…"],
+      ["Overall, I believe that …","全体として、私は…と思う"],
+      ["…clearly outweigh…","…は明らかに…を上回る"]
+    ]}
+  ]},
+  linking:{ label:"つなぎ語", groups:[
+    {h:"順序・列挙", rows:[
+      ["Firstly, / Secondly, / Finally,","第一に／第二に／最後に"],
+      ["In addition, / Moreover, / Furthermore,","加えて／さらに"],
+      ["Also, / What is more,","また／その上"]
+    ]},
+    {h:"対比・逆接", rows:[
+      ["However, / Nevertheless,","しかし／それにもかかわらず"],
+      ["On the other hand, / In contrast,","一方で／対照的に"],
+      ["Although / Whereas / While","…だが／…である一方"]
+    ]},
+    {h:"理由・結果", rows:[
+      ["because / since / as","…なので"],
+      ["Therefore, / Consequently, / As a result,","したがって／結果として"],
+      ["This is why …","こういうわけで…"]
+    ]},
+    {h:"例示・言い換え", rows:[
+      ["For example, / For instance,","例えば"],
+      ["In other words, / That is to say,","言い換えると"],
+      ["such as / like","…のような"]
+    ]}
+  ]},
+  vocab:{ label:"トピック語彙", groups:[
+    {h:"教育 Education", rows:[
+      ["compulsory","必修の"],["curriculum","カリキュラム"],["academic","学業の"],
+      ["motivation","やる気"],["literacy","読み書き能力"],["knowledge and skills","知識と技能"]
+    ]},
+    {h:"環境 Environment", rows:[
+      ["pollution","汚染"],["climate change","気候変動"],["renewable energy","再生可能エネルギー"],
+      ["sustainable","持続可能な"],["emissions","排出"],["conservation","保護"]
+    ]},
+    {h:"テクノロジー Technology", rows:[
+      ["innovation","革新"],["digital","デジタルの"],["automation","自動化"],
+      ["social media","SNS"],["access to information","情報への入手"]
+    ]},
+    {h:"健康 Health", rows:[
+      ["lifestyle","生活習慣"],["obesity","肥満"],["mental health","心の健康"],
+      ["well-being","幸福・健康"],["healthcare","医療"],["prevention","予防"]
+    ]},
+    {h:"社会・仕事 Society & Work", rows:[
+      ["employment","雇用"],["work-life balance","ワークライフバランス"],["inequality","不平等"],
+      ["community","地域社会"],["independence","自立"],["responsibility","責任"]
+    ]}
+  ]}
+};
+
+/* ===================== ガイド本文 ===================== */
+var GUIDE_HTML =
+  '<div class="guidecard"><h3>📋 IELTS Writing ってどんなテスト？</h3>'+
+  '<p>制限時間は<b class="big">60分</b>。その中で <b>Task 1</b> と <b>Task 2</b> の2つを書きます。</p>'+
+  '<table class="scoretable">'+
+  '<tr><td>Task 1<br><small>約20分</small></td><td><b>150語以上</b>。Academicでは<b>グラフ・表・図・地図</b>を見て特徴を説明します（自分の意見は書かない）。</td></tr>'+
+  '<tr><td>Task 2<br><small>約40分</small></td><td><b>250語以上</b>。質問に対して<b>エッセイ</b>を書きます。配点は Task 1 の<b>約2倍</b>。だからTask 2を優先！</td></tr>'+
+  '</table></div>'+
+
+  '<div class="guidecard"><h3>📝 何で採点されるの？（4つの観点）</h3>'+
+  '<table class="scoretable">'+
+  '<tr><td>Task Achievement</td><td>質問にちゃんと答えているか。Task 1 はデータを正しく選べているか。</td></tr>'+
+  '<tr><td>Coherence &amp; Cohesion</td><td>段落分け・つなぎ言葉で<b>読みやすく</b>整理されているか。</td></tr>'+
+  '<tr><td>Lexical Resource</td><td>語彙の豊富さ・正確さ。<b>同じ語の繰り返しを避ける</b>（＝パラフレーズ）。</td></tr>'+
+  '<tr><td>Grammatical Range</td><td>文法の正確さと多様さ。複文も少し使えると良い。</td></tr>'+
+  '</table></div>'+
+
+  '<div class="guidecard"><h3>🎯 Band 6 を取るためのコツ</h3>'+
+  '<p>✅ <b>質問に正面から答える</b>（テーマからずれない）</p>'+
+  '<p>✅ <b>段落を分ける</b>：導入／本論①／本論②／結論</p>'+
+  '<p>✅ 各段落の最初に<b>トピックセンテンス</b>を置く</p>'+
+  '<p>✅ <b>つなぎ言葉</b>を使う：However, For example, In addition …</p>'+
+  '<p>✅ <b>語数を満たす</b>（Task1=150／Task2=250以上）</p>'+
+  '<p>✅ <b>具体例</b>を1つは入れる</p>'+
+  '<p>✅ 完璧な文より<b>正しく伝わる文</b>を優先。短くても正確に！</p></div>'+
+
+  '<div class="guidecard"><h3>⏱ おすすめの時間配分</h3>'+
+  '<p><b>Task 2（40分）</b>：考える5分 → 書く30分 → 見直し5分</p>'+
+  '<p><b>Task 1（20分）</b>：図を読む3分 → 書く15分 → 見直し2分</p>'+
+  '<p>このアプリの各練習画面には<b>タイマー</b>と<b>語数カウント</b>が付いています。本番のつもりで計りながら書いてみよう！</p></div>'+
+
+  '<div class="guidecard"><h3>💜 LOVE YOURSELF English より</h3>'+
+  '<p>最初から完璧じゃなくて大丈夫。<b>モデルアンサーを真似</b>して、使えるフレーズを少しずつ増やしていこう。毎日1問でも続けることが、Band 6 への一番の近道です！</p></div>';
+
+/* =========================================================
+   アプリ本体
+   ========================================================= */
+(function(){
+  'use strict';
+
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+  /* ---- 保存データ ---- */
+  var SAVE_KEY = "lys_ielts_save_v1";
+  var save = { drafts:{}, t1done:[], t2done:[], paraDone:[], check:{} };
+  function loadSave(){
+    try{ var raw=localStorage.getItem(SAVE_KEY);
+      if(raw){ var o=JSON.parse(raw);
+        save.drafts   = o.drafts   || {};
+        save.t1done   = o.t1done   || [];
+        save.t2done   = o.t2done   || [];
+        save.paraDone = o.paraDone || [];
+        save.check    = o.check    || {};
+      }
+    }catch(e){}
+  }
+  function persist(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(save)); }catch(e){} }
+
+  function showScreen(id){
+    var ss=document.querySelectorAll(".screen");
+    for(var i=0;i<ss.length;i++) ss[i].classList.add("hidden");
+    $(id).classList.remove("hidden");
+    $("app").scrollTop=0; window.scrollTo(0,0);
+  }
+
+  /* ===================== ホーム ===================== */
+  function renderHome(){
+    $("t1-badge").textContent = save.t1done.length+"/"+TASK1.length;
+    $("t2-badge").textContent = save.t2done.length+"/"+TASK2.length;
+    $("para-badge").textContent = save.paraDone.length+"/"+PARAPHRASE.length;
+    var total = save.t1done.length+save.t2done.length;
+    var drafts = Object.keys(save.drafts).filter(function(k){return (save.drafts[k]||"").trim().length>0;}).length;
+    $("home-stat").innerHTML =
+      "✍️ 提出した作文 <b>"+total+"</b> ／ 下書き保存中 <b>"+drafts+"</b><br>"+
+      "🔁 パラフレーズ <b>"+save.paraDone.length+"/"+PARAPHRASE.length+"</b> 完了";
+  }
+
+  /* ===================== チャート描画 ===================== */
+  function renderChart(c){
+    if(!c) return "";
+    var h='<div class="chartwrap">';
+    if(c.unit) h+='<div class="chart-title">単位：'+esc(c.unit)+'</div>';
+
+    if(c.kind==="line"){
+      var W=300,H=150,pad=28, max=c.max, n=c.points.length;
+      var stepX=(W-pad*2)/(n-1);
+      var pts=c.points.map(function(p,i){
+        var x=pad+stepX*i, y=H-pad-(p[1]/max)*(H-pad*2);
+        return [x,y];
+      });
+      var poly=pts.map(function(p){return p[0].toFixed(1)+","+p[1].toFixed(1);}).join(" ");
+      h+='<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="overflow:visible">';
+      // gridlines
+      for(var g=0;g<=4;g++){
+        var gy=H-pad-(g/4)*(H-pad*2);
+        h+='<line x1="'+pad+'" y1="'+gy+'" x2="'+(W-pad)+'" y2="'+gy+'" stroke="#e2ece9" stroke-width="1"/>';
+        h+='<text x="'+(pad-4)+'" y="'+(gy+3)+'" font-size="8" fill="#7d8a87" text-anchor="end">'+Math.round(max*g/4)+'</text>';
+      }
+      h+='<polyline points="'+poly+'" fill="none" stroke="'+CCOL[0]+'" stroke-width="2.5"/>';
+      pts.forEach(function(p,i){
+        h+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="3.5" fill="'+CCOL[0]+'"/>';
+        h+='<text x="'+p[0]+'" y="'+(p[1]-7)+'" font-size="8.5" fill="#33403d" text-anchor="middle" font-weight="700">'+c.points[i][1]+'</text>';
+        h+='<text x="'+p[0]+'" y="'+(H-pad+12)+'" font-size="8.5" fill="#7d8a87" text-anchor="middle">'+esc(c.points[i][0])+'</text>';
+      });
+      h+='</svg>';
+    }
+
+    else if(c.kind==="bar"){
+      c.groups.forEach(function(grp){
+        h+='<div class="barrow"><span class="blab">'+esc(grp[0])+'</span><div class="btrack">';
+        for(var s=0;s<c.series.length;s++){
+          var val=grp[s+1], w=(val/c.max)*100;
+          h+='<div class="bbar" style="width:'+w+'%;background:'+c.colors[s]+'">'+val+'%</div>';
+        }
+        h+='</div></div>';
+      });
+      h+='<div class="legend">';
+      for(var s2=0;s2<c.series.length;s2++)
+        h+='<span><i style="background:'+c.colors[s2]+'"></i>'+esc(c.series[s2])+'</span>';
+      h+='</div>';
+    }
+
+    else if(c.kind==="pie"){
+      h+='<div class="pie2">';
+      c.sets.forEach(function(set){
+        var vals=set[1], acc=0, stops=[];
+        vals.forEach(function(v,i){
+          var start=acc/100*360, end=(acc+v)/100*360; acc+=v;
+          stops.push(c.colors[i]+" "+start.toFixed(1)+"deg "+end.toFixed(1)+"deg");
+        });
+        h+='<div class="pieblock"><div class="donut" style="background:conic-gradient('+stops.join(",")+')"></div>';
+        h+='<div class="yr">'+esc(set[0])+'</div></div>';
+      });
+      h+='</div><div class="legend">';
+      c.labels.forEach(function(lb,i){
+        h+='<span><i style="background:'+c.colors[i]+'"></i>'+esc(lb)+'</span>';
+      });
+      h+='</div>';
+    }
+
+    else if(c.kind==="table"){
+      h+='<table class="dtable"><thead><tr>';
+      c.headers.forEach(function(hd){ h+='<th>'+esc(hd)+'</th>'; });
+      h+='</tr></thead><tbody>';
+      c.rows.forEach(function(r){
+        h+='<tr>'; r.forEach(function(cell){ h+='<td>'+esc(cell)+'</td>'; }); h+='</tr>';
+      });
+      h+='</tbody></table>';
+    }
+
+    else if(c.kind==="process"){
+      h+='<div class="procrow">';
+      c.steps.forEach(function(st,i){
+        h+='<div class="procstep"><span class="pnum">'+(i+1)+'</span>'+esc(st)+'</div>';
+        if(i<c.steps.length-1) h+='<span class="procarrow">→</span>';
+      });
+      h+='</div>';
+    }
+
+    else if(c.kind==="map"){
+      h+='<div class="maps">';
+      h+='<div class="mapcol"><h5>1990</h5><ul>';
+      c.before.forEach(function(b){ h+='<li>'+esc(b)+'</li>'; });
+      h+='</ul></div>';
+      h+='<div class="mapcol"><h5>Now</h5><ul>';
+      c.after.forEach(function(a){ h+='<li>'+esc(a)+'</li>'; });
+      h+='</ul></div></div>';
+    }
+
+    h+='</div>';
+    return h;
+  }
+
+  /* ===================== 問題リスト ===================== */
+  function renderLists(){
+    var t1=$("t1-list"); t1.innerHTML="";
+    TASK1.forEach(function(item){ t1.appendChild(makePCard(item,"task1",save.t1done)); });
+    var t2=$("t2-list"); t2.innerHTML="";
+    TASK2.forEach(function(item){ t2.appendChild(makePCard(item,"task2",save.t2done)); });
+  }
+  function makePCard(item, kind, doneArr){
+    var el=document.createElement("button");
+    el.className="pcard"+(kind==="task2"?" t2":"");
+    var done=doneArr.indexOf(item.id)>=0;
+    var hasDraft=(save.drafts[item.id]||"").trim().length>0;
+    var mark = done ? '<span class="pdone">✓ 提出ずみ</span>'
+             : hasDraft ? '<span class="pdone" style="color:var(--gold);background:#fff7e6">✎ 下書きあり</span>' : '';
+    el.innerHTML='<span class="ptype">'+esc(item.typeLabel)+'</span>'+
+      '<div class="ptitle">'+esc(item.title)+'</div>'+mark;
+    el.addEventListener("click",function(){ openWrite(item, kind); });
+    return el;
+  }
+
+  /* ===================== 書く画面 ===================== */
+  var cur=null, curKind=null, timerSec=0, timerInt=null, timerRunning=false, curTarget=0, curMinWords=0;
+
+  function openWrite(item, kind){
+    cur=item; curKind=kind;
+    var isT2 = kind==="task2";
+    $("screen-write").classList.toggle("t2theme", isT2);
+    $("write-title").textContent = isT2 ? "Task 2" : "Task 1";
+    curTarget = isT2 ? 40 : 20;
+    curMinWords = isT2 ? 250 : 150;
+
+    // prompt + chart
+    var ph='<span class="q-tag">'+esc(item.typeLabel)+'</span>'+
+      '<div class="q-prompt">'+esc(item.prompt)+'</div>';
+    if(!isT2){
+      ph+='<div class="q-instr">📌 グラフ/図の特徴を選んで説明しよう（自分の意見は書かない）</div>';
+      ph+=renderChart(item.chart);
+    }else{
+      ph+='<div class="q-instr">📌 質問に答えて、理由と例を入れたエッセイを書こう</div>';
+    }
+    $("write-prompt").innerHTML=ph;
+
+    // editor
+    $("editor").value = save.drafts[item.id] || "";
+    updateWordCount();
+    $("saved-note").textContent = save.drafts[item.id] ? "（前回の下書きを表示中）" : "";
+
+    // timer
+    resetTimer();
+    $("timer-target").textContent = "目安 "+curTarget+":00";
+    $("wc-target").textContent = curMinWords+"語以上";
+
+    // accordion content
+    buildAccordion(item, kind);
+    closeAllAcc();
+
+    showScreen("screen-write");
+  }
+
+  function buildAccordion(item, kind){
+    // guide (構成)
+    var g='<h4>📝 おすすめの構成</h4>';
+    item.guide.forEach(function(row,i){
+      g+='<p><b class="en">'+(i+1)+'. '+esc(row[0])+'</b><br><span class="jp">'+row[1]+'</span></p>';
+    });
+    $("acc-guide").innerHTML=g;
+
+    // phrases (link to bank subset)
+    var pk = (kind==="task2") ? "task2" : "task1";
+    var pb=PHRASEBANK[pk];
+    var p='<h4>💬 この問題で役立つ表現</h4>';
+    pb.groups.forEach(function(grp){
+      p+='<p style="margin-top:8px"><b class="en">'+esc(grp.h)+'</b></p><ul>';
+      grp.rows.slice(0,3).forEach(function(r){
+        p+='<li><span class="en">'+esc(r[0])+'</span><br><span class="jp">'+esc(r[1])+'</span></li>';
+      });
+      p+='</ul>';
+    });
+    p+='<p style="margin-top:10px;font-size:11.5px"><span class="jp">▶ もっと見たいときはホームの「💬 フレーズ＆表現集」へ</span></p>';
+    $("acc-phrase").innerHTML=p;
+
+    // checklist
+    var list = (kind==="task2") ? CHECK_T2 : CHECK_T1;
+    var savedChecks = save.check[item.id] || {};
+    var c='<h4>✅ 提出前にチェック（Band 6）</h4>';
+    list.forEach(function(txt,i){
+      var ck = savedChecks[i] ? "checked" : "";
+      c+='<label class="chk-item"><input type="checkbox" data-chk="'+i+'" '+ck+'><span>'+esc(txt)+'</span></label>';
+    });
+    $("acc-check").innerHTML=c;
+    var boxes=$("acc-check").querySelectorAll("input[data-chk]");
+    boxes.forEach(function(b){
+      b.addEventListener("change",function(){
+        if(!save.check[item.id]) save.check[item.id]={};
+        save.check[item.id][b.dataset.chk]=b.checked;
+        persist();
+      });
+    });
+
+    // model
+    var m='<h4>⭐ モデルアンサー</h4>';
+    m+='<p style="font-size:11.5px"><span class="jp">まず自分で書いてから見るのがおすすめ！真似できる表現を探そう。</span></p>';
+    item.model.split("\n\n").forEach(function(para){
+      m+='<p class="model-p">'+esc(para)+'</p>';
+    });
+    var wc = item.model.trim().split(/\s+/).length;
+    m+='<p style="font-size:11px;color:var(--ink-soft);text-align:right">（約 '+wc+' 語）</p>';
+    $("acc-model").innerHTML=m;
+  }
+
+  function closeAllAcc(){
+    document.querySelectorAll("#screen-write .acc-btn").forEach(function(b){ b.classList.remove("open"); });
+    document.querySelectorAll("#screen-write .acc-panel").forEach(function(p){ p.classList.add("hidden"); });
+  }
+
+  /* ---- 語数カウント ---- */
+  function countWords(t){ t=t.trim(); if(!t) return 0; return t.split(/\s+/).length; }
+  function updateWordCount(){
+    var n=countWords($("editor").value);
+    var v=$("wc-v"); v.textContent=n;
+    var pct=Math.min(100, (n/curMinWords)*100);
+    var fill=$("wc-fill"); fill.style.width=pct+"%";
+    if(n>=curMinWords){ v.classList.add("met"); fill.classList.add("met"); }
+    else { v.classList.remove("met"); fill.classList.remove("met"); }
+  }
+
+  /* ---- タイマー ---- */
+  function fmt(s){ var m=Math.floor(s/60), ss=s%60; return (m<10?"0":"")+m+":"+(ss<10?"0":"")+ss; }
+  function tickTimer(){
+    timerSec++; var v=$("timer-v"); v.textContent=fmt(timerSec);
+    v.classList.toggle("over", timerSec > curTarget*60);
+  }
+  function startTimer(){
+    if(timerRunning) return;
+    timerRunning=true; $("timer-toggle").textContent="一時停止";
+    timerInt=setInterval(tickTimer,1000);
+  }
+  function pauseTimer(){
+    timerRunning=false; $("timer-toggle").textContent="再開";
+    clearInterval(timerInt);
+  }
+  function resetTimer(){
+    pauseTimer(); timerSec=0; $("timer-v").textContent="00:00";
+    $("timer-v").classList.remove("over"); $("timer-toggle").textContent="スタート";
+  }
+
+  /* ---- 下書き保存 ---- */
+  var saveTimer=null;
+  function autoSave(){
+    if(!cur) return;
+    save.drafts[cur.id]=$("editor").value;
+    persist();
+    $("saved-note").textContent="✓ 自動保存しました "+new Date().toLocaleTimeString("ja-JP",{hour:"2-digit",minute:"2-digit"});
+  }
+
+  /* ===================== パラフレーズ ===================== */
+  var paraIdx=0;
+  function openParaphrase(){ paraIdx=0; renderPara(); showScreen("screen-paraphrase"); }
+  function renderPara(){
+    var p=PARAPHRASE[paraIdx];
+    $("para-counter").innerHTML="問題 <b>"+(paraIdx+1)+" / "+PARAPHRASE.length+"</b>　|　完了 "+save.paraDone.length+"問";
+    $("para-orig").innerHTML='<span class="lbl">📄 この文を別の言い方にしよう</span>'+esc(p.o);
+    $("para-syn").innerHTML='💡 ヒント：'+p.syn.map(function(s){return "<b>"+esc(s)+"</b>";}).join(" ／ ");
+    $("para-input").value="";
+    $("para-answer").classList.add("hidden");
+    var a='<div class="para-model"><span class="lbl">⭐ モデル解答（例）</span>'+
+      '<div class="mtext">'+esc(p.m)+'</div>'+
+      '<div class="tech">'+p.t.map(function(t){return "<span>"+esc(t)+"</span>";}).join("")+'</div></div>';
+    $("para-answer").innerHTML=a;
+  }
+  function revealPara(){
+    $("para-answer").classList.remove("hidden");
+    if(save.paraDone.indexOf(paraIdx)<0){ save.paraDone.push(paraIdx); persist(); renderHome(); }
+    $("para-counter").innerHTML="問題 <b>"+(paraIdx+1)+" / "+PARAPHRASE.length+"</b>　|　完了 "+save.paraDone.length+"問";
+  }
+
+  /* ===================== フレーズ集 ===================== */
+  var pbCur="task1";
+  function openPhraseBank(){ pbCur="task1"; renderPB(); showScreen("screen-phrasebank"); }
+  function renderPB(){
+    var tabs=$("pb-tabs"); tabs.innerHTML="";
+    Object.keys(PHRASEBANK).forEach(function(k){
+      var b=document.createElement("button");
+      b.className="pb-tab"+(k===pbCur?" sel":"");
+      b.textContent=PHRASEBANK[k].label;
+      b.addEventListener("click",function(){ pbCur=k; renderPB(); });
+      tabs.appendChild(b);
+    });
+    var body=$("pb-body"); body.innerHTML="";
+    PHRASEBANK[pbCur].groups.forEach(function(grp){
+      var div=document.createElement("div"); div.className="pb-group";
+      var html='<h4>'+esc(grp.h)+'</h4><div class="pb-list">';
+      grp.rows.forEach(function(r){
+        html+='<div class="pb-row"><div class="en">'+esc(r[0])+'</div><div class="jp">'+esc(r[1])+'</div></div>';
+      });
+      html+='</div>';
+      div.innerHTML=html; body.appendChild(div);
+    });
+  }
+
+  /* ===================== イベント ===================== */
+  function bind(){
+    // home menu
+    document.querySelectorAll("[data-go]").forEach(function(b){
+      b.addEventListener("click",function(){
+        var go=b.dataset.go;
+        if(go==="task1list"){ renderLists(); showScreen("screen-task1list"); }
+        else if(go==="task2list"){ renderLists(); showScreen("screen-task2list"); }
+        else if(go==="paraphrase"){ openParaphrase(); }
+        else if(go==="phrasebank"){ openPhraseBank(); }
+        else if(go==="guide"){ $("guide-body").innerHTML=GUIDE_HTML; showScreen("screen-guide"); }
+      });
+    });
+    $("home-guide-btn").addEventListener("click",function(){
+      $("guide-body").innerHTML=GUIDE_HTML; showScreen("screen-guide");
+    });
+    document.querySelectorAll(".back-home").forEach(function(b){
+      b.addEventListener("click",function(){ renderHome(); showScreen("screen-home"); });
+    });
+
+    // write screen
+    $("write-back").addEventListener("click",function(){
+      autoSave(); resetTimer();
+      renderLists();
+      showScreen(curKind==="task2" ? "screen-task2list" : "screen-task1list");
+    });
+    $("editor").addEventListener("input",function(){
+      updateWordCount();
+      clearTimeout(saveTimer); saveTimer=setTimeout(autoSave,800);
+    });
+    $("timer-toggle").addEventListener("click",function(){ timerRunning?pauseTimer():startTimer(); });
+    $("timer-reset").addEventListener("click",resetTimer);
+    document.querySelectorAll("#screen-write .acc-btn").forEach(function(btn){
+      btn.addEventListener("click",function(){
+        var panel=$("acc-"+btn.dataset.acc);
+        var willOpen=panel.classList.contains("hidden");
+        btn.classList.toggle("open",willOpen);
+        panel.classList.toggle("hidden",!willOpen);
+      });
+    });
+    $("write-clear").addEventListener("click",function(){
+      if(confirm("書いた内容を消しますか？")){ $("editor").value=""; updateWordCount(); autoSave(); }
+    });
+    $("write-done").addEventListener("click",function(){
+      var n=countWords($("editor").value);
+      autoSave();
+      var arr = curKind==="task2" ? save.t2done : save.t1done;
+      if(arr.indexOf(cur.id)<0){ arr.push(cur.id); persist(); }
+      var msg = n>=curMinWords
+        ? "🎉 提出しました！ "+n+"語（目標達成）\nモデルアンサーと見比べてみよう。"
+        : "✅ 提出しました（"+n+"語）。\n本番は"+curMinWords+"語以上が目標。あと"+(curMinWords-n)+"語がんばろう！";
+      alert(msg);
+      // open model automatically
+      var mbtn=document.querySelector('#screen-write .acc-btn[data-acc="model"]');
+      if(mbtn && !mbtn.classList.contains("open")) mbtn.click();
+      renderHome();
+    });
+
+    // paraphrase
+    $("para-reveal").addEventListener("click",revealPara);
+    $("para-prev").addEventListener("click",function(){
+      paraIdx=(paraIdx-1+PARAPHRASE.length)%PARAPHRASE.length; renderPara();
+    });
+    $("para-next").addEventListener("click",function(){
+      paraIdx=(paraIdx+1)%PARAPHRASE.length; renderPara();
+    });
+  }
+
+  /* ===================== 起動 ===================== */
+  loadSave();
+  bind();
+  renderHome();
+  showScreen("screen-home");
+
+})();
+</script>
+</body>
+</html>
