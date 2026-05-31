@@ -313,6 +313,9 @@
   .aiset-card{background:var(--bg-card2);border-radius:16px;padding:16px 14px;}
   .aiset-card .pick-label{margin-top:14px;}
   .aiset-card .pick-label:first-child{margin-top:0;}
+  .histessay{background:#fafdfc;border:1.5px solid var(--line);border-radius:12px;
+    padding:12px;font-size:13px;line-height:1.7;color:var(--ink);white-space:pre-wrap;
+    word-break:break-word;max-height:240px;overflow:auto;margin-bottom:14px;}
 
   /* generic buttons */
   .btn-row{display:flex;gap:9px;margin-top:6px;}
@@ -370,6 +373,11 @@
       <button class="mode-btn guide" data-go="guide">
         <span class="emoji">🧭</span>
         <span class="txt"><b>はじめてガイド</b><span>IELTSライティングの基本とBand 6攻略</span></span>
+      </button>
+      <button class="mode-btn" data-go="history" style="background:linear-gradient(135deg,#8a83b8,#a9a2cf);box-shadow:0 7px 16px rgba(138,131,184,.3);">
+        <span class="emoji">📚</span>
+        <span class="txt"><b>評価の記録</b><span>過去の添削・スコアを見返す</span></span>
+        <span class="badge" id="hist-badge">0</span>
       </button>
       <button class="mode-btn" data-go="aiset" style="background:linear-gradient(135deg,#5e44c4,#9d7bff);box-shadow:0 7px 16px rgba(94,68,196,.32);">
         <span class="emoji">🤖</span>
@@ -504,6 +512,17 @@
     <h2 class="sec-h">🧭 はじめてガイド</h2>
     <p class="sec-sub">IELTSライティングの基本と、Band 6 を取るコツ。</p>
     <div id="guide-body"></div>
+  </section>
+
+  <!-- ============ HISTORY ============ -->
+  <section id="screen-history" class="screen hidden">
+    <div class="topbar">
+      <button class="icon-btn back-home">←</button>
+      <span class="topbar-title">評価の記録</span>
+      <div class="spacer"></div>
+    </div>
+    <h2 class="sec-h">📚 評価の記録</h2>
+    <div id="history-body"></div>
   </section>
 
   <!-- ============ AI SETTINGS ============ -->
@@ -993,7 +1012,7 @@ var GUIDE_HTML =
 
   /* ---- 保存データ ---- */
   var SAVE_KEY = "lys_ielts_save_v1";
-  var save = { drafts:{}, t1done:[], t2done:[], paraDone:[], check:{}, stars:0, best:{} };
+  var save = { drafts:{}, t1done:[], t2done:[], paraDone:[], check:{}, stars:0, best:{}, history:[] };
   function loadSave(){
     try{ var raw=localStorage.getItem(SAVE_KEY);
       if(raw){ var o=JSON.parse(raw);
@@ -1004,10 +1023,24 @@ var GUIDE_HTML =
         save.check    = o.check    || {};
         save.stars    = o.stars    || 0;
         save.best     = o.best     || {};
+        save.history  = o.history  || [];
       }
     }catch(e){}
   }
-  function persist(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(save)); }catch(e){} }
+  function persist(){
+    try{ localStorage.setItem(SAVE_KEY, JSON.stringify(save)); }
+    catch(e){ // 容量オーバー時は記録を減らして再試行
+      try{ if(save.history && save.history.length>15){ save.history=save.history.slice(0,15);
+        localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } }catch(e2){}
+    }
+  }
+  function pushHistory(entry){
+    if(!save.history) save.history=[];
+    entry.ts=Date.now();
+    save.history.unshift(entry);
+    if(save.history.length>50) save.history=save.history.slice(0,50);
+    persist();
+  }
 
   function showScreen(id){
     var ss=document.querySelectorAll(".screen");
@@ -1025,8 +1058,9 @@ var GUIDE_HTML =
     var drafts = Object.keys(save.drafts).filter(function(k){return (save.drafts[k]||"").trim().length>0;}).length;
     var bests = Object.keys(save.best||{}).map(function(k){return save.best[k];});
     var topBand = bests.length ? Math.max.apply(null,bests).toFixed(1) : "-";
+    $("hist-badge").textContent = (save.history||[]).length;
     $("home-stat").innerHTML =
-      "✍️ 提出した作文 <b>"+total+"</b> ／ 下書き <b>"+drafts+"</b><br>"+
+      "✍️ 提出した作文 <b>"+total+"</b> ／ 下書き <b>"+drafts+"</b>　📚 記録 <b>"+(save.history||[]).length+"</b><br>"+
       "🔁 パラフレーズ <b>"+save.paraDone.length+"/"+PARAPHRASE.length+"</b>　⭐ スター <b>"+(save.stars||0)+"</b><br>"+
       "🎯 自己ベスト推定バンド <b>"+topBand+"</b>";
   }
@@ -1505,6 +1539,55 @@ var GUIDE_HTML =
     };
   }
 
+  // 自動評価カードの本体（ボタンを除く）。記録の詳細表示でも再利用
+  function autoCardInner(ev){
+    var bars=ev.crit.map(function(c){
+      var pct=clamp((c.score-4)/4*100,5,100);
+      return '<div class="crit-row"><div class="ch"><span>'+esc(c.name)+
+        '</span><span class="sc">'+c.score.toFixed(1)+'</span></div>'+
+        '<div class="crit-bar"><div style="width:'+pct+'%"></div></div></div>';
+    }).join("");
+    var gd=ev.good.map(function(g){return '<div class="gd">✅ '+esc(g)+'</div>';}).join("");
+    var bd=ev.bad.map(function(b){return '<div class="bd">⚠️ '+esc(b)+'</div>';}).join("");
+    var starStr=""; for(var i=0;i<5;i++) starStr += (i<ev.stars?"⭐":"☆");
+    var msg = ev.band>=6 ? "Band 6 ライン到達！すばらしい 🎉"
+            : ev.band>=5.5 ? "あと一歩で Band 6！この調子 💪"
+            : "いいスタート！下のポイントを直すともっと伸びるよ 🌱";
+    var fixHtml="";
+    if(ev.grammar && ev.grammar.length){
+      var items=ev.grammar.slice(0,8).map(function(g){
+        var line='<div class="fix-item"><span class="bad">'+esc(g.bad)+'</span>';
+        if(g.fix) line+='<span class="arrow">→</span><span class="fix">'+esc(g.fix)+'</span>';
+        line+='<span class="note">'+esc(g.msg)+'</span></div>';
+        return line;
+      }).join("");
+      fixHtml='<div class="fixsec"><h5 class="fix-h">✏️ 直したい文法・表記（'+ev.grammar.length+'件）</h5>'+items+'</div>';
+    }
+    var upHtml="";
+    if(ev.upgrades && ev.upgrades.length){
+      var ups=ev.upgrades.slice(0,6).map(function(u){
+        var line='<div class="up-item"><span class="bad2">'+esc(u.bad)+'</span>'+
+          '<span class="arrow">→</span><span class="better">'+esc(u.better)+'</span>';
+        if(u.note) line+='<span class="note">'+esc(u.note)+'</span>';
+        line+='</div>';
+        return line;
+      }).join("");
+      upHtml='<div class="fixsec"><h5 class="up-h">✨ もっと良くなる表現（言い換え候補）</h5>'+ups+'</div>';
+    }
+    return '<div class="eval-band"><div class="lbl">推定バンドスコア（自動の目安）</div>'+
+      '<div class="num">'+ev.band.toFixed(1)+'</div>'+
+      '<div class="range">目安レンジ '+(Math.max(4,ev.band-0.5)).toFixed(1)+'〜'+(ev.band+0.5).toFixed(1)+'</div>'+
+      '<div class="eval-stars">'+starStr+'</div></div>'+
+      '<div class="eval-wc">📝 '+ev.wc+' 語</div>'+
+      '<div class="crit">'+bars+'</div>'+
+      '<div class="eval-lists">'+gd+bd+'</div>'+
+      fixHtml+upHtml+
+      '<div class="eval-msg">'+msg+'</div>'+
+      '<div class="eval-note">※ これは語数・段落・つなぎ言葉・語彙の幅・文の長さなどから計算した'+
+      '<b>自動のおおよその目安</b>です。文法や内容の細かい正しさまでは判定できないので、'+
+      '本当の実力は先生に見てもらうのが一番！モデルアンサーと見比べるのもおすすめです 💜</div>';
+  }
+
   function renderEval(ev, kind){
     var el=$("eval-result");
     if(ev.tooShort){
@@ -1513,60 +1596,13 @@ var GUIDE_HTML =
         '<div class="btn-row" style="margin-top:12px">'+
         '<button class="pill-btn ghost" id="eval-home">🏠 ホームへ</button></div></div>';
     } else {
-      var bars=ev.crit.map(function(c){
-        var pct=clamp((c.score-4)/4*100,5,100);
-        return '<div class="crit-row"><div class="ch"><span>'+esc(c.name)+
-          '</span><span class="sc">'+c.score.toFixed(1)+'</span></div>'+
-          '<div class="crit-bar"><div style="width:'+pct+'%"></div></div></div>';
-      }).join("");
-      var gd=ev.good.map(function(g){return '<div class="gd">✅ '+esc(g)+'</div>';}).join("");
-      var bd=ev.bad.map(function(b){return '<div class="bd">⚠️ '+esc(b)+'</div>';}).join("");
-      var starStr=""; for(var i=0;i<5;i++) starStr += (i<ev.stars?"⭐":"☆");
-      var msg = ev.band>=6 ? "Band 6 ライン到達！すばらしい 🎉"
-              : ev.band>=5.5 ? "あと一歩で Band 6！この調子 💪"
-              : "いいスタート！下のポイントを直すともっと伸びるよ 🌱";
-
-      // 文法・表記の修正
-      var fixHtml="";
-      if(ev.grammar && ev.grammar.length){
-        var items=ev.grammar.slice(0,8).map(function(g){
-          var line='<div class="fix-item"><span class="bad">'+esc(g.bad)+'</span>';
-          if(g.fix) line+='<span class="arrow">→</span><span class="fix">'+esc(g.fix)+'</span>';
-          line+='<span class="note">'+esc(g.msg)+'</span></div>';
-          return line;
-        }).join("");
-        fixHtml='<div class="fixsec"><h5 class="fix-h">✏️ 直したい文法・表記（'+ev.grammar.length+'件）</h5>'+items+'</div>';
-      }
-      // もっと良い表現
-      var upHtml="";
-      if(ev.upgrades && ev.upgrades.length){
-        var ups=ev.upgrades.slice(0,6).map(function(u){
-          var line='<div class="up-item"><span class="bad2">'+esc(u.bad)+'</span>'+
-            '<span class="arrow">→</span><span class="better">'+esc(u.better)+'</span>';
-          if(u.note) line+='<span class="note">'+esc(u.note)+'</span>';
-          line+='</div>';
-          return line;
-        }).join("");
-        upHtml='<div class="fixsec"><h5 class="up-h">✨ もっと良くなる表現（言い換え候補）</h5>'+ups+'</div>';
-      }
-
-      el.innerHTML='<div class="evalcard">'+
-        '<div class="eval-band"><div class="lbl">推定バンドスコア（自動の目安）</div>'+
-        '<div class="num">'+ev.band.toFixed(1)+'</div>'+
-        '<div class="range">目安レンジ '+(Math.max(4,ev.band-0.5)).toFixed(1)+'〜'+(ev.band+0.5).toFixed(1)+'</div>'+
-        '<div class="eval-stars">'+starStr+'</div></div>'+
-        '<div class="eval-wc">📝 '+ev.wc+' 語</div>'+
-        '<div class="crit">'+bars+'</div>'+
-        '<div class="eval-lists">'+gd+bd+'</div>'+
-        fixHtml+upHtml+
-        '<div class="eval-msg">'+msg+'</div>'+
-        '<div class="eval-note">※ これは語数・段落・つなぎ言葉・語彙の幅・文の長さなどから計算した'+
-        '<b>自動のおおよその目安</b>です。文法や内容の細かい正しさまでは判定できないので、'+
-        '本当の実力は先生に見てもらうのが一番！モデルアンサーと見比べるのもおすすめです 💜</div>'+
+      el.innerHTML='<div class="evalcard">'+autoCardInner(ev)+
         '<div class="btn-row" style="margin-top:12px">'+
         '<button class="pill-btn ghost" id="eval-model">⭐ モデルと比べる</button>'+
         '<button class="pill-btn'+(kind==="task2"?" purple":"")+'" id="eval-home">🏠 ホームへ</button>'+
         '</div></div>';
+      if(cur) pushHistory({ type:"auto", kind:kind, promptId:cur.id, promptTitle:cur.title,
+        band:ev.band, essay:$("editor").value, ev:ev });
     }
     el.classList.remove("hidden");
     var mb=document.getElementById("eval-model");
@@ -1708,7 +1744,8 @@ var GUIDE_HTML =
     var rt=document.getElementById("ai-retry"); if(rt) rt.addEventListener("click",aiGrade);
   }
 
-  function renderAIResult(d, kind){
+  // AI添削カードの本体（ボタンを除く）。記録の詳細表示でも再利用
+  function aiCardInner(d){
     function num(x){ return (typeof x==="number")? x.toFixed(1) : (x!=null?String(x):"-"); }
     var c=d.criteria||{};
     var rows=[["Task Achievement（内容）",c.task],["Coherence（構成・つながり）",c.coherence],
@@ -1730,8 +1767,7 @@ var GUIDE_HTML =
         '<span class="better">'+esc(x.better||"")+'</span>'+(x.note_ja?'<span class="note">'+esc(x.note_ja)+'</span>':'')+'</div>';
     }).join("");
     var ob=(typeof d.overall_band==="number")?d.overall_band:(parseFloat(d.overall_band)||0);
-    var html='<div class="evalcard ai">'+
-      '<div style="text-align:center"><span class="ai-badge">🤖 AIによる添削（Claude）</span></div>'+
+    return '<div style="text-align:center"><span class="ai-badge">🤖 AIによる添削（Claude）</span></div>'+
       '<div class="eval-band"><div class="lbl">推定バンドスコア</div><div class="num">'+num(d.overall_band)+'</div>'+
       '<div class="range">目安レンジ '+Math.max(4,ob-0.5).toFixed(1)+'〜'+(ob+0.5).toFixed(1)+'</div></div>'+
       '<div class="crit">'+bars+'</div>'+
@@ -1739,13 +1775,21 @@ var GUIDE_HTML =
       (corr?'<div class="fixsec"><h5 class="fix-h">✏️ 文法・表現の直し</h5>'+corr+'</div>':'')+
       (ups?'<div class="fixsec"><h5 class="up-h">✨ もっと良くなる表現</h5>'+ups+'</div>':'')+
       (d.encouragement_ja?'<div class="eval-msg">'+esc(d.encouragement_ja)+'</div>':'')+
-      '<div class="eval-note">🤖 これはAIによる添削です。本物の採点にかなり近い参考になりますが、公式スコアの保証ではありません。モデルアンサーとも見比べてみよう 💜</div>'+
+      '<div class="eval-note">🤖 これはAIによる添削です。本物の採点にかなり近い参考になりますが、公式スコアの保証ではありません。モデルアンサーとも見比べてみよう 💜</div>';
+  }
+
+  function renderAIResult(d, kind){
+    var html='<div class="evalcard ai">'+aiCardInner(d)+
       '<div class="btn-row" style="margin-top:12px"><button class="pill-btn ghost" id="ai-again">🔄 もう一度</button>'+
       '<button class="pill-btn purple" id="ai-tohome">🏠 ホームへ</button></div></div>';
     var box=$("ai-result"); box.innerHTML=html; box.classList.remove("hidden");
     var ag=document.getElementById("ai-again"); if(ag) ag.addEventListener("click",aiGrade);
     var th=document.getElementById("ai-tohome"); if(th) th.addEventListener("click",function(){ renderHome(); showScreen("screen-home"); });
     if(box.scrollIntoView) box.scrollIntoView({behavior:"smooth"});
+    // 記録に保存
+    if(cur){ var ob=(typeof d.overall_band==="number")?d.overall_band:(parseFloat(d.overall_band)||0);
+      pushHistory({ type:"ai", kind:kind, promptId:cur.id, promptTitle:cur.title,
+        band:ob, model:ai.model, essay:$("editor").value, data:d }); }
   }
 
   function aiTest(){
@@ -1761,6 +1805,64 @@ var GUIDE_HTML =
       else if(res.status===401||res.status===403) $("ai-test-result").innerHTML='<span style="color:var(--ng)">✗ キーが無効です</span>';
       else $("ai-test-result").innerHTML='<span style="color:var(--ng)">✗ エラー（'+res.status+'）：'+esc((res.j&&res.j.error&&res.j.error.message)||"")+'</span>';
     }).catch(function(e){ $("ai-test-result").innerHTML='<span style="color:var(--ng)">✗ 通信エラー（'+esc(String(e))+'）</span>'; });
+  }
+
+  /* ===================== 評価の記録（履歴） ===================== */
+  function fmtTs(ts){
+    var d=new Date(ts);
+    return (d.getMonth()+1)+"/"+d.getDate()+" "+("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2);
+  }
+  function openHistory(){ renderHistoryList(); showScreen("screen-history"); }
+  function renderHistoryList(){
+    var body=$("history-body");
+    var h=save.history||[];
+    if(!h.length){
+      body.innerHTML='<p class="sec-sub">まだ記録がありません。<br>作文を「✅ 自動で評価」または「🤖 AIに添削してもらう」すると、ここに保存されます。</p>';
+      return;
+    }
+    var html='<p class="sec-sub">タップすると、その時の作文と評価をもう一度見られます（最新50件）。</p>'+
+      '<div class="btn-row" style="margin-bottom:12px"><button class="pill-btn ghost" id="hist-clear">🗑 すべて消去</button></div>'+
+      '<div class="plist">';
+    h.forEach(function(e,i){
+      var isAI=e.type==="ai";
+      var col=isAI?"#7b5fe0":"#2f9e8e";
+      var bandTxt=(typeof e.band==="number")?e.band.toFixed(1):(e.band||"-");
+      html+='<button class="pcard" data-hi="'+i+'">'+
+        '<span class="ptype" style="background:'+col+'">'+(isAI?"🤖 AI添削":"📝 自動評価")+'</span>'+
+        '<span style="font-size:11px;color:var(--ink-soft);font-weight:700;margin-left:8px">'+fmtTs(e.ts)+'</span>'+
+        '<div class="ptitle">['+(e.kind==="task2"?"Task 2":"Task 1")+'] '+esc(e.promptTitle||"")+'</div>'+
+        '<div style="margin-top:5px;font-size:12.5px;font-weight:800;color:'+col+'">推定バンド '+bandTxt+'</div>'+
+        '</button>';
+    });
+    html+='</div>';
+    body.innerHTML=html;
+    var cl=document.getElementById("hist-clear");
+    if(cl) cl.addEventListener("click",function(){
+      if(confirm("すべての評価記録を消去しますか？（元に戻せません）")){ save.history=[]; persist(); renderHome(); renderHistoryList(); }
+    });
+    Array.prototype.forEach.call(body.querySelectorAll("[data-hi]"),function(b){
+      b.addEventListener("click",function(){ openHistoryDetail(+b.dataset.hi); });
+    });
+  }
+  function openHistoryDetail(i){
+    var e=(save.history||[])[i]; if(!e) return;
+    var inner = e.type==="ai" ? aiCardInner(e.data||{}) : autoCardInner(e.ev||{});
+    var cardCls = e.type==="ai" ? "evalcard ai" : "evalcard";
+    var body=$("history-body");
+    body.innerHTML='<button class="pill-btn ghost" id="hist-back" style="margin-bottom:12px">← 記録一覧へ</button>'+
+      '<div class="promptbox"><span class="q-tag"'+(e.kind==="task2"?' style="background:var(--purple)"':'')+'>'+
+      (e.kind==="task2"?"Task 2":"Task 1")+'</span>'+
+      '<div class="q-prompt">'+esc(e.promptTitle||"")+'</div>'+
+      '<div class="q-instr">🗓 '+esc(fmtTs(e.ts))+(e.model?'　/　model: '+esc(e.model):'')+'</div></div>'+
+      '<div class="pick-label">📝 あなたの解答</div>'+
+      '<div class="histessay">'+esc(e.essay||"(本文なし)")+'</div>'+
+      '<div class="'+cardCls+'">'+inner+'</div>'+
+      '<button class="skip-btn" id="hist-del">この記録を削除する</button>';
+    document.getElementById("hist-back").addEventListener("click",renderHistoryList);
+    document.getElementById("hist-del").addEventListener("click",function(){
+      if(confirm("この記録を削除しますか？")){ save.history.splice(i,1); persist(); renderHome(); renderHistoryList(); }
+    });
+    $("app").scrollTop=0; window.scrollTo(0,0);
   }
 
   /* ===================== パラフレーズ ===================== */
@@ -1819,6 +1921,7 @@ var GUIDE_HTML =
         else if(go==="paraphrase"){ openParaphrase(); }
         else if(go==="phrasebank"){ openPhraseBank(); }
         else if(go==="guide"){ $("guide-body").innerHTML=GUIDE_HTML; showScreen("screen-guide"); }
+        else if(go==="history"){ openHistory(); }
         else if(go==="aiset"){ openAISettings(); }
       });
     });
