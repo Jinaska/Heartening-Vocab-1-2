@@ -281,6 +281,20 @@
   .eval-msg{text-align:center;font-size:13.5px;font-weight:800;color:var(--teal-d);margin-top:11px;}
   .eval-note{font-size:10.5px;color:var(--ink-soft);line-height:1.6;margin-top:10px;
     background:#fff;border-radius:10px;padding:10px;}
+  .fixsec{margin-top:13px;}
+  .fixsec h5{font-size:12.5px;font-weight:800;margin-bottom:7px;display:flex;align-items:center;gap:6px;}
+  .fix-h{color:#c0392b;}
+  .up-h{color:var(--teal-d);}
+  .t2theme .up-h{color:var(--purple-d);}
+  .fix-item,.up-item{font-size:12.5px;background:#fff;border:1.5px solid var(--line);
+    border-radius:10px;padding:8px 11px;margin-bottom:6px;line-height:1.55;}
+  .fix-item .bad{color:#c0392b;text-decoration:line-through;font-weight:700;}
+  .fix-item .arrow,.up-item .arrow{color:var(--ink-soft);margin:0 4px;}
+  .fix-item .fix{color:var(--ok);font-weight:800;}
+  .fix-item .note,.up-item .note{display:block;font-size:10.5px;color:var(--ink-soft);margin-top:2px;}
+  .up-item .bad2{font-weight:800;color:var(--ink);}
+  .up-item .better{color:var(--teal-d);font-weight:800;}
+  .t2theme .up-item .better{color:var(--purple-d);}
 
   /* generic buttons */
   .btn-row{display:flex;gap:9px;margin-top:6px;}
@@ -1209,6 +1223,109 @@ var GUIDE_HTML =
     $("saved-note").textContent="✓ 自動保存しました "+new Date().toLocaleTimeString("ja-JP",{hour:"2-digit",minute:"2-digit"});
   }
 
+  /* ===================== 文法チェック・表現アップグレード ===================== */
+  function analyzeWriting(text, kind){
+    var isT2 = kind==="task2";
+    var grammar=[], upg=[], m;
+    var seenG={}, seenU={};
+    function addG(bad,msg,fix){ var k=(bad+"|"+msg).toLowerCase(); if(seenG[k])return; seenG[k]=1; grammar.push({bad:bad,msg:msg,fix:fix||""}); }
+    function addU(bad,better,note){ var k=bad.toLowerCase(); if(seenU[k])return; seenU[k]=1; upg.push({bad:bad,better:better,note:note||""}); }
+
+    /* --- 小文字の i --- */
+    if(/\bi\b/.test(text)) addG("i","「i」はいつでも大文字の「I」","I");
+
+    /* --- 文頭の大文字（最大2件） --- */
+    var sents=text.match(/[^.!?]+[.!?]?/g)||[];
+    var capN=0;
+    sents.forEach(function(s){
+      if(capN>=2) return;
+      var ts=s.replace(/^[\s"'(]+/,"");
+      var fc=ts.charAt(0);
+      if(fc && /[a-z]/.test(fc)){
+        var fw=ts.split(/\s+/)[0];
+        if(fw && fw!=="i"){ addG(fw,"文の最初は大文字で始めよう", fw.charAt(0).toUpperCase()+fw.slice(1)); capN++; }
+      }
+    });
+
+    /* --- a / an（小文字の冠詞のみ。図のラベルA/B/Cや頭字語は対象外）--- */
+    var artRe=/\b(a|an)\s+([a-z]+)/g;
+    while(m=artRe.exec(text)){
+      var art=m[1], w=m[2];
+      var startsVowel=/^[aeiou]/.test(w);
+      var soundsVowel = startsVowel && !/^(one|once|uni|use|usu|euro|europ|unit|union|uniqu|universi|user)/.test(w);
+      if(art==="a" && soundsVowel) addG("a "+w,"母音の音の前は「a」→「an」","an "+w);
+      else if(art==="an" && /^[bcdfgjkmpqrtvwz]/.test(w) && !/^(hour|honest|honou)/.test(w))
+        addG("an "+w,"子音の音の前は「an」→「a」","a "+w);
+    }
+
+    /* --- 主語と動詞の一致 --- */
+    var sv1=/\b(people|they|we|children|students|men|women)\s+(is|was|has|does)\b/gi;
+    while(m=sv1.exec(text)){ var f1={is:"are",was:"were",has:"have",does:"do"}[m[2].toLowerCase()]; addG(m[0],"主語が複数なので動詞も複数形に",m[1]+" "+f1); }
+    var sv2=/\b(he|she|it)\s+(are|were|have|do|don't)\b/gi;
+    while(m=sv2.exec(text)){ var v=m[2].toLowerCase(), f2={are:"is",were:"was",have:"has",do:"does","don't":"doesn't"}[v]; addG(m[0],"主語が単数なので動詞も単数形に",m[1]+" "+f2); }
+
+    /* --- 二重比較・最上級 --- */
+    var dc=/\bmore\s+(better|worse|easier|harder|bigger|larger|smaller|higher|lower|faster|slower|stronger|weaker|cheaper|richer|poorer|happier|older|younger)\b/gi;
+    while(m=dc.exec(text)) addG(m[0],"二重比較。more は不要",m[1]);
+    var dc2=/\bmost\s+([a-z]+est)\b/gi;
+    while(m=dc2.exec(text)) addG(m[0],"二重最上級。most は不要",m[1]);
+
+    /* --- 不可算名詞の複数形・不規則複数 --- */
+    var unc=/\b(informations|advices|knowledges|equipments|furnitures|homeworks|softwares|trafficks)\b/gi;
+    while(m=unc.exec(text)) addG(m[0],"数えられない名詞は複数形にしない", m[0].replace(/s$/,""));
+    var irr=/\b(childrens|peoples|mens|womens|mans|womans)\b/gi;
+    while(m=irr.exec(text)){ var fi={childrens:"children",peoples:"people",mens:"men",womens:"women",mans:"men",womans:"women"}[m[0].toLowerCase()]; addG(m[0],"複数形がまちがい",fi); }
+
+    /* --- よくある表記ミス --- */
+    if(/\balot\b/i.test(text)) addG("alot","2語で「a lot」","a lot");
+    var rw=/\b([a-z]+)\s+\1\b/gi;
+    while(m=rw.exec(text)){ var rwd=m[1].toLowerCase(); if(rwd!=="had"&&rwd!=="that"&&rwd!=="very") addG(m[0],"同じ語が連続している（重複かも）",m[1]); }
+    if(/\s+[,.!?;:]/.test(text)) addG("（空白）+ 句読点","句読点の前にスペースを入れない","");
+    if(text.trim() && !/[.!?]['")]?$/.test(text.trim())) addG("…文末","最後の文がピリオド（.）で終わっていない",".");
+
+    /* --- Task2 のフォーマル度（文体）--- */
+    if(isT2){
+      var cons=text.match(/\b(don't|doesn't|didn't|can't|won't|isn't|aren't|wasn't|weren't|i'm|they're|we're|you're)\b/i);
+      if(cons) addG(cons[0],"アカデミックでは短縮形を避けて書き出す（例: don't → do not）","");
+      var si=text.match(/(^|[.!?]\s)(And|But|So)\s/);
+      if(si) addG(si[2],"文頭の And/But/So は口語的。Moreover / However / Therefore などに","");
+    }
+
+    /* --- もっと良い表現（言い換え提案）--- */
+    var UP=[
+      [/\bvery important\b/i,"crucial / essential / vital","1語で力強く"],
+      [/\bvery big\b/i,"significant / substantial",""],
+      [/\bvery good\b/i,"excellent / highly beneficial",""],
+      [/\bvery bad\b/i,"extremely harmful / detrimental",""],
+      [/\ba lot of\b/i,"a great deal of / a significant number of","フォーマルに"],
+      [/\blots of\b/i,"a large amount of / numerous",""],
+      [/\bmore and more\b/i,"an increasing number of / a growing number of",""],
+      [/\bmany people\b/i,"a large number of people / a significant proportion of people",""],
+      [/\bpeople think\b/i,"it is widely believed that / many argue that",""],
+      [/\bI think\b/i,"I believe / In my view / It seems to me","表現に幅を"],
+      [/\bnowadays\b/i,"These days / In modern society",""],
+      [/\bgood\b/i,"beneficial / positive / effective","文脈に合わせて"],
+      [/\bbad\b/i,"negative / harmful / detrimental",""],
+      [/\bbig\b/i,"significant / considerable / substantial",""],
+      [/\bthings\b/i,"aspects / factors / issues","具体的な名詞に"],
+      [/\bkids\b/i,"children","ややくだけた語"],
+      [/\bget\b/i,"obtain / receive / gain","具体的な動詞に"]
+    ];
+    var covered=[];
+    function overlaps(a,b){ for(var i=0;i<covered.length;i++){ if(a<covered[i][1] && b>covered[i][0]) return true; } return false; }
+    UP.forEach(function(rule){
+      var r=new RegExp(rule[0].source,"gi"), mm;
+      while(mm=r.exec(text)){
+        if(overlaps(mm.index, mm.index+mm[0].length)) continue;
+        covered.push([mm.index, mm.index+mm[0].length]);
+        addU(mm[0], rule[1], rule[2]);
+        break;
+      }
+    });
+
+    return { grammar:grammar, upgrades:upg };
+  }
+
   /* ===================== 自動評価 ===================== */
   function round5(x){ return Math.round(x*2)/2; }
   function clamp(x,a,b){ return Math.max(a,Math.min(b,x)); }
@@ -1299,6 +1416,14 @@ var GUIDE_HTML =
     else { bad.push("複文を増やそう（because, although, which … で文をつなぐ）"); }
     gr=clamp(gr,4.0,7.5);
 
+    /* --- 文法・表記ミスをGRに反映 --- */
+    var analysis=analyzeWriting(text, kind);
+    var gErr=analysis.grammar.length;
+    if(gErr>=5){ gr-=0.5; bad.push("文法・表記のミスが多め（"+gErr+" 件）。下の修正リストを直そう"); }
+    else if(gErr>=2){ gr-=0.2; }
+    else if(gErr===0 && wc>=minW){ good.push("目立った文法・表記ミスが見当たらない 👏"); }
+    gr=clamp(gr,4.0,7.5);
+
     var band=clamp(round5((ta+cc+lr+gr)/4),4.0,8.0);
     var stars = band>=6.5?5 : band>=6?4 : band>=5.5?3 : band>=5?2 : 1;
 
@@ -1310,7 +1435,8 @@ var GUIDE_HTML =
         {name:"Lexical Resource（語彙）", score:lr},
         {name:"Grammar（文法）", score:gr}
       ],
-      good:good, bad:bad
+      good:good, bad:bad,
+      grammar:analysis.grammar, upgrades:analysis.upgrades
     };
   }
 
@@ -1334,6 +1460,31 @@ var GUIDE_HTML =
       var msg = ev.band>=6 ? "Band 6 ライン到達！すばらしい 🎉"
               : ev.band>=5.5 ? "あと一歩で Band 6！この調子 💪"
               : "いいスタート！下のポイントを直すともっと伸びるよ 🌱";
+
+      // 文法・表記の修正
+      var fixHtml="";
+      if(ev.grammar && ev.grammar.length){
+        var items=ev.grammar.slice(0,8).map(function(g){
+          var line='<div class="fix-item"><span class="bad">'+esc(g.bad)+'</span>';
+          if(g.fix) line+='<span class="arrow">→</span><span class="fix">'+esc(g.fix)+'</span>';
+          line+='<span class="note">'+esc(g.msg)+'</span></div>';
+          return line;
+        }).join("");
+        fixHtml='<div class="fixsec"><h5 class="fix-h">✏️ 直したい文法・表記（'+ev.grammar.length+'件）</h5>'+items+'</div>';
+      }
+      // もっと良い表現
+      var upHtml="";
+      if(ev.upgrades && ev.upgrades.length){
+        var ups=ev.upgrades.slice(0,6).map(function(u){
+          var line='<div class="up-item"><span class="bad2">'+esc(u.bad)+'</span>'+
+            '<span class="arrow">→</span><span class="better">'+esc(u.better)+'</span>';
+          if(u.note) line+='<span class="note">'+esc(u.note)+'</span>';
+          line+='</div>';
+          return line;
+        }).join("");
+        upHtml='<div class="fixsec"><h5 class="up-h">✨ もっと良くなる表現（言い換え候補）</h5>'+ups+'</div>';
+      }
+
       el.innerHTML='<div class="evalcard">'+
         '<div class="eval-band"><div class="lbl">推定バンドスコア（自動の目安）</div>'+
         '<div class="num">'+ev.band.toFixed(1)+'</div>'+
@@ -1342,6 +1493,7 @@ var GUIDE_HTML =
         '<div class="eval-wc">📝 '+ev.wc+' 語</div>'+
         '<div class="crit">'+bars+'</div>'+
         '<div class="eval-lists">'+gd+bd+'</div>'+
+        fixHtml+upHtml+
         '<div class="eval-msg">'+msg+'</div>'+
         '<div class="eval-note">※ これは語数・段落・つなぎ言葉・語彙の幅・文の長さなどから計算した'+
         '<b>自動のおおよその目安</b>です。文法や内容の細かい正しさまでは判定できないので、'+
